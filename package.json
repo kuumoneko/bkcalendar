@@ -9,7 +9,7 @@
     "build": "deno compile --no-check --import-map=deno.json --allow-sys --unstable-sloppy-imports --allow-env --allow-read --allow-net --allow-write --allow-run --output \"bkcalendar.exe\" ./index.ts"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@types/node": "^24.3.0",
     "tabletojson": "^4.1.6",
