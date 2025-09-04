@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "tabletojson": "npm:tabletojson@4.1.6"
+  },
+  "nodeModulesDir": "none"
+}
