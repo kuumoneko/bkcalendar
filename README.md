@@ -7,7 +7,8 @@ Nhìn tổng quan thời khoá biểu theo tuần này và tuần kế tiếp c�
 - Open [TKB HCMUT](https://mybk.hcmut.edu.vn/app/he-thong-quan-ly/sinh-vien/tkb)
 - Login as HCMUT account
 - Right-click into the table
-- Copy the Table Element as Element
+- Chose Inspect
+- Right-click on table element -> Copy -> Copy Element
 - Paste it to table.txt
 - Run the bkcalendar.exe
 
