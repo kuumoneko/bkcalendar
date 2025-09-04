@@ -11,8 +11,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^24.3.0",
-    "tabletojson": "^4.1.6",
-    "ts-node": "^10.9.2"
+    "tabletojson": "^4.1.6"
+  },
+  "devDependencies": {
+    "typescript": "^4.5.4",
+    "ts-node": "^10.9.2",
+    "@types/node": "^24.3.0"
   }
 }
