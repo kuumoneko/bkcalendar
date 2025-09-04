@@ -15,3 +15,9 @@ Nhìn tổng quan thời khoá biểu theo tuần này và tuần kế tiếp c�
 ## Contributor
 
 - [kuumoneko](https://github.com/kuumoneko)
+
+## IMPORTANT
+
+- This script is for educational purpose only
+- Do not use this script for any illegal activity
+- Please check again with the source on mybk.hcmut.edu.vn before using this table from the script
