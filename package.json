@@ -1,11 +1,10 @@
 {
   "name": "bk-calendar",
   "version": "2.0.0",
-  "description": "",
+  "description": "Nhìn tổng quan thời khoá biểu theo ngày và các mốc thời gian khác của trường Đại học Bách Khoa - Đại học quốc gia TP.HCM",
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "deno compile --no-check --import-map=deno.json --allow-sys --unstable-sloppy-imports --allow-env --allow-read --allow-net --allow-write --allow-run --output \"bkcalendar.exe\" ./index.ts"
   },
   "author": "",
