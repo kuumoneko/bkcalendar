@@ -1,12 +1,12 @@
 import { Tabletojson } from 'tabletojson';
-import fs, { writeFileSync } from "node:fs"
+import { readFileSync } from "node:fs"
 
-const html = fs.readFileSync('./table.txt', 'utf8');
+const html = readFileSync('./table.txt', 'utf8');
 
 const tablesAsJson = Tabletojson.convert(html);
 
 const temp = tablesAsJson[0];
-const testt = temp.map((item: any) => {
+const table = temp.map((item: any) => {
     const a = item["TUẦN HỌC"].match(/\d+(\.\d+)?/g)?.map(Number) || [];
 
     return {
@@ -15,7 +15,6 @@ const testt = temp.map((item: any) => {
     }
 })
 
-writeFileSync("./data.json", JSON.stringify(testt, null, 2), { encoding: "utf-8" })
 function test() {
     // Get today's date
     const today = new Date();
@@ -42,31 +41,101 @@ function test() {
 const now = test();
 
 console.log("Tuần hiện tại: ", now.week, " Năm: ", now.year);
+console.log("-----");
+const dayNames = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+const now_date: number = (new Date().getDay())
 
-console.table((testt as any[]).filter((item: any) => {
-    return item["TUẦN HỌC"].includes(now.week)
-}).map((item: any) => {
-    return {
-        "TÊN MÔN HỌC": item["TÊN MÔN HỌC"],
-        "THỨ": item["THỨ"],
-        "TIẾT": item["TIẾT"],
-        "GIỜ HỌC": item["GIỜ HỌC"],
-        "PHÒNG": item["PHÒNG"],
+function run() {
+
+    // show the whole week schedule if today is monday
+    if (now_date === 1) {
+        console.log("Hôm nay là Thứ Hai, tuần mới bắt đầu");
+        const thisweekSchedule = (table as any[]).filter((item: any) => {
+            return item["TUẦN HỌC"].includes(now.week)
+        }).map((item: any) => {
+            return {
+                "TÊN MÔN HỌC": item["TÊN MÔN HỌC"],
+                "THỨ": item["THỨ"],
+                "TIẾT": item["TIẾT"],
+                "GIỜ HỌC": item["GIỜ HỌC"],
+                "PHÒNG": item["PHÒNG"],
+            }
+        })
+        if (thisweekSchedule.length > 0) {
+            console.table(thisweekSchedule);
+            console.log("-----");
+        }
+        else {
+            console.log("Tuần này không có lịch học");
+            return;
+        }
     }
-})
-)
 
-
-console.log("Tuần kế tiếp: ", now.week + 1, " Năm: ", now.year);
-console.table((testt as any[]).filter((item: any) => {
-    return item["TUẦN HỌC"].includes(now.week + 1)
-}).map((item: any) => {
-    return {
-        "TÊN MÔN HỌC": item["TÊN MÔN HỌC"],
-        "THỨ": item["THỨ"],
-        "TIẾT": item["TIẾT"],
-        "GIỜ HỌC": item["GIỜ HỌC"],
-        "PHÒNG": item["PHÒNG"],
+    // show the next week schedule if today is sunday
+    if ((now_date % 7) === 0) {
+        console.log("Hôm nay là Chủ Nhật, không có lịch học");
+        console.log("Tuần kế tiếp: ", now.week + 1, " Năm: ", now.year);
+        console.table((table as any[]).filter((item: any) => {
+            return item["TUẦN HỌC"].includes(now.week + 1)
+        }).map((item: any) => {
+            return {
+                "TÊN MÔN HỌC": item["TÊN MÔN HỌC"],
+                "THỨ": item["THỨ"],
+                "TIẾT": item["TIẾT"],
+                "GIỜ HỌC": item["GIỜ HỌC"],
+                "PHÒNG": item["PHÒNG"],
+            }
+        }))
     }
-})
-)
+    else {
+        console.log("Hôm nay là: ", dayNames[now_date % 7]);
+
+        const todaySchedule = (table as any[]).filter((item: any) => {
+            return item["TUẦN HỌC"].includes(now.week) && item["THỨ"] === String((now_date + 1) % 7)
+        }).map((item: any) => {
+            return {
+                "TÊN MÔN HỌC": item["TÊN MÔN HỌC"],
+                "THỨ": item["THỨ"],
+                "TIẾT": item["TIẾT"],
+                "GIỜ HỌC": item["GIỜ HỌC"],
+                "PHÒNG": item["PHÒNG"],
+            }
+        })
+        // show today's schedule
+        if (todaySchedule.length > 0) {
+            console.table(todaySchedule)
+        }
+        else {
+            console.log("Hôm nay không có lịch học");
+        }
+        console.log("-----");
+        const tomorrow = (now_date + 1);
+
+        if (tomorrow !== 7) {
+            // show tomorrow's schedule
+            console.log("Ngày mai là: ", dayNames[tomorrow % 7]);
+            const tomorowSchedule = (table as any[]).filter((item: any) => {
+                return item["TUẦN HỌC"].includes(now.week) && item["THỨ"] === String((tomorrow + 1) % 7)
+            }).map((item: any) => {
+                return {
+                    "TÊN MÔN HỌC": item["TÊN MÔN HỌC"],
+                    "THỨ": item["THỨ"],
+                    "TIẾT": item["TIẾT"],
+                    "GIỜ HỌC": item["GIỜ HỌC"],
+                    "PHÒNG": item["PHÒNG"],
+                }
+            })
+            if (tomorowSchedule.length > 0) {
+                console.table(tomorowSchedule)
+            }
+            else {
+                console.log("Ngày mai không có lịch học");
+            }
+        }
+        else {
+            console.log("Ngày mai là Chủ Nhật, không có lịch học");
+        }
+    }
+}
+
+run();
