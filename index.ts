@@ -45,7 +45,7 @@ console.log("-----");
 const dayNames = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
 const now_date: number = (new Date().getDay())
 
-function run() {
+async function run() {
 
     // show the whole week schedule if today is monday
     if (now_date === 1) {
@@ -136,6 +136,11 @@ function run() {
             console.log("Ngày mai là Chủ Nhật, không có lịch học");
         }
     }
+
+    console.log("Press Ctrl + C to exit...");
+    await new Promise<void>((resolve) => {
+        process.stdin.once('data', () => resolve());
+    });
 }
 
 run();
