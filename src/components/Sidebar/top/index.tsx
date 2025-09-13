@@ -1,0 +1,47 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCalendar,
+  faCalendarDays,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+
+function Side_bar_Button({ text, url }: { text: string; url: string }) {
+  const Font_Awesome: any = {
+    "Trang chủ": faHome,
+    "Lịch học": faCalendar,
+    "Thời khoá biểu": faCalendarDays,
+  };
+  return (
+    <li
+      className="mb-2.5 cursor-default select-none h-[50px] w-[200] rounded-xl flex flex-row items-center justify-startbg-slate-600 pl-[15px] hover:bg-slate-500"
+      onClick={() => {
+        window.location.href = url;
+      }}
+    >
+      <FontAwesomeIcon
+        icon={Font_Awesome[text]}
+        className="text-slate-300 mr-[5px] pb-[5px] "
+      />
+      <span className="text-neutral-400 no-underline">
+        {text}
+      </span>
+    </li>
+  );
+}
+
+export default function Sidebar_Top() {
+  return (
+    <div className="w-[100%] max-w-[250px] h-[24  %] bg-slate-700 text-white rounded-3xl p-7">
+      <div className="logo mb-5">
+        <h1 className="text-2xl font-bold">BK CALENDAR</h1>
+      </div>
+
+      <div className="navigation">
+        <ul className="list-none p-0 m-0">
+          <Side_bar_Button text="Trang chủ" url="/" />
+          <Side_bar_Button text="Thời khoá biểu" url="/schedule" />
+        </ul>
+      </div>
+    </div>
+  );
+}
