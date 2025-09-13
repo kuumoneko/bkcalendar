@@ -13,3 +13,7 @@
 > Do not use this script for any illegal activity
 >
 > Please check again with the source on mybk.hcmut.edu.vn before using this table from the script
+
+## Contributor
+
+- [kuumoneko](https://github.com/kuumoneko)
