@@ -15,7 +15,6 @@ export default async function login_user(JSESSIONID: string, ltValue: string, ex
         return res;
     }
     else {
-        // console.log(res.error);
         return null
     }
 }
