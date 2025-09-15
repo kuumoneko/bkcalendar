@@ -12,6 +12,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { handle_error } from "@/utils/error";
+import { useOrientationMode } from "@/hooks/display";
 
 export default function Login() {
     const [username, serusername] = useState("");
@@ -62,23 +63,7 @@ export default function Login() {
         run();
     }, [login]);
 
-    const [mode, setmode] = useState("row");
-    useLayoutEffect(() => {
-        const running = setInterval(() => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            if (height > width) {
-                setmode("col");
-            } else {
-                setmode("row");
-            }
-        }, 1000);
-
-        return () => {
-            clearInterval(running);
-        };
-    }, []);
+    const mode = useOrientationMode();
 
     return (
         <UI>
@@ -104,9 +89,6 @@ export default function Login() {
                                 name="username"
                                 id="username"
                                 value={username}
-                                autoComplete="off"
-                                autoCorrect="off"
-                                autoCapitalize="off"
                                 onChange={(e) => serusername(e.target.value)}
                             />
                         </div>
@@ -120,9 +102,6 @@ export default function Login() {
                                     name="password"
                                     id="password"
                                     value={password}
-                                    autoComplete="off"
-                                    autoCorrect="off"
-                                    autoCapitalize="off"
                                     onChange={(e) => {
                                         serpassword(e.target.value);
                                     }}
