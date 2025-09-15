@@ -6,6 +6,7 @@ import Logout from "@/utils/logout.ts";
 import full_schedule from "@/utils/schdule.ts";
 import { handle_error } from "@/utils/error.ts";
 import { SubjectInfo } from "./schedule/index.tsx";
+import { useOrientationMode } from "@/hooks/display.ts";
 
 const parseDay = (date: Date) => {
     const day = date.getDate();
@@ -94,23 +95,7 @@ export default function Home() {
         run();
     }, [today]);
 
-    const [mode, setmode] = useState("row");
-    useLayoutEffect(() => {
-        const running = setInterval(() => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            if (height > width) {
-                setmode("col");
-            } else {
-                setmode("row");
-            }
-        }, 1000);
-
-        return () => {
-            clearInterval(running);
-        };
-    }, []);
+    const mode = useOrientationMode();
 
     return (
         <UI>

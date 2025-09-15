@@ -1,16 +1,17 @@
-import { ReactNode, use, useLayoutEffect, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useState } from "react";
 import Nav from "../Navigator";
-// import Sidebar from "../Sidebar";
 import check from "@/utils/hcmut/app";
-import Col from "./utils/col";
-import Row from "./utils/row";
+import Sidebar_Col from "../Sidebar/col";
+import Sidebar_Row from "../Sidebar/row";
+import { useOrientationMode } from "@/hooks/display";
 
 interface WrapperProps {
     children?: ReactNode;
 }
 
 const UI: React.FC<WrapperProps> = ({ children }) => {
-    const [mode, setmode] = useState("row");
+    const mode = useOrientationMode();
+
     useLayoutEffect(() => {
         async function run() {
             const res = await check();
@@ -35,32 +36,22 @@ const UI: React.FC<WrapperProps> = ({ children }) => {
                 }
             }
         }
-
-        const running = setInterval(() => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            if (height > width) {
-                setmode("col");
-            } else {
-                setmode("row");
-            }
-        }, 1000);
-
         run();
-
-        return () => {
-            clearInterval(running);
-        };
     }, []);
 
     return (
-        <div className="flex flex-col bg-slate-900 h-screen w-screen items-center justify-center overflow-hidden m-0 p-0 select-none cursor-default">
-            {mode === "col" ? (
-                <Col>{children && children}</Col>
-            ) : (
-                <Row>{children && children}</Row>
-            )}
+        <div
+            className={
+                "flex flex-col bg-slate-900 h-screen w-screen items-center justify-center m-0 p-0 select-none cursor-default"
+            }
+        >
+            <div className="flex flex-col bg-slate-900 h-screen w-screen items-center justify-center overflow-y-scroll [&::-webkit-scrollbar]:hidden m-0 p-0 select-none cursor-default">
+                <Nav />
+                <div className={`flex flex-${mode} h-[90%] w-[95%] mt-[15px]`}>
+                    {mode === "col" ? <Sidebar_Col /> : <Sidebar_Row />}
+                    {children && children}
+                </div>
+            </div>
         </div>
     );
 };

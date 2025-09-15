@@ -1,7 +1,7 @@
 import Sidebar_Bottom from "./bottom/index.tsx";
 import Sidebar_Top from "./top/index.tsx";
 
-export default function Sidebar() {
+export default function Sidebar_Col() {
     return (
         <div
             className={`flex flex-col h-[25%] w-[100%] items-start justify-evenly`}
