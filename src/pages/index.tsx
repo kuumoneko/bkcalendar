@@ -1,9 +1,11 @@
 "use client";
 import UI from "@/components/UI";
-import { useEffect, useState } from "react";
-import Table, { Subject } from "../utils/table.tsx";
+import { useEffect, useLayoutEffect, useState } from "react";
+import Table from "../components/table/index.tsx";
 import Logout from "@/utils/logout.ts";
 import full_schedule from "@/utils/schdule.ts";
+import { handle_error } from "@/utils/error.ts";
+import { SubjectInfo } from "./schedule/index.tsx";
 
 const parseDay = (date: Date) => {
     const day = date.getDate();
@@ -21,7 +23,7 @@ const parseDaytoVietnamese = (date: string) => {
     return `Ngày ${Number(day)} tháng ${Number(month)} năm ${year}`;
 };
 
-const create_day_schedule = (date: string, schedule: Subject[]) => {
+const create_day_schedule = (date: string, schedule: SubjectInfo[]) => {
     return schedule.filter((subject) => {
         if (typeof subject.dates === "string") {
             return subject.dates === date;
@@ -31,17 +33,36 @@ const create_day_schedule = (date: string, schedule: Subject[]) => {
 };
 
 export default function Home() {
-    const [today_sche, set_today_sche] = useState<Subject[]>([]);
+    const [today_sche, set_today_sche] = useState<SubjectInfo[]>([]);
     const [closestDay, setClosestDay] = useState<string | null>(null);
-    const [closestDaySche, setClosestDaySche] = useState<Subject[]>([]);
+    const [closestDaySche, setClosestDaySche] = useState<SubjectInfo[]>([]);
 
     const today = parseDay(new Date());
 
     useEffect(() => {
         async function run() {
             try {
-                const schedule = await full_schedule();
-
+                let schedule: SubjectInfo[] = JSON.parse(
+                    localStorage.getItem("schedule") ?? "[]"
+                );
+                try {
+                    schedule = await full_schedule();
+                    if (
+                        (schedule as unknown as string) === "notlogin" &&
+                        schedule.length < 1
+                    ) {
+                        Logout();
+                        window.location.href = "/login";
+                        return;
+                    }
+                } catch (e: any) {
+                    const temp = localStorage.getItem("schdule") ?? "[]";
+                    schedule = JSON.parse(temp);
+                    if (schedule.length === 0) {
+                        handle_error(e);
+                        return;
+                    }
+                }
                 // find the subject that has in today
                 const today_subject = create_day_schedule(today, schedule);
                 set_today_sche(today_subject);
@@ -74,9 +95,31 @@ export default function Home() {
         run();
     }, [today]);
 
+    const [mode, setmode] = useState("row");
+    useLayoutEffect(() => {
+        const running = setInterval(() => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            if (height > width) {
+                setmode("col");
+            } else {
+                setmode("row");
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(running);
+        };
+    }, []);
+
     return (
         <UI>
-            <div className="flex flex-col items-center mt-10 ml-10 w-[100%] max-x-[1500px]">
+            <div
+                className={`flex flex-col items-center mt-10 ${
+                    mode === "row" && "ml-10"
+                } w-[100%] max-x-[1500px]`}
+            >
                 <div className="flex flex-col items-center justify-center w-[100%]">
                     <h1>Hôm nay là {parseDaytoVietnamese(today)}</h1>
                     {today_sche.length > 0 ? (
