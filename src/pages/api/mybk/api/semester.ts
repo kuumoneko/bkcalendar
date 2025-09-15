@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         try {
-            // console.log(req.body.authorization)
             const { authorization } = req.body
             const response = await fetch(`https://mybk.hcmut.edu.vn/api/v1/semester-year/short?null`, {
                 method: "GET",
@@ -16,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(200).json({ ok: true, data: data })
         }
         catch (e: any) {
-            console.log(e)
             res.status(200).json({ error: { code: e.cause.code }, ok: false });
         }
     } else {

@@ -9,7 +9,6 @@ export default async function check() {
                 "content-type": "application/json",
             }
         );
-        console.log("checking ", res)
         return res;
     }
     catch (e: any) {

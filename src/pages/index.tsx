@@ -85,7 +85,6 @@ export default function Home() {
                     setClosestDaySche(closestDaySubjects);
                 }
             } catch (e) {
-                console.log(e);
                 if (e === "ECONNRESET") {
                     Logout();
                     window.location.href = "/login";

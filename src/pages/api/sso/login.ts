@@ -49,7 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             );
 
-            // console.log(responese.headers);
             res.status(200).json({ data: responese.headers.get("location"), ok: true });
         }
         catch (e: any) {

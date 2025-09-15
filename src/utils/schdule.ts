@@ -20,7 +20,6 @@ export default async function full_schedule(): Promise<any> {
         localStorage.getItem("user") as string
     ).id;
 
-    // console.log(student_id);
 
     const schedule = await get_schedule(
         token,

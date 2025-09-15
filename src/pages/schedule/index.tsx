@@ -168,11 +168,9 @@ export default function Schedule() {
                         return acc;
                     }, {});
 
-                // console.log(datesByWeek);
                 setweek(this_week);
                 setschedule(datesByWeek);
             } catch (e) {
-                console.log(e);
                 if (e === "ECONNRESET") {
                     Logout();
                     window.location.href = "/login";
@@ -187,10 +185,8 @@ export default function Schedule() {
         if (!week) {
             return;
         }
-        console.log(`Tuần ${week}`);
         const the_week =
             (schedule_all as FullScheduleByWeek)[`Tuần ${week}`] ?? {};
-        console.log(the_week);
         set_week_schedule(the_week);
     }, [week]);
 
@@ -227,7 +223,6 @@ export default function Schedule() {
                                     {Object.keys(week_schedule).map(
                                         (key: string) => {
                                             const day = week_schedule[key];
-                                            console.log(day);
                                             return (
                                                 <div
                                                     className={`${key} flex flex-col h-auto w-[100%] items-center justify-between mt-3 bg-slate-700 rounded-4xl`}

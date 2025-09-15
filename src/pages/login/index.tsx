@@ -36,7 +36,6 @@ export default function Login() {
                     username,
                     password
                 );
-                // console.log(res);
 
                 const { SESSION } = await create_app(res as string);
                 const token = await get_token(SESSION as string);
@@ -47,7 +46,6 @@ export default function Login() {
 
                 const user = await get_student_data(token as string);
 
-                console.log(user);
                 localStorage.setItem("session", SESSION as string);
                 localStorage.setItem("token", token as string);
                 localStorage.setItem("user", JSON.stringify(user));

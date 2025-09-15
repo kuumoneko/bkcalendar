@@ -6,9 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === "POST") {
         try {
             const { SESSION } = parse_body(req.body)
-            console.log(`app ${SESSION}`)
 
-            // console.log(req.body)
             const response = await fetch("https://mybk.hcmut.edu.vn/app/", {
                 method: "GET",
                 headers: {
@@ -19,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const html = await response.text()
 
             const TokenValue = getELement(html, "hid_Token");
-            console.log(html)
             res.status(200).json({
                 ok: true,
                 data: TokenValue

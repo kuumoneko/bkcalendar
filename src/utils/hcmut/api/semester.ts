@@ -15,7 +15,6 @@ export default async function get_semester(authorization: string) {
         return res;
     }
     catch (e: any) {
-        console.log(e);
         throw new Error(e);
     }
 }

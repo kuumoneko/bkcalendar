@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 
             const setCookieHeader = response.headers.get("set-cookie");
-            console.log(`app/login ${setCookieHeader}`)
             const value = setCookieHeader
                 ? setCookieHeader.split(";")[0].split("=")[1]
                 : null;
