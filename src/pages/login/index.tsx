@@ -14,8 +14,8 @@ import { useState, useEffect, useLayoutEffect } from "react";
 import { handle_error } from "@/utils/error";
 
 export default function Login() {
-    const [username, serusername] = useState("nhat.maikuumo");
-    const [password, serpassword] = useState("02052007");
+    const [username, serusername] = useState("");
+    const [password, serpassword] = useState("");
     const [hidden, sethidden] = useState(true);
 
     const [login, setlogin] = useState(false);
