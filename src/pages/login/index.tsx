@@ -70,15 +70,12 @@ export default function Login() {
             >
                 <h1 className="text-3xl w-[100%] font-bold text-center mb-5 border-b-2 pb-3 flex flex-row items-center justify-center">
                     <Hcmut_Logo height={40} width={40} />
-                    Login with HCMUT Account
+                    Đăng nhập bằng tài khoản HCMUT
                 </h1>
                 <div className="login_form flex flex-col">
-                    <span>
-                        Enter username and password to login with HCMUT Account
-                    </span>
                     <form className="flex flex-col cursor-default select-none">
                         <div className="flex flex-col w-[100%]">
-                            <label htmlFor="username">Username:</label>
+                            <label htmlFor="username">Tên tài khoản:</label>
                             <input
                                 className="text-slate-800 w-[95%] bg-slate-500 rounded-2xl px-4"
                                 type="text"
@@ -88,8 +85,8 @@ export default function Login() {
                                 onChange={(e) => serusername(e.target.value)}
                             />
                         </div>
-                        <div className="flex flex-col w-[100%]">
-                            <label htmlFor="password">Pasword:</label>
+                        <div className="flex flex-col w-[100%] mt-1">
+                            <label htmlFor="password">Mật khẩu:</label>
                             <div className="flex flex-row ">
                                 <input
                                     className="text-slate-800 w-[95%] mr-[5px] bg-slate-500 rounded-2xl px-4"
@@ -113,14 +110,13 @@ export default function Login() {
                         </div>
                         <div className="flex flex-row-reverse items-start mt-5 w-[95%]">
                             <div
-                                className="ml-10"
+                                className="ml-10 bg-indigo-500 px-3 py-1.5 rounded-2xl"
                                 onClick={() => {
                                     setlogin(true);
                                 }}
                             >
-                                Login
+                                Đăng nhập
                             </div>
-                            <div>Clear</div>
                         </div>
                     </form>
                 </div>

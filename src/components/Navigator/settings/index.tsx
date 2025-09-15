@@ -22,7 +22,7 @@ export default function SettingsModal({
                 <Hcmut />
 
                 <div className="text-center pt-4 text-sm text-gray-400">
-                    <p>About this web</p>
+                    <p>Về trang web</p>
                     <p>
                         Web này dùng để xem thời khoá biểu và lịch học hằng ngày
                         dành cho sinh viên trường Đại học Bách khoa - Đại học
@@ -30,7 +30,13 @@ export default function SettingsModal({
                     </p>
                     <p>
                         ©️ 2025{" "}
-                        <a href="https://github.com/Kuumoneko" target="_blank" rel="noopener noreferrer">Kuumoneko</a>
+                        <a
+                            href="https://github.com/Kuumoneko"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Kuumoneko
+                        </a>
                     </p>
                 </div>
             </div>

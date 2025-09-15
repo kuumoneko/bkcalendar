@@ -30,7 +30,7 @@ export default function Hcmut() {
                 <span className="flex flex-row items-center">
                     <Hcmut_Logo height={20} width={20} />
                     <span className="text-lg font-semibold text-gray-200 ml-2">
-                        HCMUT Account:
+                        Tài khoản HCMUT:
                     </span>
                 </span>
 
@@ -41,9 +41,11 @@ export default function Hcmut() {
                             window.location.href = "/login";
                         }}
                     >
-                        <span className="border-solid rounded-[50px] bg-white py-[5px] px-[10px] text-black flex flex-row">
-                            <Hcmut_Logo height={20} width={20} />
-                            Log in
+                        <span className=" w-[140px] border-solid rounded-[50px] bg-white py-[5px] px-[10px] flex flex-row">
+                            <Hcmut_Logo height={25} width={25} />
+                            <span className="text-black ml-2 mt-0.5">
+                                Đăng nhập
+                            </span>
                         </span>
                     </div>
                 ) : (

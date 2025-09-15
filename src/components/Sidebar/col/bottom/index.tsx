@@ -20,7 +20,7 @@ export default function Sidebar_Bottom() {
                 <div>
                     <span>
                         {
-                            "Chưa đăng nhập, hãy đăng nhập bằng cách chọn Settings -> HCMUT account"
+                            "Chưa đăng nhập, hãy đăng nhập bằng cách chọn Cài đặt -> Tài khoản HCMUT"
                         }
                     </span>
                 </div>

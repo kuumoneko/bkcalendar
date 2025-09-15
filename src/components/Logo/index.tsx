@@ -8,8 +8,10 @@ export default function Hcmut_Logo({
     return (
         <img
             // use logo from sso.hcmut.edu.vn, so i think it will be ok :>
-            src="https://sso.hcmut.edu.vn/cas/images/bk_logo.png"
-            className={`h-[${height ?? 20}px] w-[${width ?? 20}px] mr-[5px]`}
+            src="https://mybk.hcmut.edu.vn/app/asset/img/bk_logo.png"
+            className={`mr-[5px]`}
+            height={height ?? 20}
+            width={width ?? 20}
             alt="hcmut logo"
         />
     );
