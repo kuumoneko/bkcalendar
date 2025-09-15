@@ -1,8 +1,11 @@
-import get_schedule from "./hcmut/data/schedule";
-import get_semester from "./hcmut/data/semester";
+import get_schedule from "./hcmut/api/schedule";
+import get_semester from "./hcmut/api/semester";
 
-export default async function full_schedule() {
-    const token = localStorage.getItem("token") as string;
+export default async function full_schedule(): Promise<any> {
+    const token = localStorage.getItem("token") as string ?? ""
+    if (token.length === 0) {
+        return "notlogin"
+    }
     const semester = await get_semester(token);
     const this_semester = semester.find(
         (item: any) => item.isCurrent === true
@@ -24,6 +27,8 @@ export default async function full_schedule() {
         student_id,
         this_semester.code
     );
+
+    localStorage.setItem("schedule", JSON.stringify(schedule));
 
     return schedule;
 
