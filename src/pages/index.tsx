@@ -183,8 +183,8 @@ export default function Home() {
                             </div>
                         )}
                         {!curr_sub && (!next_sub || next_sub.length === 0) && (
-                            <div>
-                                Hôm nay đã hết tiết học rồi, nghỉ ngơi đi bạn
+                            <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                                Hết tiết roài, xoã đê bạn ơi
                             </div>
                         )}
                     </div>
