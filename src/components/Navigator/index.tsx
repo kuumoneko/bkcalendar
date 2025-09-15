@@ -1,7 +1,7 @@
 "use client";
 import {  useState } from "react";
-import SettingsModal from "./settings/index.tsx";
-import Themes from "./settings/other/gear.tsx";
+import SettingsModal from "./settings/index";
+import Themes from "./settings/other/gear";
 
 export default function Nav() {
     const [open, setopen] = useState(false);

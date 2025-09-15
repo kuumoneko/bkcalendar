@@ -1,4 +1,6 @@
-
+/**
+ * fetch data from api
+ */
 export default async function fetch_data(
     url: string,
     method: "GET" | "POST" = "GET",

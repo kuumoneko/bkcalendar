@@ -1,3 +1,6 @@
+/**
+ * Get data from html text
+ */
 export default function getELement(html: string, id: string = "", name: string = "") {
     if (id.length > 0 && name.length > 0) {
         throw new Error("Invalid arguments");

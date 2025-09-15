@@ -1,6 +1,9 @@
 import fetch_data from "@/utils/fetch";
 
-export default async function get_semester(authorization: string) {
+/**
+ * Get all semester
+ */
+export default async function get_semester(authorization: string): Promise<any> {
     try {
         const res = await fetch_data(
             ("/api/mybk/api/semester"),

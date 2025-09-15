@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import parse_body from "../../data";
 
+/**
+ * Create login page SESSION
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         try {
@@ -12,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     referer: "https://sso.hcmut.edu.vn/",
                 }
             });
-
 
             const setCookieHeader = response.headers.get("set-cookie");
             const value = setCookieHeader

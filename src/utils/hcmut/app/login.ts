@@ -1,5 +1,8 @@
 import fetch_data from "@/utils/fetch";
 
+/**
+ * Create mybk/app SESSION
+ */
 export default async function create_app(url: string) {
     try {
         const ticket = new URL(url).searchParams.get("ticket")

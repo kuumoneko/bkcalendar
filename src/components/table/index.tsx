@@ -1,4 +1,4 @@
-import { SubjectInfo } from "@/pages/schedule";
+import { SubjectInfo } from "@/types/index";
 
 export default function Table({ subjects }: { subjects: SubjectInfo[] }) {
     const lightCol = "bg-slate-700 border-2";

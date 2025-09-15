@@ -1,9 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import parse_body from "../../data";
 
+/**
+ * Get Semester
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         try {
-            const { authorization } = req.body
+            const { authorization } = parse_body(req.body)
             const response = await fetch(`https://mybk.hcmut.edu.vn/api/v1/semester-year/short?null`, {
                 method: "GET",
                 redirect: "manual",

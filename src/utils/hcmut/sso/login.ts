@@ -1,5 +1,8 @@
 import fetch_data from "@/utils/fetch";
 
+/**
+ * Login user
+ */
 export default async function login_user(JSESSIONID: string, ltValue: string, executionValue: string, username: string, password: string) {
     const res = await fetch_data("/api/sso/login", "POST", {
         "content-type": "application/json",

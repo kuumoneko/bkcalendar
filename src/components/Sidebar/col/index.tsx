@@ -1,5 +1,5 @@
-import Sidebar_Bottom from "./bottom/index.tsx";
-import Sidebar_Top from "./top/index.tsx";
+import Sidebar_Bottom from "./bottom/index";
+import Sidebar_Top from "./top/index";
 
 export default function Sidebar_Col() {
     return (

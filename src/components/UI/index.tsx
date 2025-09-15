@@ -15,7 +15,6 @@ const UI: React.FC<WrapperProps> = ({ children }) => {
     useLayoutEffect(() => {
         async function run() {
             const res = await check();
-
             const url = window.location.href;
 
             if (res == "ok") {

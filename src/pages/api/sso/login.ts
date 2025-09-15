@@ -1,10 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { URLSearchParams } from 'node:url';
+import parse_body from "../data";
 
+/**
+ * Login user
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         try {
-            const { username, password, JSESSIONID, ltValue, executionValue } = req.body;
+            const { username, password, JSESSIONID, ltValue, executionValue } = parse_body(req.body);
             const responese = await fetch(
                 "https://sso.hcmut.edu.vn/cas/login?service=https%3A%2F%2Fmybk.hcmut.edu.vn%2Fapp%2Flogin%2Fcas",
                 {
@@ -45,7 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     redirect: "manual",
                     mode: "cors",
                     credentials: "include",
-
                 }
             );
 

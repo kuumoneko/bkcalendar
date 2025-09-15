@@ -1,5 +1,8 @@
 import fetch_data from "@/utils/fetch";
 
+/**
+ * Get student data
+ */
 export default async function get_student_data(authorization: string) {
     try {
         const res = await fetch_data(
@@ -12,7 +15,6 @@ export default async function get_student_data(authorization: string) {
                 authorization: authorization,
             },
         );
-        // const data = await res.json();
 
         return res;
     } catch (e: any) { console.error(e); throw new Error(e) }

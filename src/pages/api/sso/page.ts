@@ -1,6 +1,9 @@
 import getELement from "@/utils/hcmut/getvalue";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+/**
+ * Create SSO login page
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
 

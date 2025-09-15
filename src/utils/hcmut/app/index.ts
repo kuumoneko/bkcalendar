@@ -1,7 +1,9 @@
 import fetch_data from "@/utils/fetch";
 
+/**
+ * check if web is down?
+ */
 export default async function check() {
-
     try {
         const res = await fetch_data("/api/mybk/app/check",
             "GET",

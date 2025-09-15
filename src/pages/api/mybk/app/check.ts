@@ -1,5 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+/**
+ * Check if web is down?
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         try {
@@ -11,7 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.status(200).json({ ok: true });
             }
             else {
-                // get response code
                 const responseCode = response.status;
 
                 if (responseCode === 408) {

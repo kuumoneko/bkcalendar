@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import Hcmut_Logo from "../../../Logo/index.tsx";
-import Logout from "../../../../utils/logout.ts";
-// import { Data, fetch_data } from "../../../../utils/fetch.ts";
+import Hcmut_Logo from "../../../Logo/index";
+import Logout from "../../../../utils/logout";
 
 export default function Hcmut() {
     const [user, setuser] = useState(

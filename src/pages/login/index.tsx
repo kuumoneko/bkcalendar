@@ -1,24 +1,20 @@
 import Hcmut_Logo from "@/components/Logo";
 import UI from "@/components/UI";
-
-import create_app from "@/utils/hcmut/app/login";
-import create_login from "@/utils/hcmut/sso/index";
-
-import login_user from "@/utils/hcmut/sso/login";
-import get_token from "@/utils/hcmut/app/user";
-
-import get_student_data from "@/utils/hcmut/api/student";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
 import { handle_error } from "@/utils/error";
 import { useOrientationMode } from "@/hooks/display";
+import create_app from "@/utils/hcmut/app/login";
+import create_login from "@/utils/hcmut/sso/index";
+import login_user from "@/utils/hcmut/sso/login";
+import get_token from "@/utils/hcmut/app/user";
+import get_student_data from "@/utils/hcmut/api/student";
 
 export default function Login() {
     const [username, serusername] = useState("");
     const [password, serpassword] = useState("");
     const [hidden, sethidden] = useState(true);
-
     const [login, setlogin] = useState(false);
 
     useEffect(() => {
@@ -92,7 +88,6 @@ export default function Login() {
                                 onChange={(e) => serusername(e.target.value)}
                             />
                         </div>
-
                         <div className="flex flex-col w-[100%]">
                             <label htmlFor="password">Pasword:</label>
                             <div className="flex flex-row ">
@@ -116,7 +111,6 @@ export default function Login() {
                                 </div>
                             </div>
                         </div>
-
                         <div className="flex flex-row-reverse items-start mt-5 w-[95%]">
                             <div
                                 className="ml-10"

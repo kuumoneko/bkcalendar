@@ -2,6 +2,9 @@ import getELement from "@/utils/hcmut/getvalue";
 import { NextApiRequest, NextApiResponse } from "next";
 import parse_body from "../../data";
 
+/**
+ * Get auth token from mybk/app
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         try {

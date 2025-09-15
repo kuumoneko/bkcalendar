@@ -1,11 +1,5 @@
-// import Audio_Settings from "./music/audio.tsx";
-import Google from "./account/google/index.tsx";
-import Hcmut from "./account/hcmut.tsx";
-import Close_Settings from "./other/close.tsx";
-// import Spotify_Account from "./account/spotify.tsx";
-// import Youtube_Account from "./account/youtube.tsx";
-// import { goto } from "../../../utils/url.ts";
-// import LocalFile from "./music/localfile.tsx";
+import Hcmut from "./account/hcmut";
+import Close_Settings from "./other/close";
 
 export default function SettingsModal({
     isOpen,

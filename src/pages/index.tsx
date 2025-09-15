@@ -1,37 +1,45 @@
 "use client";
 import UI from "@/components/UI";
-import { useEffect, useLayoutEffect, useState } from "react";
-import Table from "../components/table/index.tsx";
-import Logout from "@/utils/logout.ts";
-import full_schedule from "@/utils/schdule.ts";
-import { handle_error } from "@/utils/error.ts";
-import { SubjectInfo } from "./schedule/index.tsx";
-import { useOrientationMode } from "@/hooks/display.ts";
+import { useEffect,  useState } from "react";
+import Table from "../components/table/index";
+import Logout from "@/utils/logout";
+import full_schedule from "@/utils/schdule";
+import { handle_error } from "@/utils/error";
+import { SubjectInfo } from "../types/index";
+import { useOrientationMode } from "@/hooks/display";
 
-const parseDay = (date: Date) => {
+/**
+ * Convert Date to yyyy-mm-dd
+ */
+function parseDay(date: Date): string {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
-    // convert to yyyy-mm-dd
-    const monthPadded = String(month).padStart(2, "0");
-    const dayPadded = String(day).padStart(2, "0");
-    return `${year}-${monthPadded}-${dayPadded}`;
-};
 
-// function to change yyyy-mm-dd to date month year in vietnamese
-const parseDaytoVietnamese = (date: string) => {
+    const monthPadded = String(month).padStart(2, "0"); // to mm
+    const dayPadded = String(day).padStart(2, "0"); // to dd
+    return `${year}-${monthPadded}-${dayPadded}`;
+}
+
+/**
+ * Convert yyyy-mm-dd to date month year in vietnamese
+ */
+function parseDaytoVietnamese(date: string): string {
     const [year, month, day] = date.split("-");
     return `Ngày ${Number(day)} tháng ${Number(month)} năm ${year}`;
-};
+}
 
-const create_day_schedule = (date: string, schedule: SubjectInfo[]) => {
+/**
+ * Create Schedule by day
+ */
+function create_day_schedule(date: string, schedule: SubjectInfo[]) {
     return schedule.filter((subject) => {
         if (typeof subject.dates === "string") {
             return subject.dates === date;
         }
         return subject.dates.includes(date);
     });
-};
+}
 
 export default function Home() {
     const [today_sche, set_today_sche] = useState<SubjectInfo[]>([]);
@@ -64,18 +72,17 @@ export default function Home() {
                         return;
                     }
                 }
-                // find the subject that has in today
+
                 const today_subject = create_day_schedule(today, schedule);
                 set_today_sche(today_subject);
 
-                // Find the closest day with subjects after today
                 const allDates: any[] = [
                     ...new Set(schedule.flatMap((s: any) => s.dates)),
                 ];
 
                 const closestFutureDateString = allDates
-                    .filter((dateStr: string) => dateStr > today) // string comparison works for YYYY-MM-DD
-                    .sort()[0]; // sort alphabetically which is chronologically for YYYY-MM-DD
+                    .filter((dateStr: string) => dateStr > today)
+                    .sort()[0];
 
                 if (closestFutureDateString) {
                     setClosestDay(closestFutureDateString);

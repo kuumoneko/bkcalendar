@@ -5,30 +5,7 @@ import { useEffect, useState } from "react";
 import { convertDateFormat, getnow } from "@/utils/day";
 import Loading from "@/components/Loading";
 import { handle_error } from "@/utils/error";
-
-export interface SubjectInfo {
-    building: string;
-    class: string;
-    dates: string | string[];
-    dayofWeek: number;
-    endTime: string;
-    lesson: string;
-    room: string;
-    startTime: string;
-    subject: string;
-    teacher: string;
-    weeks: number[];
-}
-interface DailySchedule {
-    day: string;
-    subjects: SubjectInfo[];
-}
-interface WeeklySchedule {
-    [date: string]: DailySchedule;
-}
-interface FullScheduleByWeek {
-    [week: string]: WeeklySchedule;
-}
+import { FullScheduleByWeek, SubjectInfo } from "@/types";
 
 export default function Schedule() {
     const [schedule_all, setschedule] = useState<FullScheduleByWeek | null>(
@@ -48,16 +25,15 @@ export default function Schedule() {
                 }
 
                 function getFirstDayOfWeek(date = new Date()) {
-                    const dayOfWeek = date.getDay(); // 0 (Sun) to 6 (Sat)
+                    const dayOfWeek = date.getDay(); 
                     const diff =
-                        date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust if Sunday
+                        date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); 
                     return new Date(date.setDate(diff));
                 }
 
                 const first_day_of_week = getFirstDayOfWeek();
-                first_day_of_week.setHours(0, 0, 0, 0); // Set to start of day for accurate comparison
+                first_day_of_week.setHours(0, 0, 0, 0); 
 
-                // get the day by week number
                 const daysOfWeek = [
                     "Chủ Nhật",
                     "Thứ Hai",
@@ -68,29 +44,21 @@ export default function Schedule() {
                     "Thứ Bảy",
                 ];
 
-                // Helper to get week number (ISO 8601)
                 const getWeekNumber = (d: Date): number => {
-                    // Copy date so don't modify original
                     d = new Date(
                         Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())
                     );
-                    // Set to nearest Thursday: current date + 4 - current day number
-                    // Make Sunday's day number 7
                     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-                    // Get first day of year
                     const yearStart = new Date(
                         Date.UTC(d.getUTCFullYear(), 0, 1)
                     );
-                    // Calculate full weeks to nearest Thursday
                     const weekNo = Math.ceil(
                         ((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
                     );
-                    // Return week number
                     return weekNo;
                 };
 
                 const datesByWeek = schedule
-                    // make the subject that the day is "--" to check in the end of the list
                     .sort((a: SubjectInfo, b: SubjectInfo) => {
                         const daysOrder = [
                             "Thứ Hai",

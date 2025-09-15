@@ -6,13 +6,10 @@ enum Error_code {
 }
 
 export default function ErrorPage() {
-    const [code, setcode] = useState("");
     const [error, seterror] = useState("");
 
     useLayoutEffect(() => {
         const temp = localStorage.getItem("error") ?? "";
-        setcode(temp);
-        // get all key of Error_code
         const allErrorCode = Object.keys(Error_code);
 
         if (allErrorCode.includes(temp)) {
