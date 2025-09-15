@@ -1,20 +1,21 @@
 import Hcmut_Logo from "@/components/Logo";
 import UI from "@/components/UI";
 
-import create_app from "@/utils/hcmut/create/app";
-import create_login from "@/utils/hcmut/create/login";
+import create_app from "@/utils/hcmut/app/login";
+import create_login from "@/utils/hcmut/sso/index";
 
-import login_user from "@/utils/hcmut/auth/login";
-import get_token from "@/utils/hcmut/auth/user";
+import login_user from "@/utils/hcmut/sso/login";
+import get_token from "@/utils/hcmut/app/user";
 
-import get_student_data from "@/utils/hcmut/data/student";
+import get_student_data from "@/utils/hcmut/api/student";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
+import { handle_error } from "@/utils/error";
 
 export default function Login() {
-    const [username, serusername] = useState("");
-    const [password, serpassword] = useState("");
+    const [username, serusername] = useState("nhat.maikuumo");
+    const [password, serpassword] = useState("02052007");
     const [hidden, sethidden] = useState(true);
 
     const [login, setlogin] = useState(false);
@@ -27,36 +28,67 @@ export default function Login() {
             const { JSESSIONID, ltValue, executionValue } =
                 await create_login();
 
-            const res = await login_user(
-                JSESSIONID || "",
-                ltValue || "",
-                executionValue || "",
-                username,
-                password
-            );
+            try {
+                const res = await login_user(
+                    JSESSIONID || "",
+                    ltValue || "",
+                    executionValue || "",
+                    username,
+                    password
+                );
+                // console.log(res);
 
-            const { SESSION } = await create_app(res as string);
-            const token = await get_token(SESSION as string);
-            const user = await get_student_data(token as string);
-            // console.log(user);
-            localStorage.setItem("session", SESSION as string);
-            localStorage.setItem("token", token as string);
+                const { SESSION } = await create_app(res as string);
+                const token = await get_token(SESSION as string);
 
-            // console.log(user);
-            localStorage.setItem("user", JSON.stringify(user));
+                if (token === "ok") {
+                    handle_error("EAI_AGAIN");
+                }
 
-            const expires = new Date().getTime() + 60 * 60 * 1000;
-            localStorage.setItem("expires", expires.toString());
+                const user = await get_student_data(token as string);
 
-            window.location.href = "/";
-            setlogin(false);
+                console.log(user);
+                localStorage.setItem("session", SESSION as string);
+                localStorage.setItem("token", token as string);
+                localStorage.setItem("user", JSON.stringify(user));
+
+                const expires = new Date().getTime() + 60 * 60 * 1000;
+                localStorage.setItem("expires", expires.toString());
+
+                window.location.href = "/";
+                setlogin(false);
+            } catch (e: any) {
+                handle_error(e);
+            }
         }
         run();
     }, [login]);
 
+    const [mode, setmode] = useState("row");
+    useLayoutEffect(() => {
+        const running = setInterval(() => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+
+            if (height > width) {
+                setmode("col");
+            } else {
+                setmode("row");
+            }
+        }, 1000);
+
+        return () => {
+            clearInterval(running);
+        };
+    }, []);
+
     return (
         <UI>
-            <div className="login ml-10 mt-10 flex flex-col items-center h-[100%] w-[80%]">
+            <div
+                className={`login ml-15 mt-${mode === "row" ? 10 : 15} ${
+                    mode === "col" && "mt-6"
+                } flex flex-col items-center h-[100%] w-[80%]`}
+            >
                 <h1 className="text-3xl w-[100%] font-bold text-center mb-5 border-b-2 pb-3 flex flex-row items-center justify-center">
                     <Hcmut_Logo height={40} width={40} />
                     Login with HCMUT Account

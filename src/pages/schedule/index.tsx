@@ -1,11 +1,12 @@
 import UI from "@/components/UI";
 import Logout from "@/utils/logout";
 import full_schedule from "@/utils/schdule";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { convertDateFormat, getnow } from "@/utils/day";
 import Loading from "@/components/Loading";
+import { handle_error } from "@/utils/error";
 
-interface SubjectInfo {
+export interface SubjectInfo {
     building: string;
     class: string;
     dates: string | string[];
@@ -30,7 +31,6 @@ interface FullScheduleByWeek {
 }
 
 export default function Schedule() {
-    
     const [schedule_all, setschedule] = useState<FullScheduleByWeek | null>(
         null
     );
@@ -39,7 +39,13 @@ export default function Schedule() {
     useEffect(() => {
         async function run() {
             try {
-                const schedule: SubjectInfo[] = await full_schedule();
+                let schedule: SubjectInfo[];
+                try {
+                    schedule = await full_schedule();
+                } catch (e: any) {
+                    handle_error(e);
+                    return;
+                }
 
                 function getFirstDayOfWeek(date = new Date()) {
                     const dayOfWeek = date.getDay(); // 0 (Sun) to 6 (Sat)
@@ -235,7 +241,14 @@ export default function Schedule() {
                                                                   )}
                                                         </span>
                                                     </div>
-                                                    <div className="subject w-[100%] pb-4 mt-3 bg-slate-600 rounded-4xl grid grid-cols-3">
+                                                    <div
+                                                        className={`subject w-[100%] pb-4 mt-3 bg-slate-600 rounded-4xl ${
+                                                            day.subjects
+                                                                .length > 2
+                                                                ? "grid grid-cols-3"
+                                                                : "flex flex-row items-center justify-evenly"
+                                                        }`}
+                                                    >
                                                         {day.subjects.map(
                                                             (
                                                                 subject: SubjectInfo
@@ -244,24 +257,24 @@ export default function Schedule() {
                                                                     <div
                                                                         className={`${subject.subject} flex flex-col items-center justify-center mt-2`}
                                                                     >
-                                                                        <div>
+                                                                        <div className="text-center">
                                                                             {
                                                                                 subject.subject
                                                                             }
                                                                         </div>
-                                                                        <div>
+                                                                        <div className="text-center">
                                                                             {subject.teacher.includes(
                                                                                 "Chưa biết"
                                                                             )
                                                                                 ? "Chưa biết"
                                                                                 : subject.teacher}
                                                                         </div>
-                                                                        <div>
+                                                                        <div className="text-center">
                                                                             {
                                                                                 subject.room
                                                                             }
                                                                         </div>
-                                                                        <div>
+                                                                        <div className="text-center">
                                                                             {day.day ===
                                                                             "--"
                                                                                 ? "--"
