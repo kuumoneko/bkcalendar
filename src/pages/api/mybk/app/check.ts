@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const response = await fetch("https://mybk.hcmut.edu.vn/app/login?type=cas", {
                 method: "GET"
             })
-
+            console.log(response.status)
             if (response.ok) {
                 res.status(200).json({ ok: true });
             }

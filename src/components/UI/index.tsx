@@ -12,7 +12,7 @@ interface WrapperProps {
 const UI: React.FC<WrapperProps> = ({ children }) => {
     const mode = useOrientationMode();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         async function run() {
             const res = await check();
             const url = window.location.href;
