@@ -6,26 +6,51 @@ import { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "GET") {
         try {
-            const response = await fetch("https://mybk.hcmut.edu.vn/app/login?type=cas", {
-                method: "GET"
-            })
-            console.log(response.status)
-            if (response.ok) {
-                res.status(200).json({ ok: true });
-            }
-            else {
-                const responseCode = response.status;
+            let url = "https://mybk.hcmut.edu.vn/app/login?type=cas";
 
-                if (responseCode === 408) {
-                    res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
+            let tryCount = 1;
+            while (tryCount < 4 && !url.includes("401")) {
+                const response = await fetch(url, {
+                    method: "GET", signal: AbortSignal.timeout(4500)
+                });
+
+                url = response.headers.get("Location") || "";
+
+                if (url === "") {
+                    return res.status(200).json({ ok: true });
                 }
                 else {
-                    res.status(200).json({ error: { code: response.statusText }, ok: false });
+                    if (response.ok) {
+                        return res.status(200).json({ ok: true });
+                    }
+                    else {
+                        const responseCode = response.status;
+
+                        if (responseCode === 408) {
+                            return res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
+                        }
+                        else {
+                            return res.status(200).json({ error: { code: response.statusText }, ok: false });
+                        }
+                    }
                 }
+                tryCount += 1;
+            }
+
+            if (url.includes("401")) {
+                return res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
+            }
+
+            if (tryCount > 3) {
+                return res.status(200).json({ ok: true });
             }
         }
         catch (e: any) {
-            res.status(200).json({ error: { code: e.cause.code }, ok: false });
+            if (String(e).includes("signal timed out")) {
+                return res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
+            }
+
+            return res.status(200).json({ error: { code: e.cause.code }, ok: false });
         }
     }
     else {

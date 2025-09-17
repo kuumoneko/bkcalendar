@@ -14,6 +14,11 @@ const UI: React.FC<WrapperProps> = ({ children }) => {
 
     useEffect(() => {
         async function run() {
+            const isOffline = Boolean(
+                localStorage.getItem("offline") ?? "false"
+            );
+            if (isOffline) return;
+
             const res = await check();
             const url = window.location.href;
 

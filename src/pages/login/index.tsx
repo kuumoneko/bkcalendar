@@ -110,7 +110,7 @@ export default function Login() {
                         </div>
                         <div className="flex flex-row-reverse items-start mt-5 w-[95%]">
                             <div
-                                className="ml-10 bg-indigo-500 px-3 py-1.5 rounded-2xl"
+                                className="ml-10 bg-indigo-500 px-3 py-1.5 rounded-2xl hover:cursor-pointer"
                                 onClick={() => {
                                     setlogin(true);
                                 }}
