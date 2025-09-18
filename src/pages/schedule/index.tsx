@@ -165,9 +165,9 @@ export default function Schedule() {
         <div>
             <UI>
                 <div
-                    className={`flex flex-row items-center justify-center w-[100%] h-[${
-                        mode === "col" ? 75 : 100
-                    }%] mt-4`}
+                    className={`flex flex-row items-center justify-center w-[100%] ${
+                        mode === "col" ? "h-[75%]" : "h-full"
+                    } mt-4`}
                 >
                     {schedule_all && week ? (
                         <div className="schedule flex flex-col w-[100%] h-[100%] items-center">
@@ -195,9 +195,11 @@ export default function Schedule() {
                             </div>
                             {Object.keys(week_schedule).length > 0 && (
                                 <div
-                                    className={`h-[100%] max-h-[${
-                                        mode === "row" ? 1000 : 500
-                                    }px] w-[90%] flex flex-col items-center justify-start  overflow-y-scroll [&::-webkit-scrollbar]:hidden`}
+                                    className={`h-[100%] ${
+                                        mode === "row"
+                                            ? "max-h-[1000px]"
+                                            : "max-h-[750px]"
+                                    } w-[90%] flex flex-col items-center justify-start  overflow-y-scroll [&::-webkit-scrollbar]:hidden`}
                                 >
                                     {Object.keys(week_schedule).map(
                                         (key: string) => {

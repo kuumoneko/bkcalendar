@@ -43,7 +43,7 @@ export default function Login() {
                     alert("Tài khoản hoặc mật khẩu không đúng");
                     return setlogin(false);
                 }
-                
+
                 const { SESSION } = await create_app(res as string);
                 const token = await get_token(SESSION as string);
 
@@ -74,8 +74,8 @@ export default function Login() {
     return (
         <UI>
             <div
-                className={`login ml-15 mt-${mode === "row" ? 10 : 15} ${
-                    mode === "col" && "mt-6"
+                className={`login ml-15 ${
+                    mode === "row" ? "mt-10" : "mt-6"
                 } flex flex-col items-center h-[100%] w-[80%]`}
             >
                 <h1 className="text-3xl w-[100%] font-bold text-center mb-5 border-b-2 pb-3 flex flex-row items-center justify-center">

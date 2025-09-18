@@ -151,7 +151,7 @@ export default function Day() {
     return (
         <div
             className={`flex flex-col items-center mt-10 ${
-                mode === "row" && "ml-10"
+                mode === "row" ? "ml-10" : ""
             } w-[100%] max-x-[1500px]`}
         >
             <h1>Hôm nay là {parseDaytoVietnamese(today)}</h1>

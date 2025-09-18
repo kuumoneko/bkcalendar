@@ -8,7 +8,7 @@
     "scripts": {
         "dev": "cross-env PORT=3005 next dev",
         "build": "next build",
-        "start": "next start"
+        "start": "cross-env PORT=3005 next start"
     },
     "dependencies": {
         "@fortawesome/free-brands-svg-icons": "^7.0.1",

@@ -30,11 +30,9 @@ function Side_bar_Button({ text, url }: { text: string; url: string }) {
 export default function Sidebar_Top({ mode }: { mode: "row" | "col" }) {
     return (
         <div
-            className={`w-[100%] ${mode === "row" ? "max-w-[250px]" : ""} h-[${
-                mode === "col" ? "40" : "17"
-            }%] bg-slate-700 text-white rounded-3xl ${
-                mode === "row" ? "p-7" : "pt-2"
-            }`}
+            className={`w-[100%] ${
+                mode === "row" ? "max-w-[250px] h-[17%] p-7" : "h-[40%] p-2"
+            } bg-slate-700 text-white rounded-3xl`}
         >
             <div className="navigation">
                 <ul

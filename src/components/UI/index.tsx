@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useLayoutEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import Nav from "../Navigator";
 import check from "@/utils/hcmut/app";
 import { useOrientationMode } from "@/hooks/display";
@@ -51,7 +51,11 @@ const UI: React.FC<WrapperProps> = ({ children }) => {
         >
             <div className="flex flex-col bg-slate-900 h-full w-full items-center justify-start m-0 p-0 select-none cursor-default">
                 <Nav />
-                <div className={`flex flex-${mode} h-[85%] w-[95%] mt-[15px]`}>
+                <div
+                    className={`flex ${
+                        mode === "row" ? "flex-row" : "flex-col"
+                    } h-[85%] w-[95%] mt-[15px]`}
+                >
                     <Sidebar mode={mode} />
                     {children && children}
                 </div>
