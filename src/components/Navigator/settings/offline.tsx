@@ -1,9 +1,9 @@
 "use client";
-import { faComputer, faGear, faGlobe } from "@fortawesome/free-solid-svg-icons";
+import { faComputer, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect, useState } from "react";
 
-export default function Themes({ setopen }: { setopen: (a: boolean) => void }) {
+export default function Themes() {
     const [offline, setoffline] = useState(false);
     useLayoutEffect(() => {
         setoffline(Boolean(localStorage.getItem("offline") ?? "false"));
@@ -14,6 +14,10 @@ export default function Themes({ setopen }: { setopen: (a: boolean) => void }) {
                 <div className="flex justify-center items-center space-x-4">
                     <label className="relative inline-block w-[60px] h-8">
                         <input
+                            name="offline"
+                            title="offline"
+                            id="offline"
+                            placeholder="offline"
                             type="checkbox"
                             className="opacity-0 w-0 h-0 peer"
                             checked={offline}
@@ -25,25 +29,25 @@ export default function Themes({ setopen }: { setopen: (a: boolean) => void }) {
                                 );
                             }}
                         />
-                        <span className="slider round absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 transition-all duration-400 rounded-[34px] before:absolute before:content-[''] before:h-6 before:w-6 before:left-1 before:bottom-1 before:bg-white before:transition-all before:duration-400 before:rounded-full peer-checked:bg-blue-500 peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:before:translate-x-6 flex items-center justify-between px-2">
+                        <span className="slider round w-[63px] absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 transition-all duration-400 rounded-[34px] before:absolute before:content-[''] before:h-6 before:w-6 before:left-1 before:bottom-1 before:bg-white before:transition-all before:duration-400 before:rounded-full peer-checked:bg-blue-500 peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:before:translate-x-[29px] flex items-center justify-between px-2">
                             <span>
-                                <FontAwesomeIcon icon={faGlobe} />
+                                <FontAwesomeIcon className="mt-1.5" icon={faGlobe} />
                             </span>
                             <span>
-                                <FontAwesomeIcon icon={faComputer} />
+                                <FontAwesomeIcon className="mt-1.5 text-slate-700" icon={faComputer} />
                             </span>
                         </span>
                     </label>
                 </div>
             </span>
-            <span
-                className="material-icons caret-slate-50"   
+            {/* <span
+                className="material-icons caret-slate-50"
                 onClick={() => {
                     setopen(true);
                 }}
             >
                 <FontAwesomeIcon icon={faGear} className="text-white" />
-            </span>
+            </span> */}
         </div>
     );
 }

@@ -6,6 +6,18 @@
 
 - [BK Calendar](https://bkcalendar.vercel.app/)
 
+## UPDATE
+
+> Add offline mode
+>
+> Add logic on login page
+>
+> Remove Settings button and add Login button on navbar
+>
+> Refactor Sidebar code
+>
+> Change logo from url to file
+
 ## Usage
 
 > Click the link above.
@@ -18,8 +30,8 @@
 
 ## IMPORTANT
 
-> This script is for educational purpose only.
+> This web app is for educational purpose only.
 >
-> Do not use this script for any illegal activity.
+> Do not use this web app for any illegal activity.
 >
 > Please check again with the source on mybk.hcmut.edu.vn/app before using the schedule from this web.

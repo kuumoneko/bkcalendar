@@ -21,6 +21,10 @@ export default function Login() {
         if (!login) {
             return;
         }
+        if (username.length === 0 || password.length === 0) {
+            alert("Vui lòng nhập tài khoản và mật khẩu");
+            return setlogin(false);
+        }
         async function run() {
             const { JSESSIONID, ltValue, executionValue } =
                 await create_login();
@@ -34,6 +38,12 @@ export default function Login() {
                     password
                 );
 
+                console.log(res);
+                if (res === "INVALID_CREDENTIALS") {
+                    alert("Tài khoản hoặc mật khẩu không đúng");
+                    return setlogin(false);
+                }
+                
                 const { SESSION } = await create_app(res as string);
                 const token = await get_token(SESSION as string);
 
@@ -115,7 +125,11 @@ export default function Login() {
                                     setlogin(true);
                                 }}
                             >
-                                Đăng nhập
+                                {!login ? (
+                                    <span>Đăng nhập</span>
+                                ) : (
+                                    <span>Đang đăng nhập...</span>
+                                )}
                             </div>
                         </div>
                     </form>

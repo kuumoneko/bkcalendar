@@ -1,9 +1,9 @@
 import { ReactNode, useEffect, useLayoutEffect, useState } from "react";
 import Nav from "../Navigator";
 import check from "@/utils/hcmut/app";
-import Sidebar_Col from "../Sidebar/col";
-import Sidebar_Row from "../Sidebar/row";
 import { useOrientationMode } from "@/hooks/display";
+import Footer from "../Footer";
+import Sidebar from "../Sidebar";
 
 interface WrapperProps {
     children?: ReactNode;
@@ -49,12 +49,13 @@ const UI: React.FC<WrapperProps> = ({ children }) => {
                 "flex flex-col bg-slate-900 h-screen w-screen items-center justify-center m-0 p-0 select-none cursor-default"
             }
         >
-            <div className="flex flex-col bg-slate-900 h-screen w-screen items-center justify-center overflow-y-scroll [&::-webkit-scrollbar]:hidden m-0 p-0 select-none cursor-default">
+            <div className="flex flex-col bg-slate-900 h-full w-full items-center justify-start m-0 p-0 select-none cursor-default">
                 <Nav />
-                <div className={`flex flex-${mode} h-[90%] w-[95%] mt-[15px]`}>
-                    {mode === "col" ? <Sidebar_Col /> : <Sidebar_Row />}
+                <div className={`flex flex-${mode} h-[85%] w-[95%] mt-[15px]`}>
+                    <Sidebar mode={mode} />
                     {children && children}
                 </div>
+                <Footer />
             </div>
         </div>
     );

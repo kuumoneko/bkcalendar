@@ -6,6 +6,7 @@ import { convertDateFormat, getnow } from "@/utils/day";
 import Loading from "@/components/Loading";
 import { handle_error } from "@/utils/error";
 import { FullScheduleByWeek, SubjectInfo } from "@/types";
+import { useOrientationMode } from "@/hooks/display";
 
 export default function Schedule() {
     const [schedule_all, setschedule] = useState<FullScheduleByWeek | null>(
@@ -25,14 +26,14 @@ export default function Schedule() {
                 }
 
                 function getFirstDayOfWeek(date = new Date()) {
-                    const dayOfWeek = date.getDay(); 
+                    const dayOfWeek = date.getDay();
                     const diff =
-                        date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); 
+                        date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
                     return new Date(date.setDate(diff));
                 }
 
                 const first_day_of_week = getFirstDayOfWeek();
-                first_day_of_week.setHours(0, 0, 0, 0); 
+                first_day_of_week.setHours(0, 0, 0, 0);
 
                 const daysOfWeek = [
                     "Chủ Nhật",
@@ -158,10 +159,16 @@ export default function Schedule() {
         set_week_schedule(the_week);
     }, [week]);
 
+    const mode = useOrientationMode();
+
     return (
         <div>
             <UI>
-                <div className="flex flex-row items-center justify-center w-[100%] mt-4">
+                <div
+                    className={`flex flex-row items-center justify-center w-[100%] h-[${
+                        mode === "col" ? 75 : 100
+                    }%] mt-4`}
+                >
                     {schedule_all && week ? (
                         <div className="schedule flex flex-col w-[100%] h-[100%] items-center">
                             <div className="flex flex-row h-[5%] w-[50%] items-center justify-between">
@@ -187,7 +194,11 @@ export default function Schedule() {
                                 </div>
                             </div>
                             {Object.keys(week_schedule).length > 0 && (
-                                <div className="h-[100%] w-[90%] flex flex-col items-center justify-start">
+                                <div
+                                    className={`h-[100%] max-h-[${
+                                        mode === "row" ? 1000 : 500
+                                    }px] w-[90%] flex flex-col items-center justify-start  overflow-y-scroll [&::-webkit-scrollbar]:hidden`}
+                                >
                                     {Object.keys(week_schedule).map(
                                         (key: string) => {
                                             const day = week_schedule[key];

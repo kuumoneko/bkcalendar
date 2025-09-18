@@ -1,10 +1,10 @@
 {
     "name": "bk-calendar",
-    "version": "3.0.0",
-    "description": "Nhìn tổng quan thời khoá biểu theo ngày và các mốc thời gian khác của trường Đại học Bách Khoa - Đại học quốc gia TP.HCM",
+    "version": "4.0.0",
+    "description": "Xem thời khoá biểu và xem lịch học theo ngày dành cho sinh viên trường Đại học Bách Khoa - Đại học quốc gia TP.HCM",
     "private": false,
     "type": "module",
-    "homepage": "https://kuumoneko.github.io/bkcalendar",
+    "homepage": "https://bkcalendar.vercel.app",
     "scripts": {
         "dev": "cross-env PORT=3005 next dev",
         "build": "next build",

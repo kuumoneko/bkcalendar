@@ -13,25 +13,37 @@ function Side_bar_Button({ text, url }: { text: string; url: string }) {
     };
     return (
         <li
-            className="mb-2.5 cursor-default select-none h-[50px] w-[200] rounded-xl flex flex-row items-center justify-startbg-slate-600 pl-[15px] hover:bg-slate-500"
+            className="cursor-default select-none h-[50px] w-[200px] rounded-xl flex flex-row items-center justify-start bg-slate-700 pl-[15px] hover:bg-slate-600 hover:cursor-pointer"
             onClick={() => {
                 window.location.href = url;
             }}
         >
             <FontAwesomeIcon
                 icon={Font_Awesome[text]}
-                className="text-slate-300 mr-[5px] pb-[5px] "
+                className="text-slate-300 mr-[5px] pb-[5px]"
             />
             <span className="text-neutral-400 no-underline">{text}</span>
         </li>
     );
 }
 
-export default function Sidebar_Top() {
+export default function Sidebar_Top({ mode }: { mode: "row" | "col" }) {
     return (
-        <div className="w-[100%] max-w-[250px] h-[17%] bg-slate-700 text-white rounded-3xl p-7">
+        <div
+            className={`w-[100%] ${mode === "row" ? "max-w-[250px]" : ""} h-[${
+                mode === "col" ? "40" : "17"
+            }%] bg-slate-700 text-white rounded-3xl ${
+                mode === "row" ? "p-7" : "pt-2"
+            }`}
+        >
             <div className="navigation">
-                <ul className="list-none p-0 m-0">
+                <ul
+                    className={`list-none p-0 m-0 ${
+                        mode === "col"
+                            ? "flex flex-row items-center justify-evenly"
+                            : ""
+                    }`}
+                >
                     <Side_bar_Button text="Trang chủ" url="/" />
                     <Side_bar_Button text="Thời khoá biểu" url="/schedule" />
                 </ul>

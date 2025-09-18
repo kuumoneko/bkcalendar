@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === "POST") {
         try {
             const { username, password, JSESSIONID, ltValue, executionValue } = parse_body(req.body);
-            const responese = await fetch(
+            const response = await fetch(
                 "https://sso.hcmut.edu.vn/cas/login?service=https%3A%2F%2Fmybk.hcmut.edu.vn%2Fapp%2Flogin%2Fcas",
                 {
                     headers: {
@@ -51,8 +51,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     credentials: "include",
                 }
             );
+            const location = response.headers.get("location");
+            if (location !== null) {
+                res.status(200).json({ data: response.headers.get("location"), ok: true });
 
-            res.status(200).json({ data: responese.headers.get("location"), ok: true });
+            }
+            else {
+                const text = await response.text();
+
+                if (text.includes("The credentials you provided cannot be determined to be authentic.")) {
+                    res.status(200).json({ data: "INVALID_CREDENTIALS", ok: true });
+                }
+                else {
+                    res.status(200).json({ error: { code: "UNKNOWN" }, ok: false });
+                }
+            }
+
         }
         catch (e: any) {
             res.status(200).json({ error: { code: e.cause.code }, ok: false });
