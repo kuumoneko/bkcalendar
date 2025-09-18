@@ -6,7 +6,7 @@ import { useLayoutEffect, useState } from "react";
 export default function Offline() {
     const [offline, setoffline] = useState(false);
     useLayoutEffect(() => {
-        setoffline(Boolean(localStorage.getItem("offline") ?? "false"));
+        setoffline(Boolean(localStorage.getItem("offline") ?? 0));
     }, []);
     return (
         <div className="header-icons flex top-[20px] right-[20px] gap-[15px] items-center cursor-pointer">
