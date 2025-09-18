@@ -1,5 +1,5 @@
 "use client";
-import Themes from "./settings/offline";
+import Offline from "./settings/offline";
 import Hcmut from "./settings/hcmut";
 
 export default function Nav() {
@@ -12,7 +12,7 @@ export default function Nav() {
             </div>
 
             <div className="settings flex flex-row justify-between items-center">
-                <Themes />
+                <Offline />
                 <Hcmut />
             </div>
         </div>

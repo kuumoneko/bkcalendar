@@ -3,7 +3,7 @@ import { faComputer, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect, useState } from "react";
 
-export default function Themes() {
+export default function Offline() {
     const [offline, setoffline] = useState(false);
     useLayoutEffect(() => {
         setoffline(Boolean(localStorage.getItem("offline") ?? "false"));
@@ -20,7 +20,7 @@ export default function Themes() {
                             placeholder="offline"
                             type="checkbox"
                             className="opacity-0 w-0 h-0 peer"
-                            checked={offline}
+                            checked={!offline}
                             onChange={() => {
                                 setoffline(!offline);
                                 localStorage.setItem(
