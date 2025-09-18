@@ -1,11 +1,10 @@
-import UI from "@/components/UI";
 import { useEffect, useState } from "react";
 import Table from "../../components/table/index";
 import Logout from "@/utils/logout";
 import full_schedule from "@/utils/schdule";
-import { handle_error } from "@/utils/error";
 import { SubjectInfo } from "../../types/index";
 import { useOrientationMode } from "@/hooks/display";
+import Loading from "@/components/Loading";
 
 /**
  * Convert Date to yyyy-mm-dd
@@ -154,40 +153,48 @@ export default function Day() {
                 mode === "row" ? "ml-10" : ""
             } w-[100%] max-x-[1500px]`}
         >
-            <h1>Hôm nay là {parseDaytoVietnamese(today)}</h1>
-            {today_sche.length > 0 ? (
-                <div className="flex flex-col items-center justify-center w-[100%]">
-                    {curr_sub && (
-                        <div className="flex flex-col items-center justify-center w-[100%] mt-8">
-                            <h1>Tiết hiện tại</h1>
-                            <Table subjects={[curr_sub]} />
-                        </div>
-                    )}
-                    {next_sub && next_sub.length > 0 && (
-                        <div className="flex flex-col items-center justify-center w-[100%] mt-8">
-                            <h1>Các tiết tiếp theo</h1>
-                            <Table subjects={next_sub} />{" "}
-                        </div>
-                    )}
-                    {!curr_sub && (!next_sub || next_sub.length === 0) && (
-                        <div className="flex flex-col items-center justify-center w-[100%] mt-8">
-                            Hết tiết roài, xoã đê bạn ơi
-                        </div>
-                    )}
-                </div>
+            {today_sche.length === 0 && closestDaySche.length === 0 ? (
+                <Loading mode="Loading schedule" />
             ) : (
-                <p className="mt-4">Hôm nay không có môn học.</p>
-            )}
-
-            {closestDay && closestDaySche.length > 0 && (
-                <div className="flex flex-col items-center justify-center w-[100%] mt-8">
-                    <h1>
-                        Ngày học tiếp theo là {parseDaytoVietnamese(closestDay)}
-                    </h1>
-                    {closestDaySche.length > 0 && (
-                        <Table subjects={closestDaySche} />
+                <>
+                    <h1>Hôm nay là {parseDaytoVietnamese(today)}</h1>
+                    {today_sche.length > 0 ? (
+                        <div className="flex flex-col items-center justify-center w-[100%]">
+                            {curr_sub && (
+                                <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                                    <h1>Tiết hiện tại</h1>
+                                    <Table subjects={[curr_sub]} />
+                                </div>
+                            )}
+                            {next_sub && next_sub.length > 0 && (
+                                <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                                    <h1>Các tiết tiếp theo</h1>
+                                    <Table subjects={next_sub} />{" "}
+                                </div>
+                            )}
+                            {!curr_sub &&
+                                (!next_sub || next_sub.length === 0) && (
+                                    <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                                        Hết tiết roài, xoã đê bạn ơi
+                                    </div>
+                                )}
+                        </div>
+                    ) : (
+                        <p className="mt-4">Hôm nay không có môn học.</p>
                     )}
-                </div>
+
+                    {closestDay && closestDaySche.length > 0 && (
+                        <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                            <h1>
+                                Ngày học tiếp theo là{" "}
+                                {parseDaytoVietnamese(closestDay)}
+                            </h1>
+                            {closestDaySche.length > 0 && (
+                                <Table subjects={closestDaySche} />
+                            )}
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
