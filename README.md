@@ -11,6 +11,8 @@
 > Add offline mode
 >
 > Add mongodb to get data when the origin web is down
+>
+> Add filter page, you can add filter, subject, etc
 
 ## Usage
 
