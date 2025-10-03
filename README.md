@@ -10,13 +10,7 @@
 
 > Add offline mode
 >
-> Add logic on login page
->
-> Remove Settings button and add Login button on navbar
->
-> Refactor Sidebar code
->
-> Change logo from url to file
+> Add mongodb to get data when the origin web is down
 
 ## Usage
 
