@@ -2,10 +2,10 @@ import { MongoClient, MongoClientOptions } from "mongodb";
 import { attachDatabasePool } from "@vercel/functions";
 
 export default async function Mongo_client_Component() {
-  if (!process.env.MONGODB_URI) {
+  if (!process.env.MONGODB_MONGODB_URI) {
     throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
   }
-  const uri = process.env.MONGODB_URI;
+  const uri = process.env.MONGODB_MONGODB_URI;
   const options: MongoClientOptions = { appName: "devrel.vercel.integration" };
   let client: MongoClient;
   let globalWithMongo = global as typeof globalThis & {
