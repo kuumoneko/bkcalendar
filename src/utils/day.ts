@@ -19,7 +19,7 @@ export function getnow(): { year: number, week: number } {
 }
 
 /**
- *  dateString convert yyy-mm-dd to full day in vietnamese
+ *  dateString convert yyyy-mm-dd to full day in vietnamese
  */
 export function convertDateFormat(dateString: string): string {
     const [year, month, day] = dateString.split('-').map(Number);

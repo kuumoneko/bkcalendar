@@ -31,14 +31,14 @@ export default async function fetch_data(
             }
         }
         else {
-            const { code } = error;
-            throw new Error(code);
+            console.log(data, error)
         }
     }
     catch (e: any) {
         if (String(e).includes("signal timed out")) {
             handle_error("EAI_AGAIN")
         }
+        console.log(e)
         throw new Error(e);
     }
 }

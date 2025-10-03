@@ -6,7 +6,6 @@ export default function Sidebar({ mode }: { mode: "row" | "col" }) {
         height: mode === "col" ? "h-[25%]" : "h-[100%]",
         width: mode === "col" ? "w-[100%]" : "w-[15%]",
     };
-    console.log(mode, " ", height, " ", width);
     return (
         <div
             className={`flex flex-col ${height} ${width} items-start justify-evenly mb-2`}

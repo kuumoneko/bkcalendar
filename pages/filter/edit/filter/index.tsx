@@ -1,0 +1,375 @@
+import { DayTime, formatDate, getDayOfWeek, getWeekNumber } from "@/types/day";
+import get_filter from "@/utils/data/databsae/filter/get";
+import { useEffect, useState } from "react";
+
+export default function Page() {
+    const [data, setdata] = useState<any>({});
+
+    const [teacher, setteacher] = useState("");
+
+    const [lessonStart, setlessonStart] = useState("");
+    const [lessonEnd, setlessonEnd] = useState("");
+    useEffect(() => {
+        if (lessonStart === "" || lessonEnd === "") {
+            return;
+        }
+
+        if (Number(lessonStart) > Number(lessonEnd)) {
+            alert("Invalid lesson time");
+            setlessonStart("");
+            setlessonEnd("");
+            return;
+        }
+    }, [lessonStart, lessonEnd]);
+    const [TimeStart, setTimeStart] = useState("");
+    const [TimeEnd, setTimeEnd] = useState("");
+    const [date, setdate] = useState({
+        date: 0,
+        month: 0,
+        year: 0,
+    });
+
+    const [Stage, setStage] = useState("");
+    const [room, setroom] = useState("");
+
+    const [building, setbuilding] = useState("");
+
+    useEffect(() => {
+        const temp = localStorage.getItem("data");
+        if (temp) {
+            const temping = JSON.parse(temp);
+            setdata(temping);
+            setteacher(temping.teacher);
+            setlessonStart(temping?.lesson?.split(" - ")[0] ?? "");
+            setlessonEnd(temping?.lesson?.split(" - ")[1] ?? "");
+
+            setTimeEnd(temping.endTime);
+            setTimeStart(temping.startTime);
+
+            setroom(temping?.room?.split("-")[1] ?? "");
+            setStage(temping?.room?.split("-")[0] ?? "");
+            setbuilding(temping.building);
+
+            const datee = temping?.dates
+                ? new Date(temping?.dates[0])
+                : new Date();
+            setdate({
+                date: datee.getDate(),
+                month: datee.getMonth() + 1,
+                year: datee.getFullYear(),
+            });
+        }
+    }, []);
+
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="flex flex-col h-[10%] text-2xl font-bold">
+                <span>{data.subject}</span>
+            </div>
+            <div className="flex flex-col h-[30%] w-[50%]">
+                <div className="grid grid-cols-2 w-full">
+                    <span className="flex flex-row items-center justify-center">
+                        Giảng viên
+                    </span>
+                    <span className="flex flex-row items-center justify-center">
+                        {data.teacher}
+                    </span>
+                </div>
+                <div className="grid grid-cols-2 w-full">
+                    <span className="flex flex-row items-center justify-center">
+                        Lớp
+                    </span>
+                    <span className="flex flex-row items-center justify-center">
+                        {data.class}
+                    </span>
+                </div>
+                <div className="grid grid-cols-2 w-full">
+                    <span className="flex flex-row items-center justify-center">
+                        Thời gian
+                    </span>
+                    <span className="flex flex-row items-center justify-center">{`${
+                        data.startTime
+                    } - ${data.endTime} ${
+                        data?.lesson === "" ? "" : `(${data.lesson})`
+                    }`}</span>
+                </div>
+                <div className="grid grid-cols-2 w-full">
+                    <span className="flex flex-row items-center justify-center">
+                        Ngày
+                    </span>
+                    <div className="flex flex-row items-center justify-center">
+                        {data?.dates?.length > 0 && (
+                            <select className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[150px]">
+                                {data.dates.map((item: string) => {
+                                    return <option>{item}</option>;
+                                })}
+                            </select>
+                        )}
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 w-full">
+                    <span className="flex flex-row items-center justify-center">
+                        Phòng
+                    </span>
+                    <span className="flex flex-row items-center justify-center">
+                        {`${
+                            data.room?.includes("NHATHIDAU")
+                                ? "NHATHIDAU"
+                                : data.room
+                        } ${data.building?.includes("1") ? "CS1" : "CS2"}`}
+                    </span>
+                </div>
+            </div>
+            <div className="flex flex-col h-[20%] w-[50%] items-center justify-center">
+                <div className="w-full flex flex-row items-center justify-center">
+                    <span>Fix</span>
+                </div>
+                <div className="w-full grid grid-cols-2 mb-2">
+                    <label htmlFor="teacher">Giảng viên</label>
+                    <input
+                        type="text"
+                        id="teacher"
+                        value={teacher ?? ""}
+                        onChange={(e) => {
+                            setteacher(e.target.value);
+                        }}
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl"
+                    />
+                </div>
+                <div className="w-full grid grid-cols-2 mb-2">
+                    <label htmlFor="class">Tiết</label>
+                    <div>
+                        {lessonStart !== "" && lessonEnd !== "" ? (
+                            <>
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={lessonStart ?? ""}
+                                    onChange={(e) => {
+                                        setlessonStart(e.target.value);
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    maxLength={2}
+                                />
+                                {" - "}
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={lessonEnd ?? ""}
+                                    onChange={(e) => {
+                                        setlessonEnd(e.target.value);
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    maxLength={2}
+                                />
+                                <span>{` (${
+                                    DayTime[lessonStart as keyof typeof DayTime]
+                                        .startTime ?? ""
+                                } - ${
+                                    DayTime[lessonEnd as keyof typeof DayTime]
+                                        .endTime ?? ""
+                                })`}</span>
+                            </>
+                        ) : (
+                            <>
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={TimeStart ?? ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (!value.includes(":")) {
+                                            setTimeStart(`${value}:00`);
+                                        } else {
+                                            setTimeStart(value);
+                                        }
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    maxLength={5}
+                                />
+                                {" - "}
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={TimeEnd ?? ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (!value.includes(":")) {
+                                            setTimeEnd(`${value}:00`);
+                                        } else {
+                                            setTimeEnd(value);
+                                        }
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    maxLength={5}
+                                />
+                            </>
+                        )}
+                    </div>
+                </div>
+                <div className="w-full grid grid-cols-2 mb-2">
+                    <label htmlFor="class">Ngày</label>
+                    <div>
+                        <input
+                            type="text"
+                            id="class"
+                            value={date.date ?? ""}
+                            onChange={(e) => {
+                                setdate({
+                                    ...date,
+                                    date: Number(e.target.value),
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            maxLength={2}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            value={date.month ?? ""}
+                            onChange={(e) => {
+                                setdate({
+                                    ...date,
+                                    month: Number(e.target.value),
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            maxLength={2}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            value={date.year ?? ""}
+                            onChange={(e) => {
+                                setdate({
+                                    ...date,
+                                    year: Number(e.target.value),
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
+                            maxLength={4}
+                        />
+                    </div>
+                </div>
+                <div className="w-full grid grid-cols-2 mb-2">
+                    <label htmlFor="class">Toà</label>
+                    <div>
+                        {"CS "}
+                        <input
+                            type="text"
+                            id="class"
+                            value={building?.includes("1") ? "1" : "2"}
+                            onChange={(e) => {
+                                setbuilding(e.target.value);
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[25px]"
+                            maxLength={1}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            value={Stage ?? ""}
+                            onChange={(e) => {
+                                setStage(e.target.value);
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            maxLength={2}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            value={room ?? ""}
+                            onChange={(e) => {
+                                setroom(e.target.value);
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[50px]"
+                            maxLength={3}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="h-[10%] w-[50%] flex flex-row items-center justify-center gap-24">
+                <div className="flex flex-col items-center bg-red-500 hover:bg-red-400 hover:cursor-pointer w-[65px] rounded-2xl">
+                    Xoá
+                </div>
+                <div
+                    className="flex flex-col items-center bg-sky-700 hover:bg-sky-600 hover:cursor-pointer w-[65px] rounded-2xl"
+                    onClick={() => {
+                        async function run() {
+                            // create Subject from all hook
+                            const new_subject = {
+                                building: `${building}`,
+                                class: data.class,
+                                dates: [
+                                    formatDate(
+                                        date.year,
+                                        date.month,
+                                        date.date
+                                    ),
+                                ],
+                                dayOfWeek: getDayOfWeek(
+                                    date.year,
+                                    date.month,
+                                    date.date
+                                ),
+                                endTime:
+                                    DayTime[lessonEnd as keyof typeof DayTime]
+                                        .endTime,
+                                lesson: `${lessonStart} - ${lessonEnd}`,
+                                room: `${Stage}-${room}`,
+                                startTime:
+                                    DayTime[lessonStart as keyof typeof DayTime]
+                                        .startTime,
+                                subject: data.subject,
+                                teacher: teacher,
+                                weeks: [
+                                    getWeekNumber(
+                                        new Date(
+                                            `${date.year}-${date.month}-${date.date}`
+                                        )
+                                    ),
+                                ],
+                            };
+                            if (
+                                JSON.stringify(new_subject) !==
+                                JSON.stringify(data)
+                            ) {
+                                const user: any = JSON.parse(
+                                    localStorage.getItem("user") as string
+                                );
+
+                                const { data: filter_temp, _id: filter_id } =
+                                    await get_filter(user.username);
+
+                                const add_list: any = [];
+
+                                filter_temp.forEach((item: any) => {
+                                    if (Object.keys(item.pre).length === 1) {
+                                        add_list.push(item);
+                                    }
+                                });
+
+                                const the_filter = add_list.find(
+                                    (item: { aft: any }) => {
+                                        return (
+                                            JSON.stringify(item.aft) ===
+                                            JSON.stringify(data)
+                                        );
+                                    }
+                                );
+                                the_filter.aft = new_subject;
+                            }
+                        }
+                        run();
+                    }}
+                >
+                    Lưu
+                </div>
+            </div>
+        </div>
+    );
+}

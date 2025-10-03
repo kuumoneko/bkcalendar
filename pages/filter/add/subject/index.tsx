@@ -1,0 +1,355 @@
+import { DayTime, getWeekNumber } from "@/types/day";
+import get_filter from "@/utils/data/databsae/filter/get";
+import update_filter from "@/utils/data/databsae/filter/update,";
+import { useEffect, useState } from "react";
+
+export default function Page() {
+    const [class_code, setclass] = useState("");
+    const [teacher, setteacher] = useState("");
+    const [subject, setsubject] = useState("");
+
+    const [mode, setmode] = useState<"lesson" | "time">("lesson");
+    const [lessonStart, setlessonStart] = useState("");
+    const [lessonEnd, setlessonEnd] = useState("");
+
+    useEffect(() => {
+        if (lessonStart === "" || lessonEnd === "") {
+            return;
+        }
+
+        if (Number(lessonStart) > Number(lessonEnd)) {
+            alert("Invalid lesson time");
+            setlessonStart("");
+            setlessonEnd("");
+            return;
+        }
+    }, [lessonStart, lessonEnd]);
+
+    const [TimeStart, setTimeStart] = useState("");
+    const [TimeEnd, setTimeEnd] = useState("");
+
+    const [dates, setdates] = useState<string[]>([]);
+    const [date, setdate] = useState({
+        date: "",
+        month: 0,
+        year: 0,
+    });
+
+    const [Stage, setStage] = useState("");
+    const [room, setroom] = useState("");
+
+    const [building, setbuilding] = useState("");
+
+    return (
+        <div className="h-full w-full flex flex-col items-center justify-center">
+            <span className="text-2xl">Add subject</span>
+            <div>
+                <div>
+                    class{" "}
+                    <input
+                        type="text"
+                        id="class"
+                        value={class_code ?? ""}
+                        onChange={(e) => {
+                            setclass(e.target.value);
+                        }}
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
+                    />
+                </div>
+                <div>
+                    teacher{" "}
+                    <input
+                        type="text"
+                        id="class"
+                        value={teacher ?? ""}
+                        onChange={(e) => {
+                            setteacher(e.target.value);
+                        }}
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[250px]"
+                    />
+                </div>
+                <div>
+                    subject{" "}
+                    <input
+                        type="text"
+                        id="class"
+                        value={subject ?? ""}
+                        onChange={(e) => {
+                            setsubject(e.target.value);
+                        }}
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[250px]"
+                    />
+                </div>
+                <div>
+                    <div>
+                        <form>
+                            <input
+                                type="radio"
+                                id="lesson"
+                                checked={mode === "lesson"}
+                                onChange={() => {
+                                    setmode("lesson");
+                                }}
+                            />
+                            <label htmlFor="lesson">Lesson</label>
+                            <input
+                                type="radio"
+                                id="time"
+                                checked={mode === "time"}
+                                onChange={() => {
+                                    setmode("time");
+                                }}
+                            />
+                            <label htmlFor="time">Time</label>
+                        </form>
+                    </div>
+                    <div>
+                        {mode === "lesson" ? (
+                            <>
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={lessonStart ?? ""}
+                                    onChange={(e) => {
+                                        setlessonStart(e.target.value);
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    maxLength={2}
+                                />
+                                {" - "}
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={lessonEnd ?? ""}
+                                    onChange={(e) => {
+                                        setlessonEnd(e.target.value);
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    maxLength={2}
+                                />
+                                <span>{` (${
+                                    DayTime[lessonStart as keyof typeof DayTime]
+                                        .startTime ?? ""
+                                } - ${
+                                    DayTime[lessonEnd as keyof typeof DayTime]
+                                        .endTime ?? ""
+                                })`}</span>
+                            </>
+                        ) : (
+                            <>
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={TimeStart ?? ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (!value.includes(":")) {
+                                            setTimeStart(`${value}:00`);
+                                        } else {
+                                            setTimeStart(value);
+                                        }
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    maxLength={5}
+                                />
+                                {" - "}
+                                <input
+                                    type="text"
+                                    id="class"
+                                    value={TimeEnd ?? ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (!value.includes(":")) {
+                                            setTimeEnd(`${value}:00`);
+                                        } else {
+                                            setTimeEnd(value);
+                                        }
+                                    }}
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    maxLength={5}
+                                />
+                            </>
+                        )}
+                    </div>
+                </div>
+                <div>
+                    dates
+                    <div className="flex flex-row">
+                        <input
+                            type="text"
+                            id="class"
+                            value={date.year ?? ""}
+                            onChange={(e) => {
+                                setdate({
+                                    ...date,
+                                    year: Number(e.target.value),
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
+                            maxLength={4}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            value={date.month ?? ""}
+                            onChange={(e) => {
+                                setdate({
+                                    ...date,
+                                    month: Number(e.target.value),
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            maxLength={2}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            value={date.date ?? ""}
+                            onChange={(e) => {
+                                setdate({
+                                    ...date,
+                                    date: e.target.value,
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[150px]"
+                        />
+
+                        <div
+                            onClick={() => {
+                                const temp = `${date.year}-${date.month}-`;
+                                const dataa = date.date
+                                    .split(",")
+                                    .map((item: string) => {
+                                        return temp + item;
+                                    });
+
+                                const temping = [
+                                    ...new Set(dates.concat(dataa)),
+                                ];
+                                setdates(temping);
+                                setdate({
+                                    date: "",
+                                    month: date.month,
+                                    year: date.year,
+                                });
+                            }}
+                        >
+                            Add
+                        </div>
+                    </div>
+                    <div>
+                        <select
+                            onChange={(e) => {
+                                setdates(
+                                    dates.filter((item: string) => {
+                                        return item !== e.target.value;
+                                    })
+                                );
+                            }}
+                        >
+                            {[""].concat(dates).map((item: string) => {
+                                return (
+                                    <option
+                                        value={item}
+                                        className="bg-slate-500 text-slate-800"
+                                    >
+                                        {item}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    location {" CS "}
+                    <input
+                        type="text"
+                        id="class"
+                        value={building}
+                        onChange={(e) => {
+                            setbuilding(e.target.value);
+                        }}
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[25px]"
+                        maxLength={1}
+                    />
+                    {" - "}
+                    <input
+                        type="text"
+                        id="class"
+                        value={Stage ?? ""}
+                        onChange={(e) => {
+                            setStage(e.target.value);
+                        }}
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                        maxLength={2}
+                    />
+                    {" - "}
+                    <input
+                        type="text"
+                        id="class"
+                        value={room ?? ""}
+                        onChange={(e) => {
+                            setroom(e.target.value);
+                        }}
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[50px]"
+                        maxLength={3}
+                    />
+                </div>
+                <div
+                    onClick={() => {
+                        const data = {
+                            class: class_code,
+                            teacher: teacher,
+                            subject: subject,
+                            lesson:
+                                mode === "lesson"
+                                    ? `${lessonStart} - ${lessonEnd}`
+                                    : "",
+                            dates: dates,
+                            startTime:
+                                mode === "time"
+                                    ? TimeStart
+                                    : DayTime[
+                                          lessonStart as keyof typeof DayTime
+                                      ].startTime,
+                            endTime:
+                                mode === "time"
+                                    ? TimeEnd
+                                    : DayTime[lessonEnd as keyof typeof DayTime]
+                                          .endTime,
+                            room: `${Stage}-${room}`,
+                            building: `CS ${building}`,
+                            weeks: dates.map((item: string) => {
+                                return getWeekNumber(new Date(item));
+                            }),
+                        };
+
+                        async function run() {
+                            const user: any = JSON.parse(
+                                localStorage.getItem("user") as string
+                            );
+                            const { data: filter_temp, _id: filter_id } =
+                                await get_filter(user.username);
+                            filter_temp.push({
+                                pre: {},
+                                aft: data,
+                            });
+
+
+                            await update_filter({
+                                _id: filter_id,
+                                data: filter_temp,
+                                username: user.username,
+                            });
+                        }
+                        run();
+                    }}
+                >
+                    Submit
+                </div>
+            </div>
+        </div>
+    );
+}
