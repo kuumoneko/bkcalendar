@@ -3,16 +3,14 @@ import create_login from "@/utils/data/hcmut/sso/index";
 import login_user from "@/utils/data/hcmut/sso/login";
 import get_token from "@/utils/data/hcmut/app/user";
 import get_student_data from "@/utils/data/hcmut/api/student";
-import { handle_error } from "../error";
-import login_db from "./databsae/login/login";
-import get_student from "./databsae/user/get";
-import update_student from "./databsae/user/update";
-import get_semester from "./hcmut/api/semester";
+import { handle_error } from "@/utils/error";
+import login_db from "@/utils/data/databsae/login";
+import mongodb from "@/utils/data/databsae";
+import get_web_semester from "./hcmut/api/semester";
 
 export default async function logining(username: string, password: string) {
     const { JSESSIONID, ltValue, executionValue } =
         await create_login();
-
     try {
         const res = await login_user(
             JSESSIONID || "",
@@ -28,9 +26,9 @@ export default async function logining(username: string, password: string) {
 
         const { SESSION } = await create_app(res as string);
         let token = await get_token(SESSION as string);
+        const result = await login_db(username, password);
 
         if (token === "ok") {
-            const result = await login_db(username, password);
             if (result) {
                 localStorage.setItem("offline", "true");
             }
@@ -38,28 +36,28 @@ export default async function logining(username: string, password: string) {
                 throw new Error("Đăng nhập thất bại. Web trường bị sập và database không có thông tin tài khoản của bạn. Vui lòng thử lại sau.");
             }
         }
+        else {
+            await mongodb("password", "post", { username: username, password: password });
+        }
 
-        let database = await get_student(username);
+        let database = await mongodb("user", "get", { username });
         let user;
         if (token !== "ok") {
             user = await get_student_data(token as string);
-            const semester = await get_semester(token as string);
-            const this_semester = semester.find(
-                (item: any) => item.isCurrent === true
-            );
+            const this_semester = await get_web_semester()
 
             if (user.name) {
                 database = {
                     _id: database._id,
                     username: username,
                     ...user,
-                    semester: this_semester.code
+                    semester: this_semester
                 }
-                const updating = await update_student(database);
+                const updating = await mongodb("user", "post", { username: username, data: database });
 
                 user = {
                     ...user,
-                    semester: this_semester.code,
+                    semester: this_semester,
                     username: username
                 };
             }

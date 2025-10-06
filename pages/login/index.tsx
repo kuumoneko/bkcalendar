@@ -8,7 +8,9 @@ import logining from "@/utils/data/login";
 
 export default function Login() {
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user") as string);
+        const user = JSON.parse(
+            localStorage.getItem("user") ?? `{"name":null}`
+        );
         if (user.name !== null) {
             alert("Bạn đã đăng nhập trước đó.");
             window.location.href = "/";

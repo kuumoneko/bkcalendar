@@ -53,7 +53,7 @@ export default async function get_web_schedule(authorization: string, studentId:
     dates: string[] | "--";
 }[]> {
 
-    const res = await fetch_data("/api/mybk/api/schedule", "POST", {
+    const res = await fetch_data("/api/mybk/api/schedule",  {
         "Content-Type": "application/json"
     }, {
         authorization: authorization,

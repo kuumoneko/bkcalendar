@@ -3,54 +3,48 @@ import { NextApiRequest, NextApiResponse } from "next";
 /**
  * Check if web is down?
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === "GET") {
-        try {
-            let url = "https://mybk.hcmut.edu.vn/app/login?type=cas";
+export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
+    try {
+        let url = "https://mybk.hcmut.edu.vn/app/login?type=cas";
 
-            let tryCount = 1;
-            while (tryCount < 4 && !url.includes("401")) {
-                const response = await fetch(url, {
-                    method: "GET", signal: AbortSignal.timeout(4500)
-                });
+        let tryCount = 1;
+        while (tryCount < 4 && !url.includes("401")) {
+            const response = await fetch(url, {
+                method: "GET", signal: AbortSignal.timeout(10 * 1000)
+            });
 
-                url = response.headers.get("Location") || "";
-                tryCount += 1;
+            url = response.headers.get("Location") || "";
+            tryCount += 1;
 
-                if (url === "") {
+            if (url === "") {
+                return res.status(200).json({ ok: true });
+            }
+            else {
+                if (response.ok) {
                     return res.status(200).json({ ok: true });
                 }
                 else {
-                    if (response.ok) {
-                        return res.status(200).json({ ok: true });
+                    const responseCode = response.status;
+
+                    if (responseCode === 408) {
+                        return res.status(200).json({ data: "EAI_AGAIN", ok: false });
                     }
                     else {
-                        const responseCode = response.status;
-
-                        if (responseCode === 408) {
-                            return res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
-                        }
-                        else {
-                            return res.status(200).json({ error: { code: response.statusText }, ok: false });
-                        }
+                        return res.status(200).json({ data: response.statusText, ok: false });
                     }
                 }
             }
-
-            if (url.includes("401")) {
-                return res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
-            }
-
-            if (tryCount > 3) {
-                return res.status(200).json({ ok: true });
-            }
         }
-        catch (e: any) {
-            return res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
+
+        if (url.includes("401")) {
+            return res.status(200).json({ data: "EAI_AGAIN", ok: false });
+        }
+
+        if (tryCount > 3) {
+            return res.status(200).json({ ok: true, data: "ok" });
         }
     }
-    else {
-        res.setHeader("Allow", ["GET"]);
-        res.status(405).json({ ok: false, error: { code: 405 } });
+    catch (e: any) {
+        return res.status(200).json({ data: e.message, ok: false });
     }
 }

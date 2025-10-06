@@ -1,24 +1,19 @@
-import get_student from "./databsae/user/get";
-import update_student from "./databsae/user/update";
-import get_semester from "./hcmut/api/semester";
+import mongodb from "./databsae";
 
-export default async function get_this_semester(token: string, offline: boolean) {
+export default async function get_this_semester(offline: boolean) {
     let { semester, username } = JSON.parse(localStorage.getItem("user") as string);
 
     if (!offline) {
-        let web_semesters = await get_semester(token);
-        const temp = web_semesters.find(
-            (item: any) => item.isCurrent === true
-        ).code;
+        let temp = localStorage.getItem("semester")
 
         if (temp != semester) {
-            const user = await get_student(username)
+            const user = await mongodb("user", "get", { username })
 
             const database = {
                 ...user,
                 semester: temp
             }
-            await update_student(database);
+            await mongodb("user", "post", { username: username, data: database });
         }
     }
     return semester;

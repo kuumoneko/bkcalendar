@@ -179,7 +179,7 @@ export default function Schedule() {
                                     setweek(week - 1);
                                 }}
                             >
-                                Previous
+                                Tuần trước
                             </div>
                             <div className="head">Tuần {week}</div>
                             <div
@@ -188,7 +188,7 @@ export default function Schedule() {
                                     setweek(week + 1);
                                 }}
                             >
-                                Next
+                                Tuần sau
                             </div>
                         </div>
                         {Object.keys(week_schedule).length > 0 && (
@@ -222,7 +222,9 @@ export default function Schedule() {
                                                             : "flex flex-row items-center justify-evenly"
                                                     }`}
                                                 >
-                                                    {(day.subjects as SubjectInfo[])
+                                                    {(
+                                                        day.subjects as SubjectInfo[]
+                                                    )
                                                         .sort(
                                                             (
                                                                 a: SubjectInfo,

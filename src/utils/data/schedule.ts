@@ -1,10 +1,8 @@
 import { SubjectInfo } from "@/types/index";
 import get_web_schedule from "./hcmut/api/schedule";
-import get_schedule from "./databsae/schedule/get";
-import update_schedule from "./databsae/schedule/update";
-import get_filter from "./databsae/filter/get";
-import get_this_semester from "./semester";
 import { formatDate } from "@/types/day";
+import mongodb from "./databsae";
+import get_web_semester from "./hcmut/api/semester";
 
 /**
  * Create fully schedule
@@ -13,12 +11,12 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
 
     const token = localStorage.getItem("token") as string ?? ""
     if (token.length === 0) {
-        throw new Error("Not login")
+        window.location.href = "/login"
     }
 
     const offline = (localStorage.getItem("offline") ?? "false") === "true" ? true : false;
 
-    const this_semester = await get_this_semester(token, offline);
+    const this_semester = await get_web_semester();
 
     if (!this_semester) {
         throw new Error("No current semester found.")
@@ -27,7 +25,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
     let { username, id } = JSON.parse(localStorage.getItem("user") as string);
 
 
-    let { data: schedule, _id: schedule_id } = await get_schedule(username);
+    let schedule = await mongodb("schedule", "get", { username });
 
     if (!offline) {
         const schdule_from_mybk = await get_web_schedule(
@@ -39,37 +37,40 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         if (
             JSON.stringify(schedule) !== JSON.stringify(schdule_from_mybk)
         ) {
-            const temp = {
-                _id: schedule_id,
-                username,
-                data: schdule_from_mybk
-            }
-            await update_schedule(temp);
+            await mongodb("schedule", "post", { username, data: schdule_from_mybk });
             schedule = schdule_from_mybk
         }
     }
 
-
-    let { data: filters } = await get_filter(username);
+    let filters = await mongodb("filter", "get", { username });
     if (filters.length > 0) {
 
         filters = filters.sort((a: any, b: any) => {
-            const a_keys = Object.keys(a.pre);
+            const a_keys = Object.keys(a);
 
             if (a_keys.length === 1) return -1;
-            const b_keys = Object.keys(b.pre);
+            const b_keys = Object.keys(b);
             if (b_keys.length === 1) return 1;
             return 0;
 
         })
 
         for (const filter of filters) {
-            const { pre: previous, aft: after }: { pre: any, aft: any } = filter;
 
-            const { class: previous_class, ...other_pre_params } = previous
+            const { class: class_code, dates, ...other_pre_params } = filter
+            if (class_code.length < 1) {
+                schedule.push({
+                    class: class_code,
+                    dates: dates.map((item: string) => {
+                        const [year, month, day] = item.split("-").map(Number);
+                        return formatDate(year, month, day)
+                    }),
+                    ...filter
+                })
+                continue;
+            }
             let subjects: SubjectInfo[] = schedule.filter((sub: SubjectInfo) => {
-                const keys = Object.keys(other_pre_params).filter(key => key !== "date");
-                return sub.class === previous_class && keys.every(key => sub[key as keyof SubjectInfo] === other_pre_params[key]);
+                return sub.class === class_code
             });
             const keys = Object.keys(other_pre_params);
             let subject: SubjectInfo
@@ -84,20 +85,20 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
                     if (key === "date") {
                         const index = subject.dates.indexOf(other_pre_params[key]);
                         if (index !== -1 && typeof subject.dates !== "string") {
-                            subject.dates[index] = after[key]
+                            subject.dates[index] = filter[key]
                         }
                         continue;
                     }
-                    if (after[key] === undefined || after[key] === null || subject[key as keyof SubjectInfo] === undefined || subject[key as keyof SubjectInfo] === null) {
+                    if (filter[key] === undefined || filter[key] === null || subject[key as keyof SubjectInfo] === undefined || subject[key as keyof SubjectInfo] === null) {
                         console.log("ảo rồi bro")
                     }
-                    (subject[key as keyof SubjectInfo] as any) = after[key]
+                    (subject[key as keyof SubjectInfo] as any) = filter[key]
                 }
             }
             else {
                 schedule.push({
-                    class: previous_class,
-                    ...after
+                    class: class_code,
+                    ...filter
                 })
             }
         }

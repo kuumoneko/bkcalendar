@@ -4,20 +4,25 @@ import fetch_data from "@/utils/fetch";
  * Login user
  */
 export default async function login_user(JSESSIONID: string, ltValue: string, executionValue: string, username: string, password: string) {
-    const res = await fetch_data("/api/sso/login", "POST", {
-        "content-type": "application/json",
-    }, {
-        JSESSIONID,
-        ltValue,
-        executionValue,
-        username,
-        password
-    })
+    try {
+        const res = await fetch_data("/api/sso/login", {
+            "content-type": "application/json",
+        }, {
+            JSESSIONID,
+            ltValue,
+            executionValue,
+            username,
+            password
+        })
 
-    if (res.includes("https")) {
-        return res;
+        if (res.includes("https")) {
+            return res;
+        }
+        else {
+            throw new Error("NOT EAGAIN")
+        }
     }
-    else {
-        return null
+    catch (e: any) {
+        throw new Error(e);
     }
-}
+} 

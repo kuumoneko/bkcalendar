@@ -1,18 +1,18 @@
 export default function NotFound() {
     return (
         <div className="h-full w-full flex flex-col items-center justify-center">
-            <span>Page not found</span>
+            <span>Không tìm thấy trang</span>
             <span>
-                Click{" "}
+                Nhấp{" "}
                 <span
                     onClick={() => {
                         window.location.href = "/";
                     }}
                     className="underline hover:cursor-pointer"
                 >
-                    here
+                    vào đây
                 </span>{" "}
-                to goto homepage
+                để quay về trang chủ
             </span>
         </div>
     );

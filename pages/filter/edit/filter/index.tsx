@@ -1,6 +1,7 @@
 import { DayTime, formatDate, getDayOfWeek, getWeekNumber } from "@/types/day";
-import get_filter from "@/utils/data/databsae/filter/get";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import mongodb from "@/utils/data/databsae";
 
 export default function Page() {
     const [data, setdata] = useState<any>({});
@@ -15,7 +16,7 @@ export default function Page() {
         }
 
         if (Number(lessonStart) > Number(lessonEnd)) {
-            alert("Invalid lesson time");
+            alert("Thời gian học không hợp lệ");
             setlessonStart("");
             setlessonEnd("");
             return;
@@ -37,21 +38,22 @@ export default function Page() {
     useEffect(() => {
         const temp = localStorage.getItem("data");
         if (temp) {
-            const temping = JSON.parse(temp);
-            setdata(temping);
-            setteacher(temping.teacher);
-            setlessonStart(temping?.lesson?.split(" - ")[0] ?? "");
-            setlessonEnd(temping?.lesson?.split(" - ")[1] ?? "");
+            const searchParams = useSearchParams();
+            const data_temp = JSON.parse(searchParams.get("data") ?? "");
+            setdata(data_temp);
+            setteacher(data_temp.teacher);
+            setlessonStart(data_temp?.lesson?.split(" - ")[0] ?? "");
+            setlessonEnd(data_temp?.lesson?.split(" - ")[1] ?? "");
 
-            setTimeEnd(temping.endTime);
-            setTimeStart(temping.startTime);
+            setTimeEnd(data_temp.endTime);
+            setTimeStart(data_temp.startTime);
 
-            setroom(temping?.room?.split("-")[1] ?? "");
-            setStage(temping?.room?.split("-")[0] ?? "");
-            setbuilding(temping.building);
+            setroom(data_temp?.room?.split("-")[1] ?? "");
+            setStage(data_temp?.room?.split("-")[0] ?? "");
+            setbuilding(data_temp.building);
 
-            const datee = temping?.dates
-                ? new Date(temping?.dates[0])
+            const datee = data_temp?.dates
+                ? new Date(data_temp?.dates[0])
                 : new Date();
             setdate({
                 date: datee.getDate(),
@@ -338,12 +340,15 @@ export default function Page() {
                                 JSON.stringify(new_subject) !==
                                 JSON.stringify(data)
                             ) {
-                                const user: any = JSON.parse(
+                                const { username } = JSON.parse(
                                     localStorage.getItem("user") as string
                                 );
 
-                                const { data: filter_temp, _id: filter_id } =
-                                    await get_filter(user.username);
+                                const filter_temp = await mongodb(
+                                    "filter",
+                                    "get",
+                                    { username }
+                                );
 
                                 const add_list: any = [];
 
@@ -353,15 +358,7 @@ export default function Page() {
                                     }
                                 });
 
-                                const the_filter = add_list.find(
-                                    (item: { aft: any }) => {
-                                        return (
-                                            JSON.stringify(item.aft) ===
-                                            JSON.stringify(data)
-                                        );
-                                    }
-                                );
-                                the_filter.aft = new_subject;
+                                const the_filter = new_subject;
                             }
                         }
                         run();

@@ -1,43 +1,32 @@
 import Table from "@/components/table";
 import { SubjectInfo } from "@/types";
-import get_filter from "@/utils/data/databsae/filter/get";
-import get_schedule from "@/utils/data/databsae/schedule/get";
+import mongodb from "@/utils/data/databsae";
 import { useEffect, useState } from "react";
 
 export default function Filter() {
-    // const [filterid, setid] = useState("");
     const [filter, setfilter] = useState({ add: [], filter: [] });
     const [schedule, setschedule] = useState([]);
     const [class_code, set_class_code] = useState("");
-    const [pre, setpre] = useState({
-        building: "",
-        class: "",
-        date: "",
-        dayOfWeek: 0,
-        endTime: "",
-        lesson: "",
-        room: "",
-        startTime: "",
-        subject: "",
-        teacher: "",
-        weeks: [],
-    });
 
     const [filter_sub, set_filter_sub] = useState([]);
 
     useEffect(() => {
         async function run() {
-            const user: any = JSON.parse(
+            const { username } = JSON.parse(
                 localStorage.getItem("user") as string
             );
-            const { data: user_temp } = await get_schedule(user.username);
+            const user_temp = await mongodb("schedule", "get", {
+                username,
+            });
 
-            const { data: filter_temp } = await get_filter(user.username);
+            const filter_temp = await mongodb("filter", "get", {
+                username,
+            });
             const add_list: any = [];
             const filter_list: any = [];
 
             filter_temp.forEach((item: any) => {
-                if (Object.keys(item.pre).length <= 1) {
+                if (Object.keys(item).length > 2) {
                     add_list.push(item);
                 } else {
                     filter_list.push(item);
@@ -46,7 +35,7 @@ export default function Filter() {
             // dates is yyyy-mm-dd, remove the add items in add_list the the dates if the previous day from today
             const today = new Date();
             const filtered_add_list = add_list.filter((item: any) => {
-                const itemDate = new Date(item.aft.dates[0]);
+                const itemDate = new Date(item.dates[0]);
                 return itemDate >= today;
             });
             add_list.splice(0, add_list.length, ...filtered_add_list);
@@ -105,7 +94,6 @@ export default function Filter() {
                                 />
                                 <div
                                     onClick={() => {
-                                        localStorage.setItem("data", "{}");
                                         window.location.href =
                                             "/filter/add/subject";
                                     }}
@@ -122,12 +110,9 @@ export default function Filter() {
                                                 key={`${item.subject}`}
                                                 className="flex flex-col items-center justify-center rounded-4xl hover:bg-slate-400 hover:text-slate-600 hover:cursor-pointer"
                                                 onClick={() => {
-                                                    localStorage.setItem(
-                                                        "data",
+                                                    window.location.href = `/filter/add/filter?data=${encodeURIComponent(
                                                         JSON.stringify(item)
-                                                    );
-                                                    window.location.href =
-                                                        "/filter/add/filter";
+                                                    )}`;
                                                 }}
                                             >
                                                 <div>{item.subject}</div>
@@ -139,7 +124,7 @@ export default function Filter() {
                             ) : (
                                 <div>
                                     <span>
-                                        Không tìm thấy môn học, hãy thử lại.
+                                        Không tìm thấy môn học, hãy nhập mã lớp
                                     </span>
                                 </div>
                             )}
@@ -151,14 +136,9 @@ export default function Filter() {
                     <div className="w-full h-[30%] flex flex-col items-center">
                         <span>Thêm môn học</span>
                         <Table
-                            subjects={filter.add.map(
-                                (item: {
-                                    pre: SubjectInfo;
-                                    aft: SubjectInfo;
-                                }) => {
-                                    return item.aft;
-                                }
-                            )}
+                            subjects={filter.add.map((item: SubjectInfo) => {
+                                return item;
+                            })}
                             mode="filter"
                         />
                     </div>
@@ -168,60 +148,49 @@ export default function Filter() {
                     <div className="w-full h-[30%] flex flex-col items-center">
                         <span>Bộ lọc</span>
                         <div className="w-full grid grid-cols-3">
-                            {filter.filter.map(
-                                (item: {
-                                    pre: SubjectInfo;
-                                    aft: SubjectInfo;
-                                }) => {
-                                    const { pre, aft } = item;
-                                    const keys = Object.keys(pre).filter(
-                                        (item: string) => item !== "class"
-                                    );
-                                    return (
-                                        <div
-                                            className="flex flex-col items-center w-full hover:bg-slate-600 hover:cursor-pointer rounded-2xl"
-                                            onClick={() => {
-                                                localStorage.setItem(
-                                                    "data",
-                                                    JSON.stringify(item)
-                                                );
-                                                window.location.href =
-                                                    "/filter/edit/filter";
-                                            }}
-                                        >
-                                            <div className="flex flex-row">
-                                                {pre.class && (
-                                                    <div>{pre.class}</div>
-                                                )}
-                                            </div>
-                                            <div className="flex flex-col items-center w-full">
-                                                {keys.map((key: string) => {
-                                                    return (
-                                                        <div className="flex flex-row items-center w-full justify-evenly">
-                                                            <div>{key}</div>
-                                                            <div>
-                                                                {
-                                                                    pre[
-                                                                        key as keyof SubjectInfo
-                                                                    ]
-                                                                }
-                                                            </div>
-                                                            <div>{"->"}</div>
-                                                            <div>
-                                                                {
-                                                                    aft[
-                                                                        key as keyof SubjectInfo
-                                                                    ]
-                                                                }
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
+                            {filter.filter.map((item: SubjectInfo) => {
+                                const keys = Object.keys(item).filter(
+                                    (item: string) => item !== "class"
+                                );
+                                return (
+                                    <div
+                                        className="flex flex-col items-center w-full hover:bg-slate-600 hover:cursor-pointer rounded-2xl"
+                                        onClick={() => {
+                                            window.location.href = `/filter/edit/filter?data=${encodeURIComponent(
+                                                JSON.stringify(item)
+                                            )}`;
+                                        }}
+                                    >
+                                        <div className="flex flex-row">
+                                            {item.class && (
+                                                <div>{item.class}</div>
+                                            )}
                                         </div>
-                                    );
-                                }
-                            )}
+                                        <div className="flex flex-col items-center w-full">
+                                            {keys.map((key: string) => {
+                                                return (
+                                                    <div className="flex flex-row items-center w-full justify-evenly">
+                                                        <div>{key}</div>
+                                                        {/* <div>
+                                                            {
+                                                                
+                                                            }
+                                                        </div> */}
+                                                        <div>{"->"}</div>
+                                                        <div>
+                                                            {
+                                                                item[
+                                                                    key as keyof SubjectInfo
+                                                                ]
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 )}

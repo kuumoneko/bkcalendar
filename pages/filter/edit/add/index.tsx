@@ -1,5 +1,5 @@
 import { DayTime, formatDate, getDayOfWeek, getWeekNumber } from "@/types/day";
-import get_filter from "@/utils/data/databsae/filter/get";
+import mongodb from "@/utils/data/databsae";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -15,7 +15,7 @@ export default function Page() {
         }
 
         if (Number(lessonStart) > Number(lessonEnd)) {
-            alert("Invalid lesson time");
+            alert("Thời gian học không hợp lệ");
             setlessonStart("");
             setlessonEnd("");
             return;
@@ -337,12 +337,17 @@ export default function Page() {
                                 JSON.stringify(new_subject) !==
                                 JSON.stringify(data)
                             ) {
-                                const user: any = JSON.parse(
+                                const { username } = JSON.parse(
                                     localStorage.getItem("user") as string
                                 );
 
-                                const { data: filter_temp, _id: filter_id } =
-                                    await get_filter(user.username);
+                                const { data: filter_temp } = await mongodb(
+                                    "filter",
+                                    "get",
+                                    {
+                                        username,
+                                    }
+                                );
 
                                 const add_list: any = [];
 
@@ -352,16 +357,7 @@ export default function Page() {
                                     }
                                 });
 
-                                const the_filter = add_list.find(
-                                    (item: { aft: any }) => {
-                                        return (
-                                            JSON.stringify(item.aft) ===
-                                            JSON.stringify(data)
-                                        );
-                                    }
-                                );
-
-                                the_filter.aft = new_subject;
+                                const the_filter = new_subject;
                             }
                         }
                         run();

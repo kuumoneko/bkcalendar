@@ -1,24 +1,34 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import parse_body, { isValid } from "../../data";
+import { isValid } from "../../data";
+import isDown from "../../isDown";
 
 /**
  * Get Student Infomation
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === "POST") {
-        try {
-            const { authorization } = parse_body(req.body);
-            if (!isValid(authorization)) {
-                return res.status(200).json({ error: { code: "Invalid request data" }, ok: false })
-            }
-            const response = await fetch("https://mybk.hcmut.edu.vn/api/v1/student/get-student-info?null", {
-                method: "GET",
-                headers: {
-                    authorization: authorization,
-                }
-            })
+export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
+    try {
+        const searchParams = new URL("http://localhost:3000" + _req.url).searchParams;
+        const authorization = searchParams.get("authorization") ?? "";
+        if (!isValid(authorization)) {
+            return res.status(200).json({ data: "Invalid request data", ok: false })
+        }
 
-            const { data, code } = await response.json()
+        const response = await fetch("https://mybk.hcmut.edu.vn/api/v1/student/get-student-info?null", {
+            method: "GET",
+            headers: {
+                authorization: authorization,
+            }
+        })
+
+        if (isDown(response.status)) {
+            throw new Error("EAI_AGAIN");
+        }
+
+        try {
+            const { data, code } = await response.json();
+            if (code === "401") {
+                return res.status(200).json({ ok: false, data: "Unauthorized" });
+            }
             const result = {
                 id: data.id,
                 name: data.lastName + " " + data.firstName,
@@ -33,21 +43,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 semesterStart: data.semesterStart,
                 email: data.orgEmail
             }
-
-            if (Number(code) !== 200) {
-                res.status(200).json({ error: data, ok: false });
-            }
-            else {
-                res.status(200).json({ ok: true, data: result });
-            }
+            return res.status(200).json({ ok: true, data: result });
         }
-        catch (e: any) {
-            console.error(e)
-            res.status(200).json({ error: { code: "EAI_AGAIN" }, ok: false });
+        catch (e) {
+            throw new Error("Unknown error at endpoint /api/mybk/api/student");
         }
     }
-    else {
-        res.setHeader("Allow", ["POST"]);
-        res.status(405).json({ ok: false, error: { code: 405 } });
+    catch (e: any) {
+        console.error(e)
+        res.status(200).json({ data: e.message, ok: false });
     }
 }

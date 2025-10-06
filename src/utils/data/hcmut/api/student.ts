@@ -7,7 +7,6 @@ export default async function get_web_student(authorization: string) {
     try {
         const res = await fetch_data(
             "/api/mybk/api/student",
-            "POST",
             {
                 "Content-Type": "application/json"
             },

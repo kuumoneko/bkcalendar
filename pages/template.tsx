@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Navigator";
 import Sidebar from "@/components/Sidebar";
 import { useOrientationMode } from "@/hooks/display";
+import get_web_semester from "@/utils/data/hcmut/api/semester";
 import check from "@/utils/data/hcmut/app";
 import { useEffect } from "react";
 
@@ -9,6 +10,17 @@ export default function Template({ children }: { children: React.ReactNode }) {
     const mode = useOrientationMode();
 
     useEffect(() => {
+        const hasVisited = sessionStorage.getItem("hasVisited") ?? false;
+
+        if (!hasVisited) {
+            sessionStorage.setItem("hasVisited", "true");
+            localStorage.setItem("offline", "false");
+            localStorage.setItem("error", "");
+            localStorage.setItem("user", `{"name":null}`);
+            alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại");
+            window.location.href = "/login";
+        }
+
         async function run() {
             const isOffline = Boolean(
                 localStorage.getItem("offline") ?? "false"
@@ -22,6 +34,9 @@ export default function Template({ children }: { children: React.ReactNode }) {
                 const temp = JSON.parse(
                     localStorage.getItem("user") ?? `{"name":null}`
                 );
+                const this_semester = await get_web_semester();
+                localStorage.setItem("semester", this_semester);
+
                 if (
                     temp.name === null &&
                     !url.includes("login") &&
@@ -38,19 +53,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
             }
         }
         run();
-    }, []);
-
-    useEffect(() => {
-        const hasVisited = sessionStorage.getItem("hasVisited") ?? false;
-
-        if (!hasVisited) {
-            sessionStorage.setItem("hasVisited", "true");
-            localStorage.setItem("offline", "false");
-            localStorage.setItem("error", "");
-            localStorage.setItem("user", `{"name":null}`);
-            alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại");
-            window.location.href = "/login";
-        }
     }, []);
 
     return (

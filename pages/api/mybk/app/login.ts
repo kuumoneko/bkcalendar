@@ -1,24 +1,30 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import parse_body, { isValid } from "../../data";
+import { isValid } from "../../data";
+import isDown from "../../isDown";
 
 /**
  * Create login page SESSION
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === "POST") {
-        try {
-            const { ticket } = parse_body(req.body)
-            if (!isValid(ticket)) {
-                return res.status(200).json({ error: { code: "Invalid request data" }, ok: false })
+    try {
+        const searchParams = new URL("http://localhost:3000" + req.url).searchParams;
+        const ticket = searchParams.get("ticket") ?? "";
+        if (!isValid(ticket)) {
+            return res.status(200).json({ data: "Invalid request data", ok: false })
+        }
+        const response = await fetch(`https://mybk.hcmut.edu.vn/app/login/cas?ticket=${ticket}`, {
+            method: "GET",
+            redirect: "manual",
+            headers: {
+                referer: "https://sso.hcmut.edu.vn/",
             }
-            const response = await fetch(`https://mybk.hcmut.edu.vn/app/login/cas?ticket=${ticket}`, {
-                method: "GET",
-                redirect: "manual",
-                headers: {
-                    referer: "https://sso.hcmut.edu.vn/",
-                }
-            });
+        });
 
+        if (isDown(response.status)) {
+            throw new Error("EAI_AGAIN");
+        }
+
+        try {
             const setCookieHeader = response.headers.get("set-cookie");
             const value = setCookieHeader
                 ? setCookieHeader.split(";")[0].split("=")[1]
@@ -26,11 +32,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             res.status(200).json({ ok: true, data: value })
         }
-        catch (e: any) {
-            res.status(200).json({ error: { code: e.cause.code }, ok: false });
+        catch (e) {
+            throw new Error("Unknown error at endpoint /api/mybk/app/login");
         }
-    } else {
-        res.setHeader("Allow", ["GET"]);
-        res.status(405).json({ ok: false, error: { code: 405 } })
+    }
+    catch (e: any) {
+        res.status(200).json({ data: e.message, ok: false });
     }
 }

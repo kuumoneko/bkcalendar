@@ -1,6 +1,5 @@
 import { DayTime, getWeekNumber } from "@/types/day";
-import get_filter from "@/utils/data/databsae/filter/get";
-import update_filter from "@/utils/data/databsae/filter/update,";
+import mongodb from "@/utils/data/databsae";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -18,7 +17,7 @@ export default function Page() {
         }
 
         if (Number(lessonStart) > Number(lessonEnd)) {
-            alert("Invalid lesson time");
+            alert("Thời gian học không hợp lệ");
             setlessonStart("");
             setlessonEnd("");
             return;
@@ -327,21 +326,17 @@ export default function Page() {
                         };
 
                         async function run() {
-                            const user: any = JSON.parse(
+                            const { username } = JSON.parse(
                                 localStorage.getItem("user") as string
                             );
-                            const { data: filter_temp, _id: filter_id } =
-                                await get_filter(user.username);
-                            filter_temp.push({
-                                pre: {},
-                                aft: data,
+                            const filter_temp = await mongodb("filter", "get", {
+                                username,
                             });
+                            filter_temp.push(data);
 
-
-                            await update_filter({
-                                _id: filter_id,
+                            await mongodb("filter", "post", {
+                                username,
                                 data: filter_temp,
-                                username: user.username,
                             });
                         }
                         run();
