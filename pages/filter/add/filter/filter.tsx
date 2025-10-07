@@ -210,13 +210,18 @@ export default function Filter({
                                 );
 
                                 filter_temp.push(aft);
-                                await mongodb("filter", "post", {
-                                    username: username,
+
+                                const res = await mongodb("filter", "post", {
+                                    username,
                                     data: filter_temp,
                                 });
+                                if (res.matchedCount > 0) {
+                                    alert("Thêm bộ lọc thành công");
+                                }
                             }
                             run();
                         }}
+                        className="hover:cursor-pointer"
                     >
                         Submit
                     </div>

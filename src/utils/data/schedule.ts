@@ -44,21 +44,20 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
 
     let filters = await mongodb("filter", "get", { username });
     if (filters.length > 0) {
-
         filters = filters.sort((a: any, b: any) => {
-            const a_keys = Object.keys(a);
+            const aKeys = Object.keys(a).length;
+            const bKeys = Object.keys(b).length;
 
-            if (a_keys.length === 1) return -1;
-            const b_keys = Object.keys(b);
-            if (b_keys.length === 1) return 1;
-            return 0;
+            const aPriority = aKeys > 2 ? 0 : 1;
+            const bPriority = bKeys > 2 ? 0 : 1;
 
+            return aPriority - bPriority;
         })
 
         for (const filter of filters) {
 
             const { class: class_code, dates, ...other_pre_params } = filter
-            if (class_code.length < 1) {
+            if (Object.keys(other_pre_params).length > 1) {
                 schedule.push({
                     class: class_code,
                     dates: dates.map((item: string) => {

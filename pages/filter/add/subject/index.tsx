@@ -334,13 +334,17 @@ export default function Page() {
                             });
                             filter_temp.push(data);
 
-                            await mongodb("filter", "post", {
+                            const res = await mongodb("filter", "post", {
                                 username,
                                 data: filter_temp,
                             });
+                            if (res.matchedCount > 0) {
+                                alert("Thêm môn học thành công");
+                            }
                         }
                         run();
                     }}
+                    className="hover:cursor-pointer"
                 >
                     Submit
                 </div>

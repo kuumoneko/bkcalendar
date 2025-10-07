@@ -12,6 +12,10 @@ export default function Page() {
         );
         if (data_temp) {
             setdata(JSON.parse(data_temp));
+
+            setbuilding(data?.building ?? "");
+            setStage(data?.room.split("-")[0] ?? "");
+            setroom(data?.room.split("-")[1] ?? "");
         }
     }, []);
     const [mode, setmode] = useState<"lesson" | "filter">("lesson");
@@ -31,9 +35,9 @@ export default function Page() {
     const [lessonStart, setlessonStart] = useState("");
     const [lessonEnd, setlessonEnd] = useState("");
     const [date, setdate] = useState({
-        date: 0,
-        month: 0,
-        year: 0,
+        date: "0",
+        month: "0",
+        year: "0",
     });
 
     const [Stage, setStage] = useState("");

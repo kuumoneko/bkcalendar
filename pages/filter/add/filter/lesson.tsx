@@ -22,11 +22,11 @@ export default function lesson({
     lessonEnd: string;
     setlessonEnd: (value: string) => void;
     date: {
-        date: number;
-        month: number;
-        year: number;
+        date: string;
+        month: string;
+        year: string;
     };
-    setdate: (value: { date: number; month: number; year: number }) => void;
+    setdate: (value: { date: string; month: string; year: string }) => void;
     building: string;
     setbuilding: (value: string) => void;
     Stage: string;
@@ -83,7 +83,7 @@ export default function lesson({
                     onChange={(e) => {
                         setdate({
                             ...date,
-                            date: Number(e.target.value),
+                            date: String(Number(e.target.value)),
                         });
                     }}
                     className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
@@ -97,7 +97,7 @@ export default function lesson({
                     onChange={(e) => {
                         setdate({
                             ...date,
-                            month: Number(e.target.value),
+                            month: String(Number(e.target.value)),
                         });
                     }}
                     className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
@@ -111,7 +111,7 @@ export default function lesson({
                     onChange={(e) => {
                         setdate({
                             ...date,
-                            year: Number(e.target.value),
+                            year: String(Number(e.target.value)),
                         });
                     }}
                     className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
@@ -161,15 +161,15 @@ export default function lesson({
                         class: data?.class ?? "",
                         dates: [
                             formatDate(
-                                date?.year ?? 0,
-                                date?.month ?? 0,
-                                date?.date ?? 0
+                                Number(date?.year) ?? 0,
+                                Number(date?.month) ?? 0,
+                                Number(date?.date) ?? 0
                             ),
                         ],
                         dayOfWeek: getDayOfWeek(
-                            date?.year ?? 0,
-                            date?.month ?? 0,
-                            date?.date ?? 0
+                            Number(date?.year) ?? 0,
+                            Number(date?.month) ?? 0,
+                            Number(date?.date) ?? 0
                         ),
                         endTime:
                             DayTime[lessonEnd as keyof typeof DayTime]
@@ -203,13 +203,17 @@ export default function lesson({
 
                         filter_temp.push(new_subject);
 
-                        await mongodb("filter", "post", {
+                        const res = await mongodb("filter", "post", {
                             username,
                             data: filter_temp,
                         });
+                        if (res.matchedCount > 0) {
+                            alert("Thêm tiết học thành công");
+                        }
                     }
                     run();
                 }}
+                className="hover:cursor-pointer"
             >
                 submit
             </div>
