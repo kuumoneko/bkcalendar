@@ -4,8 +4,10 @@ import {
     faCalendarDays,
     faFilter,
 } from "@fortawesome/free-solid-svg-icons";
+import { useOrientationMode } from "@/hooks/display";
 
 function Side_bar_Button({ text, url }: { text: string; url: string }) {
+    const mode = useOrientationMode();
     const Font_Awesome: any = {
         "Lịch thi": faCalendarCheck,
         "Thời khoá biểu": faCalendarDays,
@@ -13,7 +15,9 @@ function Side_bar_Button({ text, url }: { text: string; url: string }) {
     };
     return (
         <li
-            className="cursor-default select-none h-[50px] w-[200px] rounded-xl flex flex-row items-center justify-start bg-slate-700 pl-[15px] hover:bg-slate-600 hover:cursor-pointer"
+            className={`cursor-default select-none h-[50px] w-[200px] rounded-xl flex flex-row items-center ${
+                mode === "col" ? "justify-center " : "justify-start "
+            } bg-slate-700 pl-[15px] hover:bg-slate-600 hover:cursor-pointer`}
             onClick={() => {
                 window.location.href = url;
             }}

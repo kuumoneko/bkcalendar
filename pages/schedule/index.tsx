@@ -171,7 +171,7 @@ export default function Schedule() {
                     <div className="schedule flex flex-col w-[100%] h-[100%] items-center">
                         <div className="flex flex-row h-[5%] w-[50%] items-center justify-between">
                             <div
-                                className="head"
+                                className="head hover:cursor-pointer"
                                 onClick={() => {
                                     if (week - 1 < this_week) {
                                         return;
@@ -183,7 +183,7 @@ export default function Schedule() {
                             </div>
                             <div className="head">Tuần {week}</div>
                             <div
-                                className="head"
+                                className="head hover:cursor-pointer"
                                 onClick={() => {
                                     setweek(week + 1);
                                 }}
