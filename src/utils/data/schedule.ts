@@ -2,7 +2,7 @@ import { SubjectInfo } from "@/types/index";
 import get_web_schedule from "./hcmut/api/schedule";
 import { formatDate } from "@/types/day";
 import mongodb from "./databsae";
-import get_web_semester from "./hcmut/api/semester";
+import get_this_semester from "./semester";
 
 /**
  * Create fully schedule
@@ -16,7 +16,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
 
     const offline = (localStorage.getItem("offline") ?? "false") === "true" ? true : false;
 
-    const this_semester = await get_web_semester();
+    const this_semester = get_this_semester();
 
     if (!this_semester) {
         throw new Error("No current semester found.")

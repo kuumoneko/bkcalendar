@@ -53,7 +53,7 @@ export default async function logining(username: string, password: string) {
                     ...user,
                     semester: this_semester
                 }
-                const updating = await mongodb("user", "post", { username: username, data: database });
+                await mongodb("user", "post", { username: username, data: database });
 
                 user = {
                     ...user,

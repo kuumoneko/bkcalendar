@@ -1,6 +1,6 @@
 import mongodb from "./databsae";
 import get_exam from "./hcmut/api/exam";
-import get_web_semester from "./hcmut/api/semester";
+import get_this_semester from "./semester";
 
 export default async function get_full_exam() {
     const token = localStorage.getItem("token") as string ?? ""
@@ -10,7 +10,7 @@ export default async function get_full_exam() {
 
     const offline = (localStorage.getItem("offline") ?? "false") === "true" ? true : false;
 
-    const this_semester = await get_web_semester();
+    const this_semester = get_this_semester();
 
     if (!this_semester) {
         throw new Error("No current semester found.")

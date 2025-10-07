@@ -2,8 +2,8 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Navigator";
 import Sidebar from "@/components/Sidebar";
 import { useOrientationMode } from "@/hooks/display";
-import get_web_semester from "@/utils/data/hcmut/api/semester";
 import check from "@/utils/data/hcmut/app";
+import get_this_semester from "@/utils/data/semester";
 import { useEffect } from "react";
 
 export default function Template({ children }: { children: React.ReactNode }) {
@@ -33,7 +33,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
                 const temp = JSON.parse(
                     localStorage.getItem("user") ?? `{"name":null}`
                 );
-                const this_semester = await get_web_semester();
+                const this_semester = get_this_semester();
                 localStorage.setItem("semester", this_semester);
 
                 if (
