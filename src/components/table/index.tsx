@@ -45,11 +45,9 @@ export default function Table({
                             }}
                             onMouseDown={() => {
                                 if (mode === "filter" && hover) {
-                                    localStorage.setItem(
-                                        "data",
+                                    window.location.href = `/filter/edit/add?data=${encodeURIComponent(
                                         JSON.stringify(subject)
-                                    );
-                                    window.location.href = "/filter/edit/add";
+                                    )}`;
                                 }
                             }}
                         >

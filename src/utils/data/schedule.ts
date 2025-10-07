@@ -88,9 +88,6 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
                         }
                         continue;
                     }
-                    if (filter[key] === undefined || filter[key] === null || subject[key as keyof SubjectInfo] === undefined || subject[key as keyof SubjectInfo] === null) {
-                        console.log("ảo rồi bro")
-                    }
                     (subject[key as keyof SubjectInfo] as any) = filter[key]
                 }
             }

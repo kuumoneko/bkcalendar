@@ -35,7 +35,6 @@ export default async function fetch_data(
         }
 
         const { ok, data } = await res.json();
-        console.log(ok, data)
         if (ok) {
             return data ?? "ok";
         }

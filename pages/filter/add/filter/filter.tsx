@@ -223,7 +223,7 @@ export default function Filter({
                         }}
                         className="hover:cursor-pointer"
                     >
-                        Submit
+                        Lưu
                     </div>
                 )}
             </div>

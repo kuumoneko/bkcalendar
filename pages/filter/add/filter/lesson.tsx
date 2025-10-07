@@ -215,7 +215,7 @@ export default function lesson({
                 }}
                 className="hover:cursor-pointer"
             >
-                submit
+                Lưu
             </div>
         </div>
     );

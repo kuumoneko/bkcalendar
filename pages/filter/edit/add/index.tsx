@@ -1,5 +1,7 @@
+import { SubjectInfo } from "@/types";
 import { DayTime, formatDate, getDayOfWeek, getWeekNumber } from "@/types/day";
 import mongodb from "@/utils/data/databsae";
+import deepEqual from "@/utils/object";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -35,7 +37,7 @@ export default function Page() {
     const [building, setbuilding] = useState("");
 
     useEffect(() => {
-        const temp = localStorage.getItem("data");
+        const temp = new URL(window.location.href).searchParams.get("data");
         if (temp) {
             const temping = JSON.parse(temp);
             setdata(temping);
@@ -291,14 +293,51 @@ export default function Page() {
                 </div>
             </div>
             <div className="h-[10%] w-[50%] flex flex-row items-center justify-center gap-24">
-                <div className="flex flex-col items-center bg-red-500 hover:bg-red-400 hover:cursor-pointer w-[65px] rounded-2xl">
+                <div
+                    className="flex flex-col items-center bg-red-500 hover:bg-red-400 hover:cursor-pointer w-[65px] rounded-2xl"
+                    onClick={() => {
+                        async function run() {
+                            if (data === undefined) {
+                                return;
+                            }
+                            const { username } = JSON.parse(
+                                localStorage.getItem("user") as string
+                            );
+
+                            const filter_temp: SubjectInfo[] = await mongodb(
+                                "filter",
+                                "get",
+                                {
+                                    username,
+                                }
+                            );
+
+                            const indexx = filter_temp.findIndex(
+                                (item: any) => {
+                                    if (deepEqual(item, data)) {
+                                        return true;
+                                    }
+                                }
+                            );
+
+                            filter_temp.splice(indexx, 1);
+                            const res = await mongodb("filter", "post", {
+                                username,
+                                data: filter_temp,
+                            });
+                            if (res.matchedCount > 0) {
+                                alert("Xóa bộ lọc thành công");
+                            }
+                        }
+                        run();
+                    }}
+                >
                     Xoá
                 </div>
                 <div
                     className="flex flex-col items-center bg-sky-700 hover:bg-sky-600 hover:cursor-pointer w-[65px] rounded-2xl"
                     onClick={() => {
                         async function run() {
-                            // create Subject from all hook
                             const new_subject = {
                                 building: `${building}`,
                                 class: data.class,
@@ -333,15 +372,12 @@ export default function Page() {
                                 ],
                             };
 
-                            if (
-                                JSON.stringify(new_subject) !==
-                                JSON.stringify(data)
-                            ) {
+                            if (!deepEqual(new_subject, data)) {
                                 const { username } = JSON.parse(
                                     localStorage.getItem("user") as string
                                 );
 
-                                const { data: filter_temp } = await mongodb(
+                                const filter_temp = await mongodb(
                                     "filter",
                                     "get",
                                     {
@@ -349,15 +385,24 @@ export default function Page() {
                                     }
                                 );
 
-                                const add_list: any = [];
-
-                                filter_temp.forEach((item: any) => {
-                                    if (Object.keys(item.pre).length === 1) {
-                                        add_list.push(item);
+                                const indexx = filter_temp.findIndex(
+                                    (item: any) => {
+                                        if (deepEqual(item, data)) {
+                                            return true;
+                                        }
                                     }
-                                });
+                                );
 
-                                const the_filter = new_subject;
+                                filter_temp.splice(indexx, 1);
+                                filter_temp.push(new_subject);
+
+                                const res = await mongodb("filter", "post", {
+                                    username,
+                                    data: filter_temp,
+                                });
+                                if (res.matchedCount > 0) {
+                                    alert("Sửa bộ lọc thành công");
+                                }
                             }
                         }
                         run();

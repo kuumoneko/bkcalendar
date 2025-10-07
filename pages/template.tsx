@@ -17,7 +17,6 @@ export default function Template({ children }: { children: React.ReactNode }) {
             localStorage.setItem("offline", "false");
             localStorage.setItem("error", "");
             localStorage.setItem("user", `{"name":null}`);
-            alert("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại");
             window.location.href = "/login";
         }
 

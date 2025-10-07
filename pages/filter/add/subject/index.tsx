@@ -346,7 +346,7 @@ export default function Page() {
                     }}
                     className="hover:cursor-pointer"
                 >
-                    Submit
+                    Lưu
                 </div>
             </div>
         </div>
