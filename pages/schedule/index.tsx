@@ -314,7 +314,7 @@ export default function Schedule() {
                         )}
                     </div>
                 ) : (
-                    <Loading mode="Loading schedule" />
+                    <Loading mode="Đang tải thời khóa biểu" />
                 )}
             </div>
         </div>

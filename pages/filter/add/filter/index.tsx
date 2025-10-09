@@ -20,14 +20,10 @@ export default function Page() {
     }, []);
     const [mode, setmode] = useState<"lesson" | "filter">("lesson");
 
-    const [selections, setselections] = useState<string[]>([]);
+    const [selections, setselections] = useState<string>("");
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { checked, id } = e.target;
-        if (checked) {
-            setselections([...selections, id]);
-        } else {
-            setselections(selections.filter((item) => item !== id));
-        }
+        const { id } = e.target;
+        setselections(id);
     };
 
     const [filter, setfilter] = useState<any>({});
@@ -46,7 +42,9 @@ export default function Page() {
     const [building, setbuilding] = useState("");
 
     return (
-        <div className="h-full w-full flex flex-col items-center justify-start">
+        <div
+            className={`h-full mt-6 w-full flex flex-col items-center justify-start`}
+        >
             <span className="text-2xl h-[5%] w-full flex flex-row items-center justify-center">
                 Add filter
             </span>

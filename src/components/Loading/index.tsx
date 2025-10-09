@@ -6,7 +6,7 @@ export default function Loading({ mode }: { mode?: string }) {
             ></div>
             {(mode?.length ?? 0) > 0 && (
                 <p className="text-lg text-gray-300 mt-2">
-                    {mode} , please wait...
+                    {mode}, hãy chờ một tí...
                 </p>
             )}
         </div>

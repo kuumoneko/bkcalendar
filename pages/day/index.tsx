@@ -56,7 +56,17 @@ export default function Day() {
                 const schedule = await full_schedule();
 
                 const today_subject = create_day_schedule(today, schedule);
-                set_today_sche(today_subject);
+                set_today_sche(
+                    today_subject.sort((a: SubjectInfo, b: SubjectInfo) => {
+                        const [h1, m1] = a.startTime.split(":").map(Number);
+                        const [h2, m2] = b.startTime.split(":").map(Number);
+
+                        const d1 = new Date(0, 0, 0, h1, m1);
+                        const d2 = new Date(0, 0, 0, h2, m2);
+
+                        return d1.getTime() - d2.getTime();
+                    })
+                );
 
                 if (today_subject.length > 0) {
                     const now = new Date();
@@ -153,7 +163,7 @@ export default function Day() {
             } w-[100%] max-x-[1500px]`}
         >
             {today_sche.length === 0 && closestDaySche.length === 0 ? (
-                <Loading mode="Loading schedule" />
+                <Loading mode="Đang tải thời khóa biểu ngày hôm nay" />
             ) : (
                 <>
                     {today_sche.length > 0 ? (

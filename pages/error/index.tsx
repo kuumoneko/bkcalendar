@@ -16,7 +16,7 @@ export default function ErrorPage() {
         if (allErrorCode.includes(code)) {
             seterror(Error_code[code as keyof typeof Error_code]);
         } else {
-            seterror(`Undefined error, code: ${code}`);
+            seterror(`Lỗi không xác định, mã lỗi: ${code}`);
         }
     }, []);
     return (

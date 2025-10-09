@@ -1,3 +1,4 @@
+import { useOrientationMode } from "@/hooks/display";
 import { SubjectInfo } from "@/types";
 import { DayTime, formatDate, getDayOfWeek, getWeekNumber } from "@/types/day";
 import mongodb from "@/utils/data/databsae";
@@ -5,6 +6,7 @@ import deepEqual from "@/utils/object";
 import { useEffect, useState } from "react";
 
 export default function Page() {
+    const user_mode = useOrientationMode();
     const [data, setdata] = useState<any>({});
 
     const [teacher, setteacher] = useState("");
@@ -120,7 +122,11 @@ export default function Page() {
                     </span>
                 </div>
             </div>
-            <div className="flex flex-col h-[20%] w-[50%] items-center justify-center">
+            <div
+                className={`flex flex-col h-[20%] ${
+                    user_mode === "col" ? "w-[75%]" : "w-[35%]"
+                } items-center justify-center`}
+            >
                 <div className="w-full flex flex-row items-center justify-center">
                     <span>Fix</span>
                 </div>

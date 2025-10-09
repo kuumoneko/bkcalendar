@@ -13,7 +13,7 @@ export default function Exam_Schedule() {
     }, []);
     return (
         <div className="h-full w-full flex flex-col justify-center items-center">
-            <span>EXAM</span>
+            <span>Lịch thi</span>
             <div className="w-[90%]">
                 {data.length > 0 ? (
                     <table className="w-full text-center mt-5 rounded-3xl min-w-[500px]">
@@ -107,7 +107,7 @@ export default function Exam_Schedule() {
                         </tbody>
                     </table>
                 ) : (
-                    <Loading mode="Loading Exam schedule" />
+                    <Loading mode="Đang tải lịch thi" />
                 )}
             </div>
         </div>

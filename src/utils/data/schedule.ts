@@ -57,7 +57,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         for (const filter of filters) {
 
             const { class: class_code, dates, ...other_pre_params } = filter
-            if (Object.keys(other_pre_params).length > 1) {
+            if (Object.keys(other_pre_params).length > 1 && !(Object.keys(other_pre_params).length === 2 && Object.keys(other_pre_params).includes("building") && Object.keys(other_pre_params).includes("room"))) {
                 schedule.push({
                     class: class_code,
                     dates: dates.map((item: string) => {

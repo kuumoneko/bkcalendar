@@ -36,7 +36,7 @@ export default function lesson({
 }) {
     return (
         <div>
-            <div>
+            <div className="mb-3">
                 {" "}
                 <div>Subject: {data?.subject}</div>
                 <div>
@@ -74,7 +74,7 @@ export default function lesson({
                     DayTime[lessonEnd as keyof typeof DayTime]?.endTime ?? ""
                 })`}</span>
             </div>
-            <div>
+            <div className="mb-3">
                 Date{" "}
                 <input
                     type="text"
@@ -118,7 +118,7 @@ export default function lesson({
                     maxLength={4}
                 />
             </div>
-            <div>
+            <div className="mb-3">
                 Location
                 {" CS "}
                 <input

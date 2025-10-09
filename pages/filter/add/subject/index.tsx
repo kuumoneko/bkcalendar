@@ -43,7 +43,7 @@ export default function Page() {
         <div className="h-full w-full flex flex-col items-center justify-center">
             <span className="text-2xl">Add subject</span>
             <div>
-                <div>
+                <div className="mb-3">
                     class{" "}
                     <input
                         type="text"
@@ -55,7 +55,7 @@ export default function Page() {
                         className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
                     />
                 </div>
-                <div>
+                <div className="mb-3">
                     teacher{" "}
                     <input
                         type="text"
@@ -67,7 +67,7 @@ export default function Page() {
                         className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[250px]"
                     />
                 </div>
-                <div>
+                <div className="mb-3">
                     subject{" "}
                     <input
                         type="text"
@@ -79,7 +79,7 @@ export default function Page() {
                         className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[250px]"
                     />
                 </div>
-                <div>
+                <div className="mb-3">
                     <div>
                         <form>
                             <input

@@ -7,7 +7,7 @@ export default function Filter({
     setfilter,
 }: {
     data: any;
-    selections: string[];
+    selections: string;
     handleChange: (e: any) => void;
     filter: any;
     setfilter: (value: any) => void;
@@ -17,11 +17,11 @@ export default function Filter({
             <div>
                 <div>
                     <input
-                        type="checkbox"
+                        type="radio"
                         onChange={handleChange}
-                        name=""
+                        name="filter"
                         id="subject"
-                        checked={selections?.includes("subject")}
+                        checked={selections === "subject"}
                     />
 
                     <label htmlFor="subject">
@@ -31,11 +31,11 @@ export default function Filter({
                 </div>
                 <div>
                     <input
-                        type="checkbox"
+                        type="radio"
                         onChange={handleChange}
-                        name=""
+                        name="filter"
                         id="teacher"
-                        checked={selections?.includes("teacher")}
+                        checked={selections === "teacher"}
                     />
                     <label htmlFor="teacher">
                         {"Teacher "}
@@ -46,11 +46,11 @@ export default function Filter({
                 </div>
                 <div>
                     <input
-                        type="checkbox"
+                        type="radio"
                         onChange={handleChange}
-                        name=""
+                        name="filter"
                         id="time"
-                        checked={selections?.includes("time")}
+                        checked={selections === "time"}
                     />
                     <label htmlFor="time">
                         {"Lesson "}
@@ -59,17 +59,17 @@ export default function Filter({
                 </div>
                 <div>
                     <input
-                        type="checkbox"
+                        type="radio"
                         onChange={handleChange}
-                        name=""
+                        name="filter"
                         id="date"
-                        checked={selections?.includes("date")}
+                        checked={selections === "date"}
                     />
                     <label htmlFor="date">
                         {"Date "}
                         <select
                             className="bg-slate-600 text-slate-800"
-                            disabled={!selections?.includes("date")}
+                            disabled={!(selections === "date")}
                         >
                             {[""]
                                 .concat(data?.dates ?? [])
@@ -88,11 +88,11 @@ export default function Filter({
                 </div>
                 <div>
                     <input
-                        type="checkbox"
+                        type="radio"
                         onChange={handleChange}
-                        name=""
+                        name="filter"
                         id="location"
-                        checked={selections?.includes("location")}
+                        checked={selections === "location"}
                     />
                     <label htmlFor="location">
                         {"Location "}
@@ -104,7 +104,7 @@ export default function Filter({
                 </div>
             </div>
             <div>
-                {selections?.includes("subject") && (
+                {selections === "subject" && (
                     <div>
                         subject{" "}
                         <input
@@ -119,7 +119,7 @@ export default function Filter({
                         />
                     </div>
                 )}
-                {selections?.includes("teacher") && (
+                {selections === "teacher" && (
                     <div>
                         teacher{" "}
                         <input
@@ -134,7 +134,7 @@ export default function Filter({
                         />
                     </div>
                 )}
-                {selections?.includes("time") && (
+                {selections === "time" && (
                     <div>
                         time{" "}
                         <input
@@ -149,7 +149,7 @@ export default function Filter({
                         />
                     </div>
                 )}
-                {selections?.includes("date") && (
+                {selections === "date" && (
                     <div>
                         date{" "}
                         <input
@@ -164,10 +164,10 @@ export default function Filter({
                         />
                     </div>
                 )}
-                {selections?.includes("location") && (
+                {selections === "location" && (
                     <div>
                         location{" "}
-                        <input
+                        {/* <input
                             type="text"
                             className="bg-slate-600 text-slate-300 rounded-2xl px-2"
                             onChange={(e) => {
@@ -176,6 +176,57 @@ export default function Filter({
                                     location: e.target.value,
                                 });
                             }}
+                        /> */}
+                        {" CS "}
+                        <input
+                            type="text"
+                            id="class"
+                            onChange={(e) => {
+                                setfilter({
+                                    ...filter,
+                                    building: e.target.value,
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[25px]"
+                            maxLength={1}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            onChange={(e) => {
+                                setfilter({
+                                    ...filter,
+                                    room:
+                                        filter?.room?.length === 0
+                                            ? e.target.value
+                                            : e.target.value +
+                                              "-" +
+                                              (filter?.room?.split("-")[1] ??
+                                                  ""),
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            maxLength={2}
+                        />
+                        {" - "}
+                        <input
+                            type="text"
+                            id="class"
+                            onChange={(e) => {
+                                setfilter({
+                                    ...filter,
+                                    room:
+                                        filter?.room?.length === 0
+                                            ? "-" + e.target.value
+                                            : (filter?.room?.split("-")[0] ??
+                                                  "") +
+                                              "-" +
+                                              e.target.value,
+                                });
+                            }}
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[50px]"
+                            maxLength={3}
                         />
                     </div>
                 )}

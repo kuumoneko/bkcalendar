@@ -50,7 +50,7 @@ export default function Hcmut() {
                             setlogout(true);
                         }}
                     >
-                        log out
+                        Đăng xuất
                     </span>
                 )}
             </span>
