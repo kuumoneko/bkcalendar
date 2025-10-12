@@ -112,7 +112,7 @@ export default function Schedule() {
                             (subject?.dates as string[]).forEach(
                                 (dateStr: string) => {
                                     const date = new Date(dateStr);
-                                    if (date < first_day_of_week) return; // Skip past dates
+                                    if (date < first_day_of_week) return;
 
                                     const weekNumber = getWeekNumber(date);
                                     const weekKey = `Tuần ${weekNumber}`;

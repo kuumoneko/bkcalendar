@@ -38,8 +38,6 @@ export default function Filter() {
             // dates is yyyy-mm-dd, remove the add items in add_list the the dates if the previous day from today
             const today = new Date();
             const filtered_add_list = add_list.filter((item: any) => {
-                // const itemDate = new Date(item.dates[0]);
-                // return itemDate >= today;
                 return (
                     item.dates.filter((itemm: string) => {
                         const date = new Date(itemm);

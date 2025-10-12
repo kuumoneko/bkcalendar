@@ -8,7 +8,6 @@ export default function Table({
     subjects: SubjectInfo[];
     mode?: string;
 }) {
-    // const [hover, sethover] = useState(false);
 
     return (
         <table className="w-full text-center mt-5 rounded-3xl min-w-[500px]">
