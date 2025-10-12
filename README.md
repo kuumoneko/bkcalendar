@@ -1,28 +1,25 @@
 # BK Calendar
 
 > A web built on Next.js to see schedule and manage subjects for studying in HCMUT.
+> Version: 7.0.0
 
 ## Page
 
 - [BK Calendar](https://bkcalendar.vercel.app/)
 
-## UPDATE
+## Features
 
-> Add offline mode
->
-> Add mongodb to get data when the origin web is down
->
-> Add filter page, you can add filter, subject, etc
+- Follow the current subject and the next subjects of the current day and the next day.
+- Follow the Exam schedule.
+- Add filter, add subject, add lesson, etc.
+- Export to CSV file to import to other Calendar platform.
+- Watch schedule when raw web is down.
 
 ## Usage
 
 > Click the link above.
 >
 > Sign in by using HCMUT Account.
->
-> In homepage, you will see the current subject, next subjects and the schedule of the next day.
->
-> In schedule, you will see the fully schedule of this semester.
 
 ## IMPORTANT
 
