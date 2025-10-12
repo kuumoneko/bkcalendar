@@ -13,7 +13,7 @@ export default async function get_exam(authorization: string, mssv: string, hock
     class: string,
 }[]> {
 
-    const res = await fetch_data("/api/mybk/api/exam",  {
+    const res = await fetch_data("/api/mybk/api/exam", {
         "Content-Type": "application/json"
     }, {
         authorization: authorization,

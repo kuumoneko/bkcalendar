@@ -15,9 +15,9 @@ export interface SubjectInfo {
 export interface CSVHeader {
     Subject: string,
     'Start Date': string, // DD/MM/YYY
-    'Start Time': string,
+    'Start Time'?: string,
     'End Date': string, // DD/MM/YYY
-    'End Time': string,
+    'End Time'?: string,
     'All Day Event': "TRUE" | 'FALSE',
     Description: string, // add teacher here
     Location: string,

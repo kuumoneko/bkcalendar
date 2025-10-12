@@ -36,7 +36,7 @@ export default function Hcmut() {
                             window.location.href = "/login";
                         }}
                     >
-                        <span className=" w-[140px] border-solid rounded-[50px] bg-white py-[5px] px-[10px] flex flex-row ml-4 hover:cursor-pointer hover:bg-slate-200">
+                        <span className=" w-[140px] border-solid rounded-[50px] bg-slate-800 py-[5px] px-[10px] flex flex-row ml-4 hover:cursor-pointer hover:bg-slate-200">
                             <Hcmut_Logo height={25} width={25} />
                             <span className="text-black ml-2 mt-0.5">
                                 Đăng nhập

@@ -43,6 +43,9 @@ export default function Nav() {
             )}
 
             <div className="settings flex flex-row justify-between items-center">
+                <div className="hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800 px-[10px] py-[5px] text-slate-100 rounded-3xl bg-slate-800" onClick={() => {window.location.href = "/export";}}>
+                    Export
+                </div>
                 <Hcmut />
             </div>
         </div>
