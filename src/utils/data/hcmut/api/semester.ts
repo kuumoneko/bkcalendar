@@ -10,7 +10,6 @@ export default async function get_web_semester(): Promise<string> {
             {
                 "Content-Type": "application/json"
             }
-
         );
         return res;
     }

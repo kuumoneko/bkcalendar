@@ -39,7 +39,7 @@ function getDatesForSchedule(scheduleItem: any): string[] {
 /**
  * Get Schedule of user
  */
-export default async function get_web_schedule(authorization: string, studentId: string, semesterYear: string): Promise<{
+export default async function get_web_schedule(authorization: string, studentId: string, semester: string): Promise<{
     subject: string;
     teacher: string;
     class: string;
@@ -53,11 +53,11 @@ export default async function get_web_schedule(authorization: string, studentId:
     dates: string[] | "--";
 }[]> {
 
-    const res = await fetch_data("/api/mybk/api/schedule",  {
+    const res = await fetch_data("/api/mybk/api/schedule", {
         "Content-Type": "application/json"
     }, {
         authorization: authorization,
-        semester_id: semesterYear, student_id: studentId
+        semester_id: semester, student_id: studentId
     })
 
     const result = res.map((a: any) => {
@@ -76,5 +76,5 @@ export default async function get_web_schedule(authorization: string, studentId:
         }
     })
 
-    return result;
+    return result ?? [];
 }

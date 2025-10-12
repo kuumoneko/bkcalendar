@@ -1,7 +1,7 @@
 export interface SubjectInfo {
     building: string;
     class: string;
-    dates: string | string[];
+    dates: string | string[]; // yyyy-mm-dd
     dayofWeek: number;
     endTime: string;
     lesson: string;
@@ -11,6 +11,19 @@ export interface SubjectInfo {
     teacher: string;
     weeks: number[];
 }
+
+export interface CSVHeader {
+    Subject: string,
+    'Start Date': string, // DD/MM/YYY
+    'Start Time': string,
+    'End Date': string, // DD/MM/YYY
+    'End Time': string,
+    'All Day Event': "TRUE" | 'FALSE',
+    Description: string, // add teacher here
+    Location: string,
+    Private: "TRUE" | "FALSE"
+}
+
 export interface DailySchedule {
     day: string;
     subjects: SubjectInfo[];

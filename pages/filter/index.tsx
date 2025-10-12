@@ -29,7 +29,7 @@ export default function Filter() {
             const filter_list: any = [];
 
             filter_temp.forEach((item: any) => {
-                if (Object.keys(item).length > 2) {
+                if (Object.keys(item).length > 3) {
                     add_list.push(item);
                 } else {
                     filter_list.push(item);
@@ -38,8 +38,14 @@ export default function Filter() {
             // dates is yyyy-mm-dd, remove the add items in add_list the the dates if the previous day from today
             const today = new Date();
             const filtered_add_list = add_list.filter((item: any) => {
-                const itemDate = new Date(item.dates[0]);
-                return itemDate >= today;
+                // const itemDate = new Date(item.dates[0]);
+                // return itemDate >= today;
+                return (
+                    item.dates.filter((itemm: string) => {
+                        const date = new Date(itemm);
+                        return date >= today;
+                    }).length > 0
+                );
             });
             add_list.splice(0, add_list.length, ...filtered_add_list);
 

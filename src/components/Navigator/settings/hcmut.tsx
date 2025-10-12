@@ -45,7 +45,7 @@ export default function Hcmut() {
                     </div>
                 ) : (
                     <span
-                        className="cursor-default flex flex-row-reverse items-center ml-4 bg-slate-50 rounded-3xl px-[10px] py-[5px] text-slate-500 hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800"
+                        className="cursor-default flex flex-row-reverse items-center justify-center ml-4 bg-slate-800 rounded-3xl px-[10px] py-[5px] text-slate-100 hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800"
                         onClick={() => {
                             setlogout(true);
                         }}

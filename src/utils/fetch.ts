@@ -23,7 +23,7 @@ export default async function fetch_data(
                 fetch_url += `&data=${encodeURIComponent(JSON.stringify(body.data))}`
             }
         }
-        let res: any;
+        let res: Response;
         try {
             res = await fetch(fetch_url, {
                 method: "GET",
@@ -44,7 +44,12 @@ export default async function fetch_data(
                 alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.")
                 window.location.href = "/login";
             }
-            handle_error(data)
+            else if (res.status === 304) {
+                return "ok"
+            }
+            else {
+                handle_error(data)
+            }
         }
     }
     catch (e: any) {

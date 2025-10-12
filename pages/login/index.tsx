@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { handle_error } from "@/utils/error";
 import { useOrientationMode } from "@/hooks/display";
 import logining from "@/utils/data/login";
+import test_logining from "@/utils/data/test";
 
 export default function Login() {
     useEffect(() => {

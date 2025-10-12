@@ -7,11 +7,15 @@ import { handle_error } from "@/utils/error";
 import login_db from "@/utils/data/databsae/login";
 import mongodb from "@/utils/data/databsae";
 import get_web_semester from "./hcmut/api/semester";
+import deepEqual from "../object";
 
 export default async function logining(username: string, password: string) {
-    const { JSESSIONID, ltValue, executionValue } =
-        await create_login();
+
     try {
+        const result = login_db(username, password);
+
+        const { JSESSIONID, ltValue, executionValue } =
+            await create_login();
         const res = await login_user(
             JSESSIONID || "",
             ltValue || "",
@@ -26,58 +30,77 @@ export default async function logining(username: string, password: string) {
 
         const { SESSION } = await create_app(res as string);
         let token = await get_token(SESSION as string);
-        const result = await login_db(username, password);
-
+        await Promise.all([
+            result
+        ])
         if (token === "ok") {
-            if (result) {
-                localStorage.setItem("offline", "true");
-            }
-            else {
+            if (!result) {
                 throw new Error("Đăng nhập thất bại. Web trường bị sập và database không có thông tin tài khoản của bạn. Vui lòng thử lại sau.");
             }
         }
         else {
-            await mongodb("password", "post", { username: username, password: password });
+            mongodb("password", "post", { username: username, password: password });
         }
 
-        let database = await mongodb("user", "get", { username });
-        let user;
+        const data_promises: any[] = [];
+
+        let database_user: any, database_semester, mybk_user: any, mybk_semester;
+
+        data_promises.push(
+            mongodb("user", "get", { username: username }).then((res: any) => {
+                const { _id, username, ...data } = res;
+
+                database_user = data;
+                // database_semester = data.semester
+            })
+        )
         if (token !== "ok") {
-            user = await get_student_data(token as string);
-            const this_semester = await get_web_semester()
+            data_promises.push(
+                get_student_data(token as string).then((res: any) => {
+                    mybk_user = res;
+                })
+            )
+            data_promises.push(
+                get_web_semester().then((res: string) => {
+                    mybk_semester = res
+                })
+            )
+        }
 
-            if (user.name) {
-                database = {
-                    _id: database._id,
-                    username: username,
-                    ...user,
-                    semester: this_semester
-                }
-                await mongodb("user", "post", { username: username, data: database });
+        await Promise.all(data_promises);
 
-                user = {
-                    ...user,
-                    semester: this_semester,
-                    username: username
-                };
+        let user;
+        console.log(token);
+        console.log(mybk_user);
+        console.log(database_user);
+        console.log(mybk_semester);
+        // console.log(database_semester);
+        if (token !== "ok") {
+            if (!deepEqual(mybk_user, database_user)) {
+                await mongodb("user", "post", {
+                    username: username, data: {
+                        ...mybk_user,
+                        semester: mybk_semester
+                    }
+                })
             }
+            user = {
+                username: username,
+                ...mybk_user,
+                semester: mybk_semester
+            };
         }
         else {
-            const { _id, username, ...data } = database;
             user = {
-                ...data
-            }
-            token = _id + username;
+                username: username,
+                ...database_user,
+                semester: database_semester
+            };
         }
-
-        localStorage.setItem("session", SESSION as string);
         localStorage.setItem("token", token as string);
         localStorage.setItem("user", JSON.stringify(user));
-
-        // 120 minutes
         const expires = new Date().getTime() + 2 * 60 * 60 * 1000;
         localStorage.setItem("expires", expires.toString());
-
         window.location.href = "/";
     } catch (e: any) {
         handle_error(e);

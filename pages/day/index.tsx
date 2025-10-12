@@ -5,7 +5,6 @@ import full_schedule from "@/utils/data/schedule";
 import { SubjectInfo } from "@/types/index";
 import { useOrientationMode } from "@/hooks/display";
 import Loading from "@/components/Loading";
-import { formatDate } from "@/types/day";
 
 /**
  * Convert Date to yyyy-mm-dd
