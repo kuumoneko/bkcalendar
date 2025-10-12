@@ -9,7 +9,7 @@ export default async function get_full_exam() {
 
     let { username, MSSV, semester: this_semester } = JSON.parse(localStorage.getItem("user") as string);
 
-    let database_exam, mybk_exam;
+    let database_exam: any, mybk_exam: any;
 
     const exam_promises = [];
     const year = String(this_semester).substring(0, 4);
