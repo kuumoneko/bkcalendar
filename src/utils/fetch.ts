@@ -44,6 +44,9 @@ export default async function fetch_data(
                 alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.")
                 window.location.href = "/login";
             }
+            if (data === "INVALID_CREDENTIALS") {
+                alert("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.")
+            }
             else if (res.status === 304) {
                 return "ok"
             }
