@@ -9,8 +9,6 @@ export default function ErrorPage() {
     const code = searchParams.get("code") ?? "";
     const [error, seterror] = useState("");
     useEffect(() => {
-        const isOffline = Boolean(localStorage.getItem("offline") ?? "false");
-        if (isOffline) window.location.href = "/";
 
         const allErrorCode = Object.keys(Error_code);
         if (allErrorCode.includes(code)) {
@@ -21,7 +19,7 @@ export default function ErrorPage() {
     }, []);
     return (
         <>
-            <div className="h-[100%] w-[100%] flex flex-col items-center justify-center text-3xl">
+            <div className="h-full w-full flex flex-col items-center justify-center text-3xl">
                 <span>{error}</span>
             </div>
         </>

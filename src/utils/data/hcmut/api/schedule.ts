@@ -1,3 +1,4 @@
+import { SubjectInfo } from "@/types";
 import fetch_data from "@/utils/fetch";
 
 /**
@@ -39,42 +40,33 @@ function getDatesForSchedule(scheduleItem: any): string[] {
 /**
  * Get Schedule of user
  */
-export default async function get_web_schedule(authorization: string, studentId: string, semester: string): Promise<{
-    subject: string;
-    teacher: string;
-    class: string;
-    lesson: string;
-    startTime: string;
-    endTime: string;
-    dayOfWeek: number;
-    weeks: number[];
-    room: string;
-    building: string;
-    dates: string[] | "--";
-}[]> {
+export default async function get_web_schedule(authorization: string, studentId: string, semester: string): Promise<SubjectInfo[]> {
+    try {
 
-    const res = await fetch_data("/api/mybk/api/schedule", {
-        "Content-Type": "application/json"
-    }, {
-        authorization: authorization,
-        semester_id: semester, student_id: studentId
-    })
-
-    const result = res.map((a: any) => {
-        return {
-            subject: a.subject.nameVi,
-            teacher: a.employee.lastName + " " + a.employee.firstName,
-            class: a.subjectClassGroup.classGroup,
-            lesson: `${a.startLesson} - ${a.numOfLesson - 1 + a.startLesson}`,
-            startTime: a.startTime,
-            endTime: a.endTime,
-            dayOfWeek: a.dayOfWeek,
-            weeks: a.weekSeriesDisplay.match(/\d+(\.\d+)?/g)?.map(Number) || [],
-            room: a.room.code,
-            building: a.room.building.campus.nameVi,
-            dates: a.dayOfWeek === 0 ? "--" : (getDatesForSchedule(a))
-        }
-    })
-
-    return result ?? [];
+        const res = await fetch_data("/api/mybk/api/schedule", {
+            "Content-Type": "application/json"
+        }, {
+            authorization: authorization,
+            semester_id: semester, student_id: studentId
+        })
+        return res.map((a: any) => {
+            return {
+                subject: a.subject.nameVi,
+                teacher: a.employee.lastName + " " + a.employee.firstName,
+                class: a.subjectClassGroup.classGroup,
+                lesson: `${a.startLesson} - ${a.numOfLesson - 1 + a.startLesson}`,
+                startTime: a.startTime,
+                endTime: a.endTime,
+                dayOfWeek: a.dayOfWeek,
+                weeks: a.weekSeriesDisplay.match(/\d+(\.\d+)?/g)?.map(Number) || [],
+                room: a.room.code,
+                building: a.room.building.campus.nameVi,
+                dates: a.dayOfWeek === 0 ? "--" : (getDatesForSchedule(a))
+            }
+        }) ?? []
+    }
+    catch (e) {
+        console.error(e);
+        return [];
+    }
 }

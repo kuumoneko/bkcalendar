@@ -1,4 +1,5 @@
 import Loading from "@/components/Loading";
+import { ExamInfo } from "@/types";
 import get_full_exam from "@/utils/data/exam";
 import { useEffect, useState } from "react";
 
@@ -7,6 +8,12 @@ export default function Exam_Schedule() {
     useEffect(() => {
         async function run() {
             const res = await get_full_exam();
+            res.sort((a: ExamInfo, b: ExamInfo) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateA.getTime() - dateB.getTime();
+            });
+
             setdata(res);
         }
         run();

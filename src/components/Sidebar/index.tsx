@@ -3,8 +3,8 @@ import Sidebar_Top from "./top";
 
 export default function Sidebar({ mode }: { mode: "row" | "col" }) {
     const { height, width } = {
-        height: mode === "col" ? "h-[25%]" : "h-[100%]",
-        width: mode === "col" ? "w-[100%]" : "w-[15%]",
+        height: mode === "col" ? "h-[25%]" : "h-full",
+        width: mode === "col" ? "w-full" : "w-[15%]",
     };
     return (
         <div

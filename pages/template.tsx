@@ -2,57 +2,18 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Navigator";
 import Sidebar from "@/components/Sidebar";
 import { useOrientationMode } from "@/hooks/display";
-import check from "@/utils/data/hcmut/app";
 import { useEffect } from "react";
 
 export default function Template({ children }: { children: React.ReactNode }) {
     const mode = useOrientationMode();
 
     useEffect(() => {
-        const hasVisited = sessionStorage.getItem("hasVisited") ?? false;
-
-        if (!hasVisited) {
-            sessionStorage.setItem("hasVisited", "true");
+        if (document.referrer === "") {
             localStorage.setItem("offline", "false");
             localStorage.setItem("error", "");
             localStorage.setItem("user", `{"name":null}`);
             window.location.href = "/login";
         }
-
-        async function run() {
-            const isOffline = Boolean(
-                localStorage.getItem("offline") ?? "false"
-            );
-            if (isOffline) return;
-
-            const res = await check();
-            const url = window.location.href;
-
-            if (res == "ok") {
-                const temp = JSON.parse(
-                    localStorage.getItem("user") ?? `{"name":null}`
-                );
-                let { semester: this_semester } = JSON.parse(
-                    localStorage.getItem("user") as string
-                );
-                localStorage.setItem("semester", this_semester);
-
-                if (
-                    temp.name === null &&
-                    !url.includes("login") &&
-                    !url.includes("error")
-                ) {
-                    if (!window.location.href.includes("login"))
-                        window.location.href = "/login";
-                    return;
-                }
-            } else {
-                if (!url.includes("error")) {
-                    window.location.href = "/error";
-                }
-            }
-        }
-        run();
     }, []);
 
     return (

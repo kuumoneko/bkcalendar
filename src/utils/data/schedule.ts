@@ -3,6 +3,7 @@ import get_web_schedule from "./hcmut/api/schedule";
 import { formatDate } from "@/types/day";
 import mongodb from "./databsae";
 import deepArrayEqual from "../array";
+import Logout from "../logout";
 
 /**
  * Create fully schedule
@@ -10,28 +11,50 @@ import deepArrayEqual from "../array";
 export default async function full_schedule(): Promise<SubjectInfo[]> {
     try {
         const token = localStorage.getItem("token") as string ?? ""
-        if (token.length === 0) {
-            window.location.href = "/login"
+        const isOffline = localStorage.getItem("offline") === "true" ? true : false;
+        if ((token.length === 0 || token === "undefined") && isOffline === false) {
+            Logout();
+            window.location.href = "/login";
+            return [];
         }
+
         let { username, id, semester } = JSON.parse(localStorage.getItem("user") as string);
 
-        let mybk_schedule, database_schedule, filters;
+        let mybk_schedule: SubjectInfo[] = [], database_schedule: SubjectInfo[] = [], filters: any[] = [];
 
-        const task_promises: any[] = [];
+        const promises = [];
+        console.log((token.length !== 0 && token !== "undefined" && isOffline === false))
+        if (token.length !== 0 && token !== "undefined" && isOffline === false) {
+            promises.push((get_web_schedule(token, id, semester)).then((res: any) => {
+                mybk_schedule = res;
+            })
+            )
+        }
+        promises.push(
+            mongodb("schedule", "get", { username: username }).then((res: any) => {
+                database_schedule = res
+            })
+        )
+        promises.push(mongodb("filter", "get", { username: username }).then((res: any) => {
+            filters = res;
+        })
+        )
+        await Promise.all(promises);
 
-        task_promises.push(get_web_schedule(token, id, semester).then(res => mybk_schedule = res))
-        task_promises.push(mongodb("schedule", "get", { username: username }).then(res => database_schedule = res as unknown as SubjectInfo[] ?? []));
-        task_promises.push(mongodb("filter", "get", { username: username }).then(res => filters = res ?? []));
-
-        await Promise.all(task_promises);
-        let schedule: SubjectInfo[] = mybk_schedule as unknown as SubjectInfo[];
-
-        if (!deepArrayEqual(mybk_schedule as unknown as SubjectInfo[], database_schedule as unknown as SubjectInfo[])) {
-            mongodb("schedule", "post", { username: username, data: schedule });
+        if (mybk_schedule.length === 0 && database_schedule.length === 0) {
+            window.location.href = "/down";
         }
 
-        if ((filters ?? []).length > 0) {
-            filters = (filters ?? []).sort((a: any, b: any) => {
+        if (!deepArrayEqual(mybk_schedule as unknown as SubjectInfo[], database_schedule as unknown as SubjectInfo[])) {
+            if (mybk_schedule.length !== 0) {
+                mongodb("schedule", "post", { username: username, data: mybk_schedule });
+            }
+        }
+
+        const schedule: SubjectInfo[] = (token.length !== 0 && token !== "undefined" && isOffline === false) ? mybk_schedule : database_schedule;
+
+        if (filters.length > 0) {
+            filters.sort((a: any, b: any) => {
                 const aKeys = Object.keys(a).length;
                 const bKeys = Object.keys(b).length;
 
@@ -104,6 +127,8 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
                 dates: temp
             }
         })
+
+        console.log(result)
 
         localStorage.setItem("schedule", JSON.stringify(result));
         return result ?? [];

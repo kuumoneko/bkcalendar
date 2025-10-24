@@ -159,29 +159,29 @@ export default function Day() {
         <div
             className={`flex flex-col items-center mt-10 ${
                 mode === "row" ? "ml-10" : ""
-            } w-[100%] max-x-[1500px]`}
+            } w-full max-x-[1500px]`}
         >
             {today_sche.length === 0 && closestDaySche.length === 0 ? (
                 <Loading mode="Đang tải thời khóa biểu ngày hôm nay" />
             ) : (
                 <>
                     {today_sche.length > 0 ? (
-                        <div className="flex flex-col items-center justify-center w-[100%]">
+                        <div className="flex flex-col items-center justify-center w-full">
                             {curr_sub && (
-                                <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                                <div className="flex flex-col items-center justify-center w-full mt-8">
                                     <h1>Tiết hiện tại</h1>
                                     <Table subjects={[curr_sub]} />
                                 </div>
                             )}
                             {next_sub && next_sub.length > 0 && (
-                                <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                                <div className="flex flex-col items-center justify-center w-full mt-8">
                                     <h1>Các tiết tiếp theo</h1>
                                     <Table subjects={next_sub} />{" "}
                                 </div>
                             )}
                             {!curr_sub &&
                                 (!next_sub || next_sub.length === 0) && (
-                                    <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                                    <div className="flex flex-col items-center justify-center w-full mt-8">
                                         Hết tiết roài, xoã đê bạn ơi
                                     </div>
                                 )}
@@ -191,7 +191,7 @@ export default function Day() {
                     )}
 
                     {closestDay && closestDaySche.length > 0 && (
-                        <div className="flex flex-col items-center justify-center w-[100%] mt-8">
+                        <div className="flex flex-col items-center justify-center w-full mt-8">
                             <h1>
                                 Ngày học tiếp theo là{" "}
                                 {parseDaytoVietnamese(closestDay)}

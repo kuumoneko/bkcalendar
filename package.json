@@ -1,7 +1,7 @@
 {
     "name": "bk-calendar",
-    "version": "7.0.0",
-    "description": "Xem thời khoá biểu và xem lịch học theo ngày dành cho sinh viên trường Đại học Bách Khoa - Đại học quốc gia TP.HCM",
+    "version": "8.0.0",
+    "description": "Xem thời khoá biểu lịch học, lịch thi dành cho sinh viên trường Đại học Bách Khoa - Đại học quốc gia TP.HCM",
     "private": false,
     "type": "module",
     "homepage": "https://bkcalendar.vercel.app",
@@ -17,7 +17,7 @@
         "bcrypt": "^6.0.0",
         "mongodb": "^6.20.0",
         "next": "15.5.3",
-        "react": "19.1.0"
+        "react": "^19.2.0"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4",

@@ -4,21 +4,21 @@ import { useEffect, useState } from "react";
 
 const containerStyles = {
     row: "h-[60%] max-w-[250px] flex-col",
-    col: "h-[100%] flex-row",
+    col: "h-full flex-row",
 };
 
 const userDetailsStyles = {
-    row: "flex-col w-[100%]",
-    col: "flex-row w-[100%]",
+    row: "flex-col w-full",
+    col: "flex-row w-full",
 };
 
 const columnOneStyles = {
-    row: "w-[100%]",
+    row: "w-full",
     col: "w-[40%]",
 };
 
 const columnTwoStyles = {
-    row: "w-[100%]",
+    row: "w-full",
     col: "w-[60%]",
 };
 

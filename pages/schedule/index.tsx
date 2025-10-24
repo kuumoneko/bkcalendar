@@ -163,12 +163,12 @@ export default function Schedule() {
     return (
         <div className="w-full h-[95%]">
             <div
-                className={`flex flex-row items-center justify-center w-[100%] ${
+                className={`flex flex-row items-center justify-center w-full ${
                     mode === "col" ? "h-[75%]" : "h-full"
                 } mt-4`}
             >
                 {schedule_all && week ? (
-                    <div className="schedule flex flex-col w-[100%] h-[100%] items-center">
+                    <div className="schedule flex flex-col w-full h-full items-center">
                         <div className="flex flex-row h-[5%] w-[50%] items-center justify-between">
                             <div
                                 className="head hover:cursor-pointer"
@@ -193,7 +193,7 @@ export default function Schedule() {
                         </div>
                         {Object.keys(week_schedule).length > 0 && (
                             <div
-                                className={`h-[100%] ${
+                                className={`h-full ${
                                     mode === "row"
                                         ? "max-h-[1000px]"
                                         : "max-h-[750px]"
@@ -204,7 +204,7 @@ export default function Schedule() {
                                         const day = week_schedule[key];
                                         return (
                                             <div
-                                                className={`${key} flex flex-col h-auto w-[100%] items-center justify-between mt-3 bg-slate-700 rounded-4xl`}
+                                                className={`${key} flex flex-col h-auto w-full items-center justify-between mt-3 bg-slate-700 rounded-4xl`}
                                             >
                                                 <div className="day flex flex-row items-start justify-center mt-3 text-2xl">
                                                     <span>
@@ -216,7 +216,7 @@ export default function Schedule() {
                                                     </span>
                                                 </div>
                                                 <div
-                                                    className={`subject w-[100%] pb-4 mt-3 bg-slate-600 rounded-4xl ${
+                                                    className={`subject w-full pb-4 mt-3 bg-slate-600 rounded-4xl ${
                                                         day.subjects.length > 2
                                                             ? "grid grid-cols-3"
                                                             : "flex flex-row items-center justify-evenly"

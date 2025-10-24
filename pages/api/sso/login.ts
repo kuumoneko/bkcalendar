@@ -1,15 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { URLSearchParams } from 'node:url';
-import convert from "../data";
 import isDown from "../isDown";
 
 /**
  * Login user
  */
-export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
+export default async function login(ltValue: string, executionValue: string, username: string, password: string, JSESSIONID: string) {
     try {
-        const searchParams = new URL("http://localhost:3000" + _req.url).searchParams;
-        const { ltValue, executionValue, username, password, JSESSIONID } = convert(searchParams);
         const response = await fetch(
             `https://sso.hcmut.edu.vn/cas/login;jsessionid=${JSESSIONID}?service=https%3A%2F%2Fmybk.hcmut.edu.vn%2Fapp%2Flogin%2Fcas`,
             {
@@ -56,7 +52,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
         }
         const location = response.headers.get("location");
         if (typeof location === "string") {
-            return res.status(200).json({ data: location, ok: true });
+            return location
         }
         else {
             const text = await response.text();
@@ -70,6 +66,6 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
         }
     }
     catch (e: any) {
-        return res.status(200).json({ data: e.message, ok: false });
+        return e.message;
     }
 }

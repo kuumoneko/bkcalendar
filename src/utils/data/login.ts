@@ -1,41 +1,34 @@
-import create_app from "@/utils/data/hcmut/app/login";
-import create_login from "@/utils/data/hcmut/sso/index";
-import login_user from "@/utils/data/hcmut/sso/login";
-import get_token from "@/utils/data/hcmut/app/user";
 import get_student_data from "@/utils/data/hcmut/api/student";
 import { handle_error } from "@/utils/error";
 import login_db from "@/utils/data/databsae/login";
 import mongodb from "@/utils/data/databsae";
 import get_web_semester from "./hcmut/api/semester";
 import deepEqual from "../object";
+import fetch_data from "../fetch";
 
 export default async function logining(username: string, password: string) {
 
     try {
-        const result = login_db(username, password);
-
-        const { JSESSIONID, ltValue, executionValue } =
-            await create_login();
-        const res = await login_user(
-            JSESSIONID || "",
-            ltValue || "",
-            executionValue || "",
-            username,
-            password
-        );
-
-        if (res === "INVALID_CREDENTIALS") {
-            throw new Error("Tài khoản hoặc mật khẩu không đúng");
-        }
-
-        const { SESSION } = await create_app(res as string);
-        let token = await get_token(SESSION as string);
+        let result, token = "";
         await Promise.all([
-            result
+            login_db(username, password).then((res: any) => {
+                result = res;
+            }),
+            fetch_data("/api/login", {}, {
+                username: username,
+                password: password
+            }).then((res: string) => {
+                token = res;
+            })
         ])
-        if (token === "ok") {
+
+        if (token === "ok" || token === undefined) {
             if (!result) {
                 throw new Error("Đăng nhập thất bại. Web trường bị sập và database không có thông tin tài khoản của bạn. Vui lòng thử lại sau.");
+            }
+            else {
+                localStorage.setItem("token", "");
+                localStorage.setItem("offline", "true");
             }
         }
         else {
@@ -51,7 +44,6 @@ export default async function logining(username: string, password: string) {
                 const { _id, username, ...data } = res;
 
                 database_user = data;
-                // database_semester = data.semester
             })
         )
         if (token !== "ok") {
@@ -70,11 +62,7 @@ export default async function logining(username: string, password: string) {
         await Promise.all(data_promises);
 
         let user;
-        console.log(token);
-        console.log(mybk_user);
-        console.log(database_user);
-        console.log(mybk_semester);
-        // console.log(database_semester);
+
         if (token !== "ok") {
             if (!deepEqual(mybk_user, database_user)) {
                 await mongodb("user", "post", {
@@ -97,12 +85,13 @@ export default async function logining(username: string, password: string) {
                 semester: database_semester
             };
         }
+        console.log(user)
         localStorage.setItem("token", token as string);
         localStorage.setItem("user", JSON.stringify(user));
         const expires = new Date().getTime() + 2 * 60 * 60 * 1000;
         localStorage.setItem("expires", expires.toString());
         window.location.href = "/";
     } catch (e: any) {
-        handle_error(e);
+        handle_error(e)
     }
 }

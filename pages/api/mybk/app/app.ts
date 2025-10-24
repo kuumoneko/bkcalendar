@@ -1,16 +1,13 @@
 import getELement from "@/utils/data/hcmut/getvalue";
-import { NextApiRequest, NextApiResponse } from "next";
 import { isValid } from "../../data";
 
 /**
  * Get auth token from mybk/app
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function create_app(SESSION: string) {
     try {
-        const searchParams = new URL("http://localhost:3000" + req.url).searchParams;
-        const SESSION = searchParams.get("SESSION") ?? "";
         if (!isValid(SESSION)) {
-            return res.status(200).json({ data: "Invalid request data", ok: false })
+            return ""
         }
         const response = await fetch("https://mybk.hcmut.edu.vn/app/", {
             method: "GET",
@@ -29,16 +26,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             const html = await response.text()
             const TokenValue = getELement(html, "hid_Token");
-            res.status(200).json({
-                ok: true,
-                data: TokenValue
-            });
+            return TokenValue
         }
         catch (e) {
             throw new Error("Unknown error at end point /api/mybk/app/app");
         }
     }
     catch (e: any) {
-        res.status(200).json({ data: e.message, ok: false });
+        return ""
     }
 }

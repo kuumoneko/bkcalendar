@@ -12,6 +12,16 @@ export interface SubjectInfo {
     weeks: number[];
 }
 
+export interface ExamInfo {
+    subject: string,
+    date: string,
+    building: string,
+    room: string,
+    startTime: string,
+    duration: string,
+    class: string,
+}
+
 export interface CSVHeader {
     Subject: string,
     'Start Date': string, // DD/MM/YYY
@@ -19,7 +29,7 @@ export interface CSVHeader {
     'End Date': string, // DD/MM/YYY
     'End Time'?: string,
     'All Day Event': "TRUE" | 'FALSE',
-    Description: string, // add teacher here
+    Description: string,
     Location: string,
     Private: "TRUE" | "FALSE"
 }

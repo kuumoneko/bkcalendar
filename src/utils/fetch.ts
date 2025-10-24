@@ -31,7 +31,7 @@ export default async function fetch_data(
             })
         }
         catch (e) {
-            throw new Error("EAI_AGAIN");
+            return [];
         }
 
         const { ok, data } = await res.json();

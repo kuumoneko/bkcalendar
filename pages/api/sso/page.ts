@@ -1,10 +1,9 @@
 import getELement from "@/utils/data/hcmut/getvalue";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 /**
  * Create SSO login page
  */
-export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
+export default async function create_login_page() {
     try {
         const response = await fetch(
             `https://sso.hcmut.edu.vn/cas/login?service=https%3A%2F%2Fmybk.hcmut.edu.vn%2Fapp%2Flogin%2Fcas`,
@@ -30,13 +29,10 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
             }
             throw new Error(response.statusText ?? "Unknown error");
         }
-        try {
-            res.status(200).json({ ok: true, data: { ltValue, executionValue, JSESSIONID } })
-        }
-        catch (e) {
-            throw new Error("Unknown error at endpoint /api/sso/page")
-        }
-    } catch (e: any) {
-        res.status(200).json({ data: e.message, ok: false });
+
+        return { ltValue: ltValue, executionValue: executionValue, JSESSIONID: JSESSIONID }
+    }
+    catch (e) {
+        throw new Error("Unknown error at endpoint /api/sso/page")
     }
 }
