@@ -1,7 +1,7 @@
 # BK Calendar
 
-> A web built on Next.js to see schedule and manage subjects for studying in HCMUT.
-> Version: 7.0.0
+> A web built on Next.js to see schedule and manage subjects for studying in HCMUT - VNUHCM.
+> Version: 8.0.0
 
 ## Page
 
@@ -13,7 +13,7 @@
 - Follow the Exam schedule.
 - Add filter, add subject, add lesson, etc.
 - Export to CSV file to import to other Calendar platform.
-- Watch schedule when raw web is down.
+- Watch schedule when school web is down.
 
 ## Usage
 
