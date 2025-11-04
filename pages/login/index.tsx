@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { handle_error } from "@/utils/error";
 import { useOrientationMode } from "@/hooks/display";
 import logining from "@/utils/data/login";
+import { convert } from "@/lib/pass";
 
 export default function Login() {
     useEffect(() => {
@@ -32,7 +33,7 @@ export default function Login() {
         }
         async function run() {
             try {
-                await logining(username, password);
+                await logining(username, convert(password));
                 setlogin(false);
             } catch (e: any) {
                 handle_error(e);

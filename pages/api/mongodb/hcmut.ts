@@ -3,6 +3,7 @@ import convert, { isValid } from "../data";
 import Mongo_client_Component from "@/lib/mongodb";
 import check from "./check";
 import { hash, verify } from "@/lib/auth/hash";
+import { revert } from "@/lib/pass";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -44,7 +45,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     if (password.length === 0) {
                         return res.status(200).json({ ok: true, data: true });
                     }
-                    const ress = await verify(data.password, password)
+                    const temp = revert(password)
+                    const ress = await verify(data.password, temp)
                     return res.status(200).json({ ok: true, data: ress });
                 }
             }

@@ -4,6 +4,7 @@ import create_login from "./sso/page";
 import get_token from "./mybk/app/app";
 import login_user from "./sso/login";
 import create_app from "./mybk/app/login";
+import { revert } from "@/lib/pass";
 
 /**
  * Login user
@@ -24,7 +25,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
             ltValue || "",
             executionValue || "",
             username,
-            password,
+            revert(password),
             JSESSIONID || "",
         );
 
