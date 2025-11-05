@@ -8,13 +8,16 @@ export default function Exam_Schedule() {
     useEffect(() => {
         async function run() {
             const res = await get_full_exam();
-            res.sort((a: ExamInfo, b: ExamInfo) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
-                return dateA.getTime() - dateB.getTime();
-            });
-
-            setdata(res);
+            const temp = res
+                .sort((a: ExamInfo, b: ExamInfo) => {
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
+                    return dateA.getTime() - dateB.getTime();
+                })
+                .filter((item: ExamInfo) => {
+                    return new Date(item.date).getTime() > Date.now();
+                });
+            setdata(temp);
         }
         run();
     }, []);

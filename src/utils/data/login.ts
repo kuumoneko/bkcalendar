@@ -85,7 +85,6 @@ export default async function logining(username: string, password: string) {
                 semester: database_semester
             };
         }
-        console.log(user)
         localStorage.setItem("token", token as string);
         localStorage.setItem("user", JSON.stringify(user));
         const expires = new Date().getTime() + 2 * 60 * 60 * 1000;

@@ -3,6 +3,7 @@ import { CSVHeader } from "@/types";
 export default function export_csv(schedule: any[]): CSVHeader[] {
     const result: CSVHeader[] = [];
 
+
     for (const sub of schedule) {
         if (typeof sub.dates === "string") {
             if (sub.dates.includes("-")) {
@@ -10,7 +11,7 @@ export default function export_csv(schedule: any[]): CSVHeader[] {
             }
         }
         if (sub.dates !== undefined && sub.dates !== null) {
-            for (const data of sub.dates) {
+            for (const data of (sub.dates as string[]).filter((item: string) => { return new Date(item).getTime() > Date.now() })) {
                 result.push(
                     {
                         Subject: sub.subject,
@@ -30,6 +31,9 @@ export default function export_csv(schedule: any[]): CSVHeader[] {
             }
         }
         else {
+            if (new Date(sub.date).getTime() < Date.now()) {
+                continue;
+            }
             result.push(
                 {
                     Subject: `Kiểm tra ${sub.subject}`,

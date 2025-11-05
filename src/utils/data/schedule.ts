@@ -23,7 +23,6 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         let mybk_schedule: SubjectInfo[] = [], database_schedule: SubjectInfo[] = [], filters: any[] = [];
 
         const promises = [];
-        console.log((token.length !== 0 && token !== "undefined" && isOffline === false))
         if (token.length !== 0 && token !== "undefined" && isOffline === false) {
             promises.push((get_web_schedule(token, id, semester)).then((res: any) => {
                 mybk_schedule = res;
@@ -128,13 +127,10 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
             }
         })
 
-        console.log(result)
-
         localStorage.setItem("schedule", JSON.stringify(result));
         return result ?? [];
     }
     catch (e) {
-        console.log(e)
         return []
     }
 }

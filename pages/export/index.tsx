@@ -9,11 +9,7 @@ export default function Export() {
         async function run() {
             const schedule = await full_schedule();
             const exam = await get_full_exam();
-            console.log(schedule);
-
             const csv = export_csv([...schedule, ...exam]);
-
-            console.log(csv);
 
             const csv_string = [
                 Object.keys(csv[0]).join(","),
