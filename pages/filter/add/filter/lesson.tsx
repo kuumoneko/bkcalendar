@@ -53,7 +53,7 @@ export default function lesson({
                     onChange={(e) => {
                         setlessonStart(e.target.value);
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                     maxLength={2}
                 />
                 {" - "}
@@ -64,7 +64,7 @@ export default function lesson({
                     onChange={(e) => {
                         setlessonEnd(e.target.value);
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                     maxLength={2}
                 />
                 <span>{` (${
@@ -86,7 +86,7 @@ export default function lesson({
                             date: String(Number(e.target.value)),
                         });
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                     maxLength={2}
                 />
                 {" - "}
@@ -100,7 +100,7 @@ export default function lesson({
                             month: String(Number(e.target.value)),
                         });
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                     maxLength={2}
                 />
                 {" - "}
@@ -114,7 +114,7 @@ export default function lesson({
                             year: String(Number(e.target.value)),
                         });
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-15"
                     maxLength={4}
                 />
             </div>
@@ -128,7 +128,7 @@ export default function lesson({
                     onChange={(e) => {
                         setbuilding(e.target.value);
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[25px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-6.25"
                     maxLength={1}
                 />
                 {" - "}
@@ -139,7 +139,7 @@ export default function lesson({
                     onChange={(e) => {
                         setStage(e.target.value);
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                     maxLength={2}
                 />
                 {" - "}
@@ -150,7 +150,7 @@ export default function lesson({
                     onChange={(e) => {
                         setroom(e.target.value);
                     }}
-                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[50px]"
+                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-12.5"
                     maxLength={3}
                 />
             </div>

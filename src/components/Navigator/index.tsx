@@ -20,7 +20,7 @@ export default function Nav() {
               }).format(new Date());
 
     return (
-        <div className="nav bg-slate-700 h-[5%] w-[90%] flex justify-between items-center rounded-full p-6 mt-[10px]">
+        <div className="nav bg-slate-700 h-[5%] w-[90%] flex justify-between items-center rounded-full p-6 mt-2.5">
             <div
                 className="title"
                 onClick={() => {
@@ -43,7 +43,7 @@ export default function Nav() {
             )}
 
             <div className="settings flex flex-row justify-between items-center">
-                <div className="hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800 px-[10px] py-[5px] text-slate-100 rounded-3xl bg-slate-800" onClick={() => {window.location.href = "/export";}}>
+                <div className="hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800 px-2.5 py-1.25 text-slate-100 rounded-3xl bg-slate-800" onClick={() => {window.location.href = "/export";}}>
                     Export
                 </div>
                 <Hcmut />

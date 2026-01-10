@@ -52,7 +52,7 @@ export default function Page() {
                         onChange={(e) => {
                             setclass(e.target.value);
                         }}
-                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-15"
                     />
                 </div>
                 <div className="mb-3">
@@ -64,7 +64,7 @@ export default function Page() {
                         onChange={(e) => {
                             setteacher(e.target.value);
                         }}
-                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[250px]"
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-62.5"
                     />
                 </div>
                 <div className="mb-3">
@@ -76,7 +76,7 @@ export default function Page() {
                         onChange={(e) => {
                             setsubject(e.target.value);
                         }}
-                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[250px]"
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-62.5"
                     />
                 </div>
                 <div className="mb-3">
@@ -112,7 +112,7 @@ export default function Page() {
                                     onChange={(e) => {
                                         setlessonStart(e.target.value);
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                                     maxLength={2}
                                 />
                                 {" - "}
@@ -123,7 +123,7 @@ export default function Page() {
                                     onChange={(e) => {
                                         setlessonEnd(e.target.value);
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                                     maxLength={2}
                                 />
                                 <span>{` (${
@@ -148,7 +148,7 @@ export default function Page() {
                                             setTimeStart(value);
                                         }
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-20"
                                     maxLength={5}
                                 />
                                 {" - "}
@@ -164,7 +164,7 @@ export default function Page() {
                                             setTimeEnd(value);
                                         }
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-20"
                                     maxLength={5}
                                 />
                             </>
@@ -184,7 +184,7 @@ export default function Page() {
                                     year: Number(e.target.value),
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-15"
                             maxLength={4}
                         />
                         {" - "}
@@ -198,7 +198,7 @@ export default function Page() {
                                     month: Number(e.target.value),
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                             maxLength={2}
                         />
                         {" - "}
@@ -212,7 +212,7 @@ export default function Page() {
                                     date: e.target.value,
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[150px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-37.5"
                         />
 
                         <div
@@ -270,7 +270,7 @@ export default function Page() {
                         onChange={(e) => {
                             setbuilding(e.target.value);
                         }}
-                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[25px]"
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-6.25"
                         maxLength={1}
                     />
                     {" - "}
@@ -281,7 +281,7 @@ export default function Page() {
                         onChange={(e) => {
                             setStage(e.target.value);
                         }}
-                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                         maxLength={2}
                     />
                     {" - "}
@@ -292,7 +292,7 @@ export default function Page() {
                         onChange={(e) => {
                             setroom(e.target.value);
                         }}
-                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[50px]"
+                        className="bg-slate-500 text-slate-800 px-2 rounded-xl w-12.5"
                         maxLength={3}
                     />
                 </div>

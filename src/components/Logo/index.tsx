@@ -12,7 +12,7 @@ export default function Hcmut_Logo({
         <Image
             // use downloaded logo from mybk.hcmut.edu.vn, so i think it will be ok :>
             src={ProfileImage}
-            className={`mr-[5px]`}
+            className={`mr-1.25`}
             height={height ?? 20}
             width={width ?? 20}
             alt="hcmut logo"

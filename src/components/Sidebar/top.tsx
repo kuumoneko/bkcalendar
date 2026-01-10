@@ -15,16 +15,16 @@ function Side_bar_Button({ text, url }: { text: string; url: string }) {
     };
     return (
         <li
-            className={`cursor-default select-none h-[50px] w-[200px] rounded-xl flex flex-row items-center ${
+            className={`cursor-default select-none h-12.5 w-50 rounded-xl flex flex-row items-center ${
                 mode === "col" ? "justify-center " : "justify-start "
-            } bg-slate-700 pl-[15px] hover:bg-slate-600 hover:cursor-pointer`}
+            } bg-slate-700 pl-3.75 hover:bg-slate-600 hover:cursor-pointer`}
             onClick={() => {
                 window.location.href = url;
             }}
         >
             <FontAwesomeIcon
                 icon={Font_Awesome[text]}
-                className="text-slate-300 mr-[5px] pb-[5px]"
+                className="text-slate-300 mr-1.25 pb-1.25"
             />
             <span className="text-neutral-400 no-underline">{text}</span>
         </li>
@@ -35,7 +35,7 @@ export default function Sidebar_Top({ mode }: { mode: "row" | "col" }) {
     return (
         <div
             className={`w-full ${
-                mode === "row" ? "max-w-[250px] h-[22%] p-7" : "h-[40%] p-2"
+                mode === "row" ? "max-w-62.5 h-[22%] p-7" : "h-[40%] p-2"
             } bg-slate-700 text-white rounded-3xl`}
         >
             <div className="navigation">

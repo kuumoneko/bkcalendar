@@ -195,8 +195,8 @@ export default function Schedule() {
                             <div
                                 className={`h-full ${
                                     mode === "row"
-                                        ? "max-h-[1000px]"
-                                        : "max-h-[750px]"
+                                        ? "max-h-250"
+                                        : "max-h-187.5"
                                 } w-[90%] flex flex-col items-center justify-start  overflow-y-scroll [&::-webkit-scrollbar]:hidden`}
                             >
                                 {Object.keys(week_schedule).map(

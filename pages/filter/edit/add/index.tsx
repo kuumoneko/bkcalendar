@@ -101,7 +101,7 @@ export default function Page() {
                     </span>
                     <div className="flex flex-row items-center justify-center">
                         {data?.dates?.length > 0 && (
-                            <select className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[150px]">
+                            <select className="bg-slate-500 text-slate-800 px-2 rounded-xl w-37.5">
                                 {data.dates.map((item: string) => {
                                     return <option>{item}</option>;
                                 })}
@@ -154,7 +154,7 @@ export default function Page() {
                                     onChange={(e) => {
                                         setlessonStart(e.target.value);
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                                     maxLength={2}
                                 />
                                 {" - "}
@@ -165,7 +165,7 @@ export default function Page() {
                                     onChange={(e) => {
                                         setlessonEnd(e.target.value);
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                                     maxLength={2}
                                 />
                                 <span>{` (${
@@ -190,7 +190,7 @@ export default function Page() {
                                             setTimeStart(value);
                                         }
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-20"
                                     maxLength={5}
                                 />
                                 {" - "}
@@ -206,7 +206,7 @@ export default function Page() {
                                             setTimeEnd(value);
                                         }
                                     }}
-                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[80px]"
+                                    className="bg-slate-500 text-slate-800 px-2 rounded-xl w-20"
                                     maxLength={5}
                                 />
                             </>
@@ -226,7 +226,7 @@ export default function Page() {
                                     date: Number(e.target.value),
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                             maxLength={2}
                         />
                         {" - "}
@@ -240,7 +240,7 @@ export default function Page() {
                                     month: Number(e.target.value),
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                             maxLength={2}
                         />
                         {" - "}
@@ -254,7 +254,7 @@ export default function Page() {
                                     year: Number(e.target.value),
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[60px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-15"
                             maxLength={4}
                         />
                     </div>
@@ -270,7 +270,7 @@ export default function Page() {
                             onChange={(e) => {
                                 setbuilding(e.target.value);
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[25px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-6.25"
                             maxLength={1}
                         />
                         {" - "}
@@ -281,7 +281,7 @@ export default function Page() {
                             onChange={(e) => {
                                 setStage(e.target.value);
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                             maxLength={2}
                         />
                         {" - "}
@@ -292,7 +292,7 @@ export default function Page() {
                             onChange={(e) => {
                                 setroom(e.target.value);
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[50px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-12.5"
                             maxLength={3}
                         />
                     </div>
@@ -300,7 +300,7 @@ export default function Page() {
             </div>
             <div className="h-[10%] w-[50%] flex flex-row items-center justify-center gap-24">
                 <div
-                    className="flex flex-col items-center bg-red-500 hover:bg-red-400 hover:cursor-pointer w-[65px] rounded-2xl"
+                    className="flex flex-col items-center bg-red-500 hover:bg-red-400 hover:cursor-pointer w-16.25 rounded-2xl"
                     onClick={() => {
                         async function run() {
                             if (data === undefined) {
@@ -341,7 +341,7 @@ export default function Page() {
                     Xoá
                 </div>
                 <div
-                    className="flex flex-col items-center bg-sky-700 hover:bg-sky-600 hover:cursor-pointer w-[65px] rounded-2xl"
+                    className="flex flex-col items-center bg-sky-700 hover:bg-sky-600 hover:cursor-pointer w-16.25 rounded-2xl"
                     onClick={() => {
                         async function run() {
                             const new_subject = {

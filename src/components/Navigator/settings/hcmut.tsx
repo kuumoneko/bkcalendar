@@ -36,7 +36,7 @@ export default function Hcmut() {
                             window.location.href = "/login";
                         }}
                     >
-                        <span className=" w-[140px] border-solid rounded-[50px] bg-slate-800 text-slate-100 py-[5px] px-[10px] flex flex-row ml-4 hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800">
+                        <span className=" w-35 border-solid rounded-[50px] bg-slate-800 text-slate-100 py-1.25 px-2.5 flex flex-row ml-4 hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800">
                             <Hcmut_Logo height={25} width={25} />
                             <span className="text-black ml-2 mt-0.5">
                                 Đăng nhập
@@ -45,7 +45,7 @@ export default function Hcmut() {
                     </div>
                 ) : (
                     <span
-                        className="cursor-default flex flex-row-reverse items-center justify-center ml-4 bg-slate-800 rounded-3xl px-[10px] py-[5px] text-slate-100 hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800"
+                        className="cursor-default flex flex-row-reverse items-center justify-center ml-4 bg-slate-800 rounded-3xl px-2.5 py-1.25 text-slate-100 hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800"
                         onClick={() => {
                             setlogout(true);
                         }}

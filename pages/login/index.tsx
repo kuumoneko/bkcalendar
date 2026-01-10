@@ -72,7 +72,7 @@ export default function Login() {
                             <label htmlFor="password">Mật khẩu:</label>
                             <div className="flex flex-row ">
                                 <input
-                                    className="text-slate-800 w-[95%] mr-[5px] bg-slate-500 rounded-2xl px-4"
+                                    className="text-slate-800 w-[95%] mr-1.25 bg-slate-500 rounded-2xl px-4"
                                     type={hidden ? "password" : "text"}
                                     name="password"
                                     id="password"

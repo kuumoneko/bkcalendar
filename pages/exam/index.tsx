@@ -26,25 +26,25 @@ export default function Exam_Schedule() {
             <span>Lịch thi</span>
             <div className="w-[90%]">
                 {data.length > 0 ? (
-                    <table className="w-full text-center mt-5 rounded-3xl min-w-[500px]">
+                    <table className="w-full text-center mt-5 rounded-3xl min-w-125">
                         <thead>
-                            <tr className="h-[50px]">
-                                <th className="bg-slate-600 border-2 w-[30%] min-w-[150px]">
+                            <tr className="h-12.5">
+                                <th className="bg-slate-600 border-2 w-[30%] min-w-37.5">
                                     Môn thi
                                 </th>
-                                <th className="bg-slate-700 border-2 w-[20%] min-w-[150px]">
+                                <th className="bg-slate-700 border-2 w-[20%] min-w-37.5">
                                     Lớp
                                 </th>
-                                <th className="bg-slate-600 border-2 w-[15%] min-w-[50px]">
+                                <th className="bg-slate-600 border-2 w-[15%] min-w-12.5">
                                     Ngày
                                 </th>
-                                <th className="bg-slate-700 border-2 w-[10%] min-w-[50px]">
+                                <th className="bg-slate-700 border-2 w-[10%] min-w-12.5">
                                     Bắt đầu
                                 </th>
-                                <th className="bg-slate-600 border-2 w-[10%] min-w-[50px]">
+                                <th className="bg-slate-600 border-2 w-[10%] min-w-12.5">
                                     Thời gian thi
                                 </th>
-                                <th className="bg-slate-700 border-2 w-[20%] min-w-[50px]">
+                                <th className="bg-slate-700 border-2 w-[20%] min-w-12.5">
                                     Phòng thi
                                 </th>
                             </tr>
@@ -63,7 +63,7 @@ export default function Exam_Schedule() {
                                     return (
                                         <tr
                                             key={item.subject}
-                                            className="h-[50px]"
+                                            className="h-12.5"
                                         >
                                             <td
                                                 className={

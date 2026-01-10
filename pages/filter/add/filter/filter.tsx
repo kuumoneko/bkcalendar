@@ -187,7 +187,7 @@ export default function Filter({
                                     building: e.target.value,
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[25px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-6.25"
                             maxLength={1}
                         />
                         {" - "}
@@ -206,7 +206,7 @@ export default function Filter({
                                                   ""),
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[40px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-10"
                             maxLength={2}
                         />
                         {" - "}
@@ -225,7 +225,7 @@ export default function Filter({
                                               e.target.value,
                                 });
                             }}
-                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-[50px]"
+                            className="bg-slate-500 text-slate-800 px-2 rounded-xl w-12.5"
                             maxLength={3}
                         />
                     </div>

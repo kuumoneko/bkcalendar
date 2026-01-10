@@ -27,7 +27,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
                 <div
                     className={`flex ${
                         mode === "row" ? "flex-row" : "flex-col"
-                    } h-[85%] w-[95%] mt-[15px]`}
+                    } h-[85%] w-[95%] mt-3.75`}
                 >
                     <Sidebar mode={mode} />
                     {children && children}

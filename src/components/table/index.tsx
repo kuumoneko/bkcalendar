@@ -10,19 +10,19 @@ export default function Table({
 }) {
 
     return (
-        <table className="w-full text-center mt-5 rounded-3xl min-w-[500px]">
+        <table className="w-full text-center mt-5 rounded-3xl min-w-125">
             <thead>
-                <tr className="h-[50px]">
-                    <th className="bg-slate-600 border-2 w-[15%] min-w-[150px]">
+                <tr className="h-12.5">
+                    <th className="bg-slate-600 border-2 w-[15%] min-w-37.5">
                         Môn học
                     </th>
-                    <th className="bg-slate-700 border-2 w-[20%] min-w-[150px]">
+                    <th className="bg-slate-700 border-2 w-[20%] min-w-37.5">
                         Giảng viên
                     </th>
-                    <th className="bg-slate-600 border-2 w-[5%] min-w-[50px]">
+                    <th className="bg-slate-600 border-2 w-[5%] min-w-12.5">
                         Lớp
                     </th>
-                    <th className="bg-slate-700 border-2 w-[15%] min-w-[50px]">
+                    <th className="bg-slate-700 border-2 w-[15%] min-w-12.5">
                         Thời gian
                     </th>
                     <th className="bg-slate-600 border-2">Phòng</th>
@@ -35,7 +35,7 @@ export default function Table({
                     return (
                         <tr
                             key={index}
-                            className="h-[50px]"
+                            className="h-12.5"
                             onMouseEnter={() => {
                                 if (mode === "filter") sethover(true);
                             }}
