@@ -1,31 +1,32 @@
 {
-  "name": "bk-calendar",
-  "version": "8.0.0",
-  "description": "Xem thời khoá biểu lịch học, lịch thi dành cho sinh viên trường Đại học Bách Khoa - Đại học quốc gia TP.HCM",
-  "private": false,
-  "type": "module",
-  "homepage": "https://bkcalendar.vercel.app",
-  "scripts": {
-    "dev": "cross-env PORT=3005 next dev",
-    "build": "next build",
-    "start": "cross-env PORT=3005 next start"
-  },
-  "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^7.1.0",
-    "@fortawesome/react-fontawesome": "^3.1.1",
-    "@vercel/analytics": "^1.6.1",
-    "@vercel/functions": "^3.3.4",
-    "bcrypt": "^6.0.0",
-    "mongodb": "^6.21.0",
-    "next": "15.5.9",
-    "react": "^19.2.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/bcrypt": "^6.0.0",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+    "name": "bk-calendar",
+    "version": "8.1.0",
+    "description": "Xem thời khoá biểu lịch học, lịch thi dành cho sinh viên trường Đại học Bách Khoa - Đại học quốc gia TP.HCM",
+    "private": false,
+    "type": "module",
+    "homepage": "https://bkcalendar.vercel.app",
+    "scripts": {
+        "dev": "cross-env PORT=3005 next dev",
+        "build": "next build",
+        "start": "cross-env PORT=3005 next start"
+    },
+    "dependencies": {
+        "@fortawesome/free-solid-svg-icons": "^7.1.0",
+        "@fortawesome/react-fontawesome": "^3.1.1",
+        "@vercel/analytics": "^1.6.1",
+        "@vercel/functions": "^3.3.4",
+        "bcrypt": "^6.0.0",
+        "mongodb": "^6.21.0",
+        "next": "15.5.9",
+        "react": "^19.2.0"
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4",
+        "@types/bcrypt": "^6.0.0",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "cross-env": "^10.1.0",
+        "tailwindcss": "^4",
+        "typescript": "^5"
+    }
 }
