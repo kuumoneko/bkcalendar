@@ -33,7 +33,7 @@ export default async function get_full_exam() {
 
     await Promise.all(promises);
 
-    if (database_exam.length === 0 && mybk_exam.length === 0) {
+    if (database_exam === null && mybk_exam === null) {
         window.location.href = "/down";
     }
 

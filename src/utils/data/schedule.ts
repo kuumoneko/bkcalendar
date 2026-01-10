@@ -40,7 +40,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         )
         await Promise.all(promises);
 
-        if (mybk_schedule.length === 0 && database_schedule.length === 0) {
+        if (mybk_schedule === null && database_schedule === null) {
             window.location.href = "/down";
         }
 
