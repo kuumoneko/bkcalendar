@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import convert from "./data";
+import { parse_body } from "./data";
 import create_login from "./sso/page";
 import get_token from "./mybk/app/app";
 import login_user from "./sso/login";
@@ -9,9 +9,9 @@ import { revert } from "@/lib/pass";
 /**
  * Login user
  */
-export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { username, password } = convert(new URL("http://localhost:3000" + _req.url).searchParams)
+        const { username, password } = parse_body(req.body)
 
         if (username.length === 0) {
             return "";

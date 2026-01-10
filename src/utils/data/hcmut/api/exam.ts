@@ -4,7 +4,7 @@ import fetch_data from "@/utils/fetch";
 /**
  * Get Schedule of user
  */
-export default async function get_exam(authorization: string, mssv: string, hocky: string, namhoc: string): Promise<ExamInfo[]> {
+export default async function get_exam(authorization: string, mssv: string, hocky: string, namhoc: string): Promise<ExamInfo[] | null> {
     try {
         const res = await fetch_data("/api/mybk/api/exam", {
             "Content-Type": "application/json"
@@ -23,10 +23,10 @@ export default async function get_exam(authorization: string, mssv: string, hock
                 duration: item.GIO_SOPHUT,
                 class: item.NHOMLOP
             }
-        })
+        }) ?? null
     }
     catch (e) {
         console.error(e);
-        return []
+        return null
     }
 }

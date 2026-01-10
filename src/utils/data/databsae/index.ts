@@ -6,7 +6,7 @@ export default async function mongodb(doc: "password" | "user" | "filter" | "sch
         const res = await fetch_data(`/api/mongodb/hcmut`, {
             "Content-Type": "application/json"
         }, {
-            doc, mode, data: JSON.stringify(data)
+            doc, mode, data: data
         })
         return res;
     }

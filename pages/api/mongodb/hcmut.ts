@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import convert, { isValid } from "../data";
+import convert, { isValid, parse_body } from "../data";
 import Mongo_client_Component from "@/lib/mongodb";
 import check from "./check";
 import { hash, verify } from "@/lib/auth/hash";
@@ -7,9 +7,9 @@ import { revert } from "@/lib/pass";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { doc = "", mode = "", data: temp }: { doc: string, mode: string, data: any } = convert(new URL("http://localhost:3000" + req.url).searchParams)
-
-        const { username, ...data } = JSON.parse(temp)
+        const { doc = "", mode = "", data: received_data }: { doc: string, mode: string, data: any } = parse_body(req.body)
+        const { username, ...data } = received_data;
+        console.log(username, ' ', doc, ' ', mode)
         if (!["post", "get"].includes(mode)) {
             return res.setHeader("Mode", "post,get").status(200).json({ ok: false, data: "Mode is invalid" });
         }
@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     _id: 0
                 }
             }).toArray();
-            return res.status(200).json({ ok: true, data: results.length === 0 ? "User not found" : results[0][doc] ?? [] });
+            return res.status(200).json({ ok: true, data: results.length === 0 ? "User not found" : results[0][doc] ?? (doc === "exam" || doc === "schedule" ? null : []) });
         }
         else {
             const result = await collection.updateOne({
@@ -86,6 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     catch (e: any) {
+        console.log(e.message)
         return res.status(200).json({ ok: false, data: e.message });
     }
 }

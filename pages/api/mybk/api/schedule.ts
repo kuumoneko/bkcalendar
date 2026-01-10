@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { isValid } from "../../data";
+import { isValid, parse_body } from "../../data";
 import isDown from "../../isDown";
 
 /**
@@ -7,10 +7,8 @@ import isDown from "../../isDown";
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const searchParams = new URL("http://localhost:3000" + req.url).searchParams;
-        const authorization = searchParams.get("authorization") ?? "";
-        const semester_id = searchParams.get("semester_id") ?? "";
-        const student_id = searchParams.get("student_id") ?? "";
+        const { authorization, semester_id, student_id } = parse_body(req.body)
+
 
         if (!isValid(semester_id) || !isValid(student_id) || !isValid(authorization)) {
             return res.status(200).json({ data: "Invalid request data", ok: false })

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import convert, { isValid } from "../../data";
+import { isValid, parse_body } from "../../data";
 import isDown from "../../isDown";
 
 /**
@@ -7,7 +7,7 @@ import isDown from "../../isDown";
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { authorization, namhoc, mssv, hocky } = convert(new URL("http://localhost:3000" + req.url).searchParams);
+        const { authorization, namhoc, mssv, hocky } = parse_body(req.body)
 
         if (!isValid(namhoc) || !isValid(mssv) || !isValid(authorization) || !isValid(hocky)) {
             return res.status(200).json({ data: "Invalid request data", ok: false })

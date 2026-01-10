@@ -116,6 +116,10 @@ export default function Exam_Schedule() {
                             )}
                         </tbody>
                     </table>
+                ) : data.length === 0 ? (
+                    <div>
+                        <span>Không có lịch thi</span>
+                    </div>
                 ) : (
                     <Loading mode="Đang tải lịch thi" />
                 )}

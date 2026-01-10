@@ -40,7 +40,7 @@ function getDatesForSchedule(scheduleItem: any): string[] {
 /**
  * Get Schedule of user
  */
-export default async function get_web_schedule(authorization: string, studentId: string, semester: string): Promise<SubjectInfo[]> {
+export default async function get_web_schedule(authorization: string, studentId: string, semester: string): Promise<SubjectInfo[] | null> {
     try {
 
         const res = await fetch_data("/api/mybk/api/schedule", {
@@ -63,10 +63,10 @@ export default async function get_web_schedule(authorization: string, studentId:
                 building: a.room.building.campus.nameVi,
                 dates: a.dayOfWeek === 0 ? "--" : (getDatesForSchedule(a))
             }
-        }) ?? []
+        }) ?? null
     }
     catch (e) {
         console.error(e);
-        return [];
+        return null;
     }
 }

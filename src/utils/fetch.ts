@@ -14,20 +14,21 @@ export default async function fetch_data(
             throw new Error("URL is empty");
         }
         let fetch_url = url;
-        if (body) {
-            if (!url.includes("mongodb")) {
-                fetch_url += "?" + new URLSearchParams(body as Record<string, string>)
-            }
-            else {
-                fetch_url += `?doc=${body.doc}&mode=${body.mode}`;
-                fetch_url += `&data=${encodeURIComponent(JSON.stringify(body.data))}`
-            }
-        }
+        // if (body) {
+        //     if (!url.includes("mongodb")) {
+        //         fetch_url += "?" + new URLSearchParams(body as Record<string, string>)
+        //     }
+        //     else {
+        //         fetch_url += `?doc=${body.doc}&mode=${body.mode}`;
+        //         fetch_url += `&data=${encodeURIComponent(JSON.stringify(body.data))}`
+        //     }
+        // }
         let res: Response;
         try {
             res = await fetch(fetch_url, {
-                method: "GET",
+                method: "POST",
                 headers: headers,
+                body: JSON.stringify(body)
             })
         }
         catch (e) {
