@@ -9,7 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const { doc = "", mode = "", data: received_data }: { doc: string, mode: string, data: any } = parse_body(req.body)
         const { username, ...data } = received_data;
-        console.log(username, ' ', doc, ' ', mode)
         if (!["post", "get"].includes(mode)) {
             return res.setHeader("Mode", "post,get").status(200).json({ ok: false, data: "Mode is invalid" });
         }
@@ -86,7 +85,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     catch (e: any) {
-        console.log(e.message)
         return res.status(200).json({ ok: false, data: e.message });
     }
 }
