@@ -248,11 +248,11 @@ export default function Filter({
                             };
 
                             async function run() {
-                                const { username } = JSON.parse(
+                                const { username, semester } = JSON.parse(
                                     localStorage.getItem("user") as string
                                 );
 
-                                const filter_temp = await mongodb(
+                                let filter_temp: any[] = await mongodb(
                                     "filter",
                                     "get",
                                     {
@@ -260,7 +260,14 @@ export default function Filter({
                                     }
                                 );
 
-                                filter_temp.push(aft);
+                                filter_temp.push({
+                                    ...aft,
+                                    semester,
+                                });
+
+                                filter_temp = filter_temp.filter(
+                                    (item: any) => item.semester === semester
+                                );
 
                                 const res = await mongodb("filter", "post", {
                                     username,

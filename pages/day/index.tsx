@@ -53,7 +53,6 @@ export default function Day() {
         async function run() {
             try {
                 const schedule = await full_schedule();
-
                 const today_subject = create_day_schedule(today, schedule);
                 set_today_sche(
                     today_subject.sort((a: SubjectInfo, b: SubjectInfo) => {

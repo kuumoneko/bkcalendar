@@ -27,7 +27,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (code === "401") {
                 return res.status(200).json({ ok: false, data: "Unauthorized" })
             }
-
             res.status(200).json({ ok: true, data: data })
         }
         catch (e) {

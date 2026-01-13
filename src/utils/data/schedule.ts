@@ -35,7 +35,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
             })
         )
         promises.push(mongodb("filter", "get", { username: username }).then((res: any) => {
-            filters = res;
+            filters = res.filter((item: any) => item.semester === semester)
         })
         )
         await Promise.all(promises);
@@ -43,14 +43,19 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         if (mybk_schedule === null && database_schedule === null) {
             window.location.href = "/down";
         }
+        const Schedule = [...mybk_schedule, ...database_schedule].filter((item, index, self) =>
+            index === self.findIndex((t) => (
+                JSON.stringify(t, Object.keys(t).sort()) === JSON.stringify(item, Object.keys(item).sort())
+            ))
+        );
 
-        if (!deepArrayEqual(mybk_schedule as unknown as SubjectInfo[], database_schedule as unknown as SubjectInfo[])) {
+        if (!deepArrayEqual(mybk_schedule as unknown as SubjectInfo[], Schedule as unknown as SubjectInfo[])) {
             if (mybk_schedule.length !== 0) {
-                mongodb("schedule", "post", { username: username, data: mybk_schedule });
+                mongodb("schedule", "post", { username: username, data: Schedule });
             }
         }
 
-        const schedule: SubjectInfo[] = (token.length !== 0 && token !== "undefined" && isOffline === false) ? mybk_schedule : database_schedule;
+        const schedule: SubjectInfo[] = (token.length !== 0 && token !== "undefined" && isOffline === false) ? Schedule : database_schedule;
 
         if (filters.length > 0) {
             filters.sort((a: any, b: any) => {

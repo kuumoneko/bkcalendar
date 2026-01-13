@@ -193,15 +193,22 @@ export default function lesson({
                     };
 
                     async function run() {
-                        const { username } = JSON.parse(
+                        const { username, semester } = JSON.parse(
                             localStorage.getItem("user") as string
                         );
 
-                        const filter_temp = await mongodb("filter", "get", {
+                        let filter_temp = await mongodb("filter", "get", {
                             username,
                         });
 
-                        filter_temp.push(new_subject);
+                        filter_temp.push({
+                            ...new_subject,
+                            semester,
+                        });
+
+                        filter_temp = filter_temp.filter(
+                            (item: any) => item.semester === semester
+                        );
 
                         const res = await mongodb("filter", "post", {
                             username,
