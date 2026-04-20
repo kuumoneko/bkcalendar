@@ -20,12 +20,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         const client = await Mongo_client_Component();
-        const db = client.db('hcmut');
-        const collection = db.collection('data');
         await client.connect();
+
+        const db = client.db('hcmut');
+
+        const collection = db.collection('data');
+
         await check(collection, username);
-
-
+        
         if (doc === "password") {
             if (mode === "get") {
                 const results = await collection.find({
