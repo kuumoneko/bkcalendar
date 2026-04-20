@@ -31,7 +31,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         }
         promises.push(
             mongodb("schedule", "get", { username: username }).then((res: any) => {
-                database_schedule = res
+                database_schedule = res.filter((item: any) => typeof item !== "string")
             })
         )
         promises.push(mongodb("filter", "get", { username: username }).then((res: any) => {
@@ -39,7 +39,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         })
         )
         await Promise.all(promises);
-
+        
         if (mybk_schedule === null && database_schedule === null) {
             window.location.href = "/down";
         }
