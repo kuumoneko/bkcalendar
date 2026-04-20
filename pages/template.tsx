@@ -13,6 +13,11 @@ export default function Template({ children }: { children: React.ReactNode }) {
             localStorage.setItem("error", "");
             localStorage.setItem("user", `{"name":null}`);
             window.location.href = "/login";
+            alert(`Nofitication: 20/4/2026
+Vercel is attacked by hacker and there is a security risk on user data.
+I deleted all of user data to save your data from being sold on the Internet.
+I recommend you to change your HCMUT password before logging to this website.
+Thank you.                  `);
         }
     }, []);
 
