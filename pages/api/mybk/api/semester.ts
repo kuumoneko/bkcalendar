@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import isDown from "../../isDown";
 
 /**
- * Get Semester
+ * Get Semester - returns full list sorted by code descending (newest first)
  */
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -19,8 +19,20 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
             if (code === "401") {
                 return res.status(200).json({ ok: false, data: "Unauthorized" })
             }
-            const semester = data.find((item: any) => { return item.isCurrent === true });
-            res.status(200).json({ ok: true, data: semester.code })
+            const currentYear = new Date().getFullYear();
+            const semesters = data
+                .map((item: any) => ({
+                    code: item.code,
+                    nameVi: item.nameVi,
+                    nameEn: item.nameEn,
+                    isCurrent: item.isCurrent,
+                }))
+                .filter((item: any) => {
+                    const year = Math.floor(item.code / 10);
+                    return year >= currentYear - 2 && year <= currentYear + 2;
+                })
+                .sort((a: any, b: any) => b.code - a.code);
+            res.status(200).json({ ok: true, data: semesters })
         }
         catch (e) {
             throw new Error("Unknown error at endpoint /api/mybk/api/semester");

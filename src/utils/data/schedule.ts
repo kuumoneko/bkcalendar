@@ -21,21 +21,23 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         let { username, id, semester } = JSON.parse(localStorage.getItem("user") as string);
 
         let mybk_schedule: SubjectInfo[] = [], database_schedule: SubjectInfo[] = [], filters: any[] = [];
+        let schoolHasData = false;
 
         const promises = [];
         if (token.length !== 0 && token !== "undefined" && isOffline === false) {
             promises.push((get_web_schedule(token, id, semester)).then((res: any) => {
-                mybk_schedule = res;
+                mybk_schedule = Array.isArray(res) ? res : [];
+                schoolHasData = true;
             })
             )
         }
         promises.push(
             mongodb("schedule", "get", { username: username }).then((res: any) => {
-                database_schedule = res.filter((item: any) => typeof item !== "string")
+                database_schedule = Array.isArray(res) ? res.filter((item: any) => typeof item !== "string") : []
             })
         )
         promises.push(mongodb("filter", "get", { username: username }).then((res: any) => {
-            filters = res.filter((item: any) => item.semester === semester)
+            filters = Array.isArray(res) ? res.filter((item: any) => item.semester === semester) : []
         })
         )
         await Promise.all(promises);
@@ -43,6 +45,11 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         if (mybk_schedule === null && database_schedule === null) {
             window.location.href = "/down";
         }
+
+        if (schoolHasData && mybk_schedule.length === 0 && database_schedule.length > 0) {
+            alert("Học kỳ này chưa có lịch học trên hệ thống. Đang hiển thị lịch học đã lưu.");
+        }
+
         const Schedule = [...mybk_schedule, ...database_schedule].filter((item, index, self) =>
             index === self.findIndex((t) => (
                 JSON.stringify(t, Object.keys(t).sort()) === JSON.stringify(item, Object.keys(item).sort())

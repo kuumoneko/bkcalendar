@@ -37,7 +37,7 @@ export default async function logining(username: string, password: string) {
 
         const data_promises: any[] = [];
 
-        let database_user: any, database_semester, mybk_user: any, mybk_semester;
+        let database_user: any, mybk_user: any, mybk_semesters: any[] = [];
 
         data_promises.push(
             mongodb("user", "get", { username: username }).then((res: any) => {
@@ -53,8 +53,8 @@ export default async function logining(username: string, password: string) {
                 })
             )
             data_promises.push(
-                get_web_semester().then((res: string) => {
-                    mybk_semester = res
+                get_web_semester().then((res: any[]) => {
+                    mybk_semesters = res
                 })
             )
         }
@@ -64,25 +64,31 @@ export default async function logining(username: string, password: string) {
         let user;
 
         if (token !== "ok") {
+            const current = mybk_semesters.find((s: any) => s.isCurrent === true);
+            const semesterCode = String(current?.code ?? mybk_semesters[0]?.code ?? "");
+
             if (!deepEqual(mybk_user, database_user)) {
                 await mongodb("user", "post", {
                     username: username, data: {
                         ...mybk_user,
-                        semester: mybk_semester
+                        semester: semesterCode,
+                        semesters: mybk_semesters
                     }
                 })
             }
             user = {
                 username: username,
                 ...mybk_user,
-                semester: mybk_semester
+                semester: semesterCode,
+                semesters: mybk_semesters
             };
         }
         else {
             user = {
                 username: username,
                 ...database_user,
-                semester: database_semester
+                semester: database_user?.semester ?? "",
+                semesters: database_user?.semesters ?? []
             };
         }
         localStorage.setItem("token", token as string);
