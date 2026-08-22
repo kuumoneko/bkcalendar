@@ -1,2 +1,0 @@
-catch error mongodb close database after long time unused:))
-log more error catch
