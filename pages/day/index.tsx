@@ -63,7 +63,7 @@ export default function Day() {
                         const d2 = new Date(0, 0, 0, h2, m2);
 
                         return d1.getTime() - d2.getTime();
-                    })
+                    }),
                 );
 
                 if (today_subject.length > 0) {
@@ -84,7 +84,7 @@ export default function Day() {
                                 StartHour,
                                 StartMin,
                                 0,
-                                0
+                                0,
                             );
 
                             const end = temping.setHours(EndHour, EndMin, 0, 0);
@@ -92,7 +92,7 @@ export default function Day() {
                             return (
                                 start <= now.getTime() && now.getTime() <= end
                             );
-                        }
+                        },
                     );
 
                     const next_subjects = today_subject.filter(
@@ -108,11 +108,11 @@ export default function Day() {
                                 StartHour,
                                 StartMin,
                                 0,
-                                0
+                                0,
                             );
 
                             return now.getTime() <= start;
-                        }
+                        },
                     );
 
                     set_curr_sub(current_subjects[0] ?? null);
@@ -130,7 +130,7 @@ export default function Day() {
                     setClosestDay(closestFutureDateString);
                     const closestDaySubjects = create_day_schedule(
                         closestFutureDateString,
-                        schedule
+                        schedule,
                     );
                     closestDaySubjects.sort((a, b) => {
                         const timeA = a.startTime.split(":").map(Number);
@@ -160,7 +160,7 @@ export default function Day() {
                 mode === "row" ? "ml-10" : ""
             } w-full max-x-[1500px]`}
         >
-            {today_sche.length === 0 && closestDaySche.length === 0 ? (
+            {!today_sche && closestDaySche.length === 0 ? (
                 <Loading mode="Đang tải thời khóa biểu ngày hôm nay" />
             ) : (
                 <>
