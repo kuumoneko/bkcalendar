@@ -32,3 +32,30 @@ export function convertDateFormat(dateString: string): string {
     };
     return date.toLocaleDateString('vi-VN', options);
 }
+
+/**
+ * get local today as yyyy-mm-dd
+ */
+export function today_local(): string {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${now.getFullYear()}-${month}-${day}`;
+}
+
+/**
+ * get the last valid date (yyyy-mm-dd) of a schedule item
+ */
+export function get_expired(dates: string | string[] | undefined): string | undefined {
+    if (!dates) {
+        return undefined;
+    }
+    if (typeof dates === "string") {
+        return /^\d{4}-\d{2}-\d{2}$/.test(dates) ? dates : undefined;
+    }
+    const valid = dates.filter((d: string) => /^\d{4}-\d{2}-\d{2}$/.test(d));
+    if (valid.length === 0) {
+        return undefined;
+    }
+    return valid.reduce((a: string, b: string) => (a > b ? a : b));
+}

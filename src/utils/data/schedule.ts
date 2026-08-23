@@ -4,6 +4,20 @@ import { formatDate } from "@/types/day";
 import mongodb from "./databsae";
 import deepArrayEqual from "../array";
 import Logout from "../logout";
+import { get_expired, today_local } from "../day";
+
+function enrich_expired(items: SubjectInfo[]): SubjectInfo[] {
+    return items.map((item) => ({
+        ...item,
+        expired: get_expired(item.dates),
+    }));
+}
+
+function prune_expired(items: SubjectInfo[], today: string): SubjectInfo[] {
+    return items.filter(
+        (item) => item.expired === undefined || item.expired >= today,
+    );
+}
 
 /**
  * Create fully schedule
@@ -19,21 +33,23 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         }
 
         let { username, id, semester } = JSON.parse(localStorage.getItem("user") as string);
+        const today = today_local();
 
-        let mybk_schedule: SubjectInfo[] = [], database_schedule: SubjectInfo[] = [], filters: any[] = [];
+        let mybk_schedule: SubjectInfo[] = [], database_schedule: SubjectInfo[] = [], database_raw: SubjectInfo[] = [], filters: any[] = [];
         let schoolHasData = false;
 
         const promises = [];
         if (token.length !== 0 && token !== "undefined" && isOffline === false) {
             promises.push((get_web_schedule(token, id, semester)).then((res: any) => {
-                mybk_schedule = Array.isArray(res) ? res : [];
+                mybk_schedule = prune_expired(enrich_expired(Array.isArray(res) ? res : []), today);
                 schoolHasData = true;
             })
             )
         }
         promises.push(
             mongodb("schedule", "get", { username: username }).then((res: any) => {
-                database_schedule = Array.isArray(res) ? res.filter((item: any) => typeof item !== "string") : []
+                database_raw = Array.isArray(res) ? res.filter((item: any) => typeof item !== "string") : []
+                database_schedule = prune_expired(enrich_expired(database_raw), today);
             })
         )
         promises.push(mongodb("filter", "get", { username: username }).then((res: any) => {
@@ -56,10 +72,11 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
             ))
         );
 
-        if (!deepArrayEqual(mybk_schedule as unknown as SubjectInfo[], Schedule as unknown as SubjectInfo[])) {
-            if (mybk_schedule.length !== 0) {
-                mongodb("schedule", "post", { username: username, data: Schedule });
-            }
+        const online = token.length !== 0 && token !== "undefined" && isOffline === false;
+        const school_drifted = online && mybk_schedule.length !== 0 && !deepArrayEqual(mybk_schedule as unknown as SubjectInfo[], Schedule as unknown as SubjectInfo[]);
+        const database_drifted = online && !deepArrayEqual(database_raw as unknown as SubjectInfo[], Schedule as unknown as SubjectInfo[]);
+        if (school_drifted || database_drifted) {
+            mongodb("schedule", "post", { username: username, data: Schedule });
         }
 
         const schedule: SubjectInfo[] = (token.length !== 0 && token !== "undefined" && isOffline === false) ? Schedule : database_schedule;
@@ -123,9 +140,11 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
 
         const result = schedule.map((sub: SubjectInfo) => {
             const dates = sub.dates;
+            const expired = sub.expired ?? get_expired(sub.dates);
             if (typeof dates === "string") {
                 return {
                     ...sub,
+                    expired,
                     dates: dates
                 }
             }
@@ -135,6 +154,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
             })
             return {
                 ...sub,
+                expired,
                 dates: temp
             }
         })

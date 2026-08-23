@@ -10,6 +10,7 @@ export interface SubjectInfo {
     subject: string;
     teacher: string;
     weeks: number[];
+    expired?: string;
 }
 
 export interface ExamInfo {
@@ -20,6 +21,7 @@ export interface ExamInfo {
     startTime: string,
     duration: string,
     class: string,
+    expired?: string,
 }
 
 export interface CSVHeader {
