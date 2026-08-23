@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import isDown from "../../isDown";
+import { pick_current_and_next } from "@/utils/data/hcmut/api/semester";
 
 /**
- * Get Semester - returns full list sorted by code descending (newest first)
+ * Get Semester - returns current and next semester sorted by code descending (newest first)
  */
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -19,20 +20,13 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
             if (code === "401") {
                 return res.status(200).json({ ok: false, data: "Unauthorized" })
             }
-            const currentYear = new Date().getFullYear();
-            const semesters = data
-                .map((item: any) => ({
-                    code: item.code,
-                    nameVi: item.nameVi,
-                    nameEn: item.nameEn,
-                    isCurrent: item.isCurrent,
-                }))
-                .filter((item: any) => {
-                    const year = Math.floor(item.code / 10);
-                    return year >= currentYear - 2 && year <= currentYear + 2;
-                })
-                .sort((a: any, b: any) => b.code - a.code);
-            res.status(200).json({ ok: true, data: semesters })
+            const semesters = data.map((item: any) => ({
+                code: item.code,
+                nameVi: item.nameVi,
+                nameEn: item.nameEn,
+                isCurrent: item.isCurrent,
+            }));
+            res.status(200).json({ ok: true, data: pick_current_and_next(semesters) })
         }
         catch (e) {
             throw new Error("Unknown error at endpoint /api/mybk/api/semester");

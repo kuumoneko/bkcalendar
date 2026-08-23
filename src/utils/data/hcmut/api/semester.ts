@@ -7,6 +7,21 @@ export interface SemesterInfo {
     isCurrent: boolean;
 }
 
+export function pick_current_and_next(semesters: SemesterInfo[]): SemesterInfo[] {
+    const sorted = [...semesters]
+        .filter((s) => s.code < 99990)
+        .sort((a, b) => b.code - a.code);
+    if (sorted.length === 0) {
+        return [];
+    }
+    const current = sorted.find((s) => s.isCurrent) ?? sorted[0];
+    const year = Math.floor(current.code / 10);
+    const term = current.code % 10;
+    const nextCode = term >= 3 ? (year + 1) * 10 + 1 : current.code + 1;
+    const next = sorted.find((s) => s.code === nextCode);
+    return next ? [next, current] : [current];
+}
+
 /**
  * Get all semesters sorted by code descending (newest first)
  */

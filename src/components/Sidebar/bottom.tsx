@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { pick_current_and_next } from "@/utils/data/hcmut/api/semester";
 
 const containerStyles = {
     row: "h-[60%] max-w-[250px] flex-col",
@@ -49,6 +50,8 @@ export default function Sidebar_Bottom({ mode }: { mode: "row" | "col" }) {
         window.location.reload();
     }
 
+    const visibleSemesters = Array.isArray(user.semesters) ? pick_current_and_next(user.semesters) : [];
+
     return (
         <div
             className={`w-full mt-4 bg-slate-700 text-white rounded-3xl p-5 flex items-center justify-between ${containerStyles[mode]}`}
@@ -75,7 +78,7 @@ export default function Sidebar_Bottom({ mode }: { mode: "row" | "col" }) {
                         <span className="mt-3">{user.teachingDep}</span>
                     </div>
 
-                    {user.semesters && user.semesters.length > 0 && (
+                    {visibleSemesters.length > 0 && (
                         <div className="w-full mt-3 flex flex-row items-center">
                             <span className="text-sm whitespace-nowrap mr-2">
                                 Học kỳ:
@@ -85,7 +88,7 @@ export default function Sidebar_Bottom({ mode }: { mode: "row" | "col" }) {
                                 value={user.semester}
                                 onChange={handleSemesterChange}
                             >
-                                {user.semesters.map((s: any) => (
+                                {visibleSemesters.map((s: any) => (
                                     <option key={s.code} value={s.code}>
                                         {s.nameVi}
                                     </option>
