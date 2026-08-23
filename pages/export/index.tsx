@@ -1,68 +1,61 @@
 import get_full_exam from "@/utils/data/exam";
-import export_csv from "@/utils/data/export";
+import export_ics from "@/utils/data/export_ics";
 import full_schedule from "@/utils/data/schedule";
 import { useEffect, useState } from "react";
 
 export default function Export() {
-    const [link, setlink] = useState<any>(null);
+    const [ready, setReady] = useState(false);
+    const [scheduleData, setScheduleData] = useState<any[]>([]);
+    const [examData, setExamData] = useState<any[]>([]);
+
     useEffect(() => {
         async function run() {
             const schedule = await full_schedule();
             const exam = await get_full_exam();
-            const csv = export_csv([...schedule, ...exam]);
-
-            const csv_string = [
-                Object.keys(csv[0]).join(","),
-                ...csv.map((row: any) => {
-                    return Object.values(row).join(",");
-                }),
-            ].join("\n");
-
-            const blob = new Blob([csv_string], {
-                type: "text/csv;charset=utf-8;",
-            });
-
-            const url = URL.createObjectURL(blob);
-            const download_element = document.createElement("a");
-            download_element.href = url;
-            download_element.download = "schedule.csv";
-            setlink(download_element);
+            setScheduleData(schedule);
+            setExamData(exam);
+            setReady(true);
         }
         run();
     }, []);
 
-    const handle_Export = () => {
-        if (link === null) {
-            alert("File không tồn tại, vui lòng tải lại trang");
+    const handleExport = () => {
+        if (!ready) {
+            alert("File chưa sẵn sàng, vui lòng thử lại");
             return;
-        } else {
-            link.click();
-            setlink(null);
         }
+
+        const icsString = export_ics(scheduleData, examData);
+        const blob = new Blob([icsString], {
+            type: "text/calendar;charset=utf-8;",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "schedule.ics";
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     return (
         <div className="h-full w-full flex flex-col justify-center items-center">
             <span className="text-4xl">Xuất lịch</span>
-            <div>
-                File CSV từ trang này có thể được sử dụng để nhập vào Google
-                Calendar để tiện theo dõi thời khóa biểu và lịch thi Đảm bảo bạn
-                đã bổ sung tất cả các bộ lọc để quá trình xuất được diễn ra
-                chính xác
+            <div className="mt-2">
+                File ICS có thể nhập trực tiếp vào Google Calendar, Apple
+                Calendar, Outlook và các ứng dụng lịch khác.
             </div>
-            <div>Nhấn vào nút dưới đây để xuất lịch</div>
-            <div>
-                {link !== null ? (
-                    <>File đã sẵn sàng</>
-                ) : (
-                    <>File chưa sẵn sàng hoặc không tồn tại</>
-                )}
+            <div className="mt-3">
+                {ready ? "File đã sẵn sàng" : "Đang tải dữ liệu..."}
             </div>
             <div
-                onClick={handle_Export}
-                className="px-4 py-2 bg-slate-500 hover:bg-slate-400 hover:cursor-pointer mt-4 rounded-3xl text-slate-800"
+                onClick={handleExport}
+                className={`px-4 py-2 mt-4 rounded-3xl transition-colors ${
+                    ready
+                        ? "bg-slate-500 hover:bg-slate-400 hover:cursor-pointer text-slate-800"
+                        : "bg-slate-700 text-slate-500 cursor-not-allowed"
+                }`}
             >
-                Xuất
+                Xuất ICS
             </div>
         </div>
     );
