@@ -45,6 +45,7 @@ export default async function login(ltValue: string, executionValue: string, use
                 redirect: "manual",
                 mode: "cors",
                 credentials: "include",
+                signal: AbortSignal.timeout(8000),
             }
         );
         if (isDown(response.status)) {

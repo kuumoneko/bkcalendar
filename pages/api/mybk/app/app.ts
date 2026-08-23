@@ -13,7 +13,8 @@ export default async function create_app(SESSION: string) {
             method: "GET",
             headers: {
                 cookie: `SESSION=${SESSION}`,
-            }
+            },
+            signal: AbortSignal.timeout(8000),
         })
 
         if (!response.ok) {

@@ -10,7 +10,8 @@ export default async function handler(url: string) {
             redirect: "manual",
             headers: {
                 referer: "https://sso.hcmut.edu.vn/",
-            }
+            },
+            signal: AbortSignal.timeout(8000),
         });
 
         if (isDown(response.status)) {

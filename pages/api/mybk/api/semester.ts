@@ -9,6 +9,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
     try {
         const response = await fetch(`https://mybk.hcmut.edu.vn/api/v1/semester-year/short?null`, {
             method: "GET",
+            signal: AbortSignal.timeout(8000),
         });
 
         if (isDown(response.status)) {

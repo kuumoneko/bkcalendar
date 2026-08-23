@@ -10,7 +10,8 @@ export default async function create_login_page() {
             {
                 method: "GET",
                 mode: "cors",
-                credentials: "include"
+                credentials: "include",
+                signal: AbortSignal.timeout(8000),
             },
         );
         const html = await response.text();

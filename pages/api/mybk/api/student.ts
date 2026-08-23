@@ -16,7 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             method: "GET",
             headers: {
                 authorization: authorization,
-            }
+            },
+            signal: AbortSignal.timeout(8000),
         })
 
         if (isDown(response.status)) {

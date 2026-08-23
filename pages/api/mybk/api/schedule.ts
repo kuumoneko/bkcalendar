@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             method: "GET",
             redirect: "manual",
             headers: { authorization: authorization },
+            signal: AbortSignal.timeout(8000),
         });
         if (isDown(response.status)) {
             throw new Error("EAI_AGAIN");

@@ -28,7 +28,8 @@ export default async function fetch_data(
             res = await fetch(fetch_url, {
                 method: "POST",
                 headers: headers,
-                body: JSON.stringify(body)
+                body: JSON.stringify(body),
+                signal: AbortSignal.timeout(10000),
             })
         }
         catch (e) {
