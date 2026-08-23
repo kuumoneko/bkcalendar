@@ -21,6 +21,25 @@
 >
 > Sign in by using HCMUT Account.
 
+## Development
+
+This project uses [Bun](https://bun.sh) as its JavaScript runtime and package manager (for both development and production).
+
+```bash
+# Install Bun (Windows: PowerShell)
+powershell -c "irm bun.sh/install.ps1 | iex"
+
+# Install dependencies
+bun install
+
+# Start dev server on http://localhost:3005
+bun dev
+
+# Production build
+bun run build
+bun start
+```
+
 ## IMPORTANT
 
 > This web app is for educational purpose only.
