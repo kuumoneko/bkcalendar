@@ -1,6 +1,7 @@
 "use client";
 import "@/styles/globals.css";
 import Logout from "@/utils/logout";
+import Notification from "@/components/Notification";
 import type { AppProps } from "next/app";
 import { useEffect } from "react";
 import Template from "./template";
@@ -29,8 +30,11 @@ export default function App({ Component, pageProps }: AppProps) {
     }, []);
 
     return (
-        <Template>
-            <Component {...pageProps} />
-        </Template>
+        <>
+            <Notification />
+            <Template>
+                <Component {...pageProps} />
+            </Template>
+        </>
     );
 }

@@ -5,6 +5,7 @@ import mongodb from "./databsae";
 import deepArrayEqual from "../array";
 import Logout from "../logout";
 import { get_expired, today_local } from "../day";
+import { push_noti } from "../notification";
 
 function enrich_expired(items: SubjectInfo[]): SubjectInfo[] {
     return items.map((item) => ({
@@ -63,7 +64,7 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         }
 
         if (schoolHasData && mybk_schedule.length === 0 && database_schedule.length > 0) {
-            alert("Học kỳ này chưa có lịch học trên hệ thống. Đang hiển thị lịch học đã lưu.");
+            push_noti("Học kỳ này chưa có lịch học trên hệ thống. Đang hiển thị lịch học đã lưu.", "info");
         }
 
         const Schedule = [...mybk_schedule, ...database_schedule].filter((item, index, self) =>

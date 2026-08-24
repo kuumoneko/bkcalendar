@@ -1,5 +1,15 @@
 import { handle_error } from "./error";
 import Logout from "./logout";
+import { push_noti } from "./notification";
+
+const TIMEOUT_HINTS = ["timeout", "abort", "eai_again"];
+
+function is_timeout_message(data: any): boolean {
+    return (
+        typeof data === "string" &&
+        TIMEOUT_HINTS.some((hint) => data.toLowerCase().includes(hint))
+    );
+}
 
 /**
  * fetch data from api
@@ -33,6 +43,12 @@ export default async function fetch_data(
             })
         }
         catch (e) {
+            if (!fetch_url.includes("mongodb")) {
+                push_noti(
+                    "Máy trường không phản hồi. Đang hiển thị dữ liệu đã lưu.",
+                    "error",
+                );
+            }
             return [];
         }
 
@@ -51,6 +67,13 @@ export default async function fetch_data(
             }
             else if (res.status === 304) {
                 return "ok"
+            }
+            else if (is_timeout_message(data)) {
+                push_noti(
+                    "Máy trường không phản hồi hoặc đang quá tải. Vui lòng thử lại sau.",
+                    "error",
+                );
+                return [];
             }
             else {
                 handle_error(data)
