@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Navigator";
 import Sidebar from "@/components/Sidebar";
 import { useOrientationMode } from "@/hooks/display";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useEffect } from "react";
 
 export default function Template({ children }: { children: React.ReactNode }) {
@@ -31,6 +32,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
                 >
                     <Sidebar mode={mode} />
                     {children && children}
+                    <SpeedInsights />
                 </div>
                 <Footer />
             </div>
