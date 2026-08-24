@@ -57,7 +57,6 @@ export default function Sidebar_Bottom({ mode }: { mode: "row" | "col" }) {
                         <span className="mb-2">{user.name}</span>
                         <span className="mt-2">MSSV: {user.MSSV}</span>
                         <span className="mt-2">Lớp: {user.class}</span>
-                        <span className="mt-2">Tình trạng: {user.status}</span>
                     </div>
 
                     <div className={`flex flex-col ${columnTwoStyles[mode]}`}>
