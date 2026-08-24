@@ -6,9 +6,9 @@
     "type": "module",
     "homepage": "https://bkcalendar.vercel.app",
     "scripts": {
-        "dev": "PORT=3005 next dev",
-        "build": "next build",
-        "start": "PORT=3005 next start"
+        "dev": "bun run --bun next dev",
+        "build": "bun run --bun next build",
+        "start": "next start"
     },
     "dependencies": {
         "@fortawesome/free-solid-svg-icons": "^7.1.0",
