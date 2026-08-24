@@ -37,13 +37,16 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
         const today = today_local();
 
         let mybk_schedule: SubjectInfo[] = [], database_schedule: SubjectInfo[] = [], database_raw: SubjectInfo[] = [], filters: any[] = [];
-        let schoolHasData = false;
+        let raw_mybk = null as SubjectInfo[] | null;
 
         const promises = [];
         if (token.length !== 0 && token !== "undefined" && isOffline === false) {
             promises.push((get_web_schedule(token, id, semester)).then((res: any) => {
-                mybk_schedule = prune_expired(enrich_expired(Array.isArray(res) ? res : []), today);
-                schoolHasData = true;
+                if (!Array.isArray(res)) {
+                    return;
+                }
+                raw_mybk = res;
+                mybk_schedule = prune_expired(enrich_expired(res), today);
             })
             )
         }
@@ -63,8 +66,11 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
             window.location.href = "/down";
         }
 
-        if (schoolHasData && mybk_schedule.length === 0 && database_schedule.length > 0) {
+        if (raw_mybk !== null && raw_mybk.length === 0 && database_schedule.length > 0) {
             push_noti("Học kỳ này chưa có lịch học trên hệ thống. Đang hiển thị lịch học đã lưu.", "info");
+        }
+        else if (raw_mybk !== null && raw_mybk.length > 0 && mybk_schedule.length === 0 && database_schedule.length > 0) {
+            push_noti("Toàn bộ lịch học học kỳ này đã qua. Đang hiển thị lịch học đã lưu.", "info");
         }
 
         const Schedule = [...mybk_schedule, ...database_schedule].filter((item, index, self) =>

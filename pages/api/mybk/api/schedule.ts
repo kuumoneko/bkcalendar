@@ -35,6 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     catch (e: any) {
-        res.status(200).json({ data: e.mesage, ok: false });
+        res.status(200).json({ data: e.message, ok: false });
     }
 }
