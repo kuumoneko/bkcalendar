@@ -60,7 +60,7 @@ export default function Login() {
                         <div className="flex flex-col w-full">
                             <label htmlFor="username">Tên tài khoản:</label>
                             <input
-                                className="text-slate-800 w-[95%] bg-slate-500 rounded-2xl px-4"
+                                className="bg-[#f8fafc] text-[#0f172a] border border-slate-400 w-[95%] rounded-2xl px-4"
                                 type="text"
                                 name="username"
                                 id="username"
@@ -70,25 +70,34 @@ export default function Login() {
                         </div>
                         <div className="flex flex-col w-full mt-1">
                             <label htmlFor="password">Mật khẩu:</label>
-                            <div className="flex flex-row ">
+                            <div className="flex flex-row items-center">
                                 <input
-                                    className="text-slate-800 w-[95%] mr-1.25 bg-slate-500 rounded-2xl px-4"
-                                    type={hidden ? "password" : "text"}
+                                    className={`bg-[#f8fafc] text-[#0f172a] border border-slate-400 rounded-2xl pl-4 pr-10 flex-1 ${hidden ? "pw-masked" : ""}`}
+                                    type="text"
+                                    autoComplete="off"
                                     name="password"
                                     id="password"
                                     value={password}
                                     onChange={(e) => {
                                         serpassword(e.target.value);
                                     }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                            setlogin(true);
+                                        }
+                                    }}
                                 />
-                                <div>
-                                    <FontAwesomeIcon
-                                        icon={hidden ? faEye : faEyeSlash}
-                                        onClick={() => {
-                                            sethidden(!hidden);
-                                        }}
-                                    />
-                                </div>
+                                <button
+                                    type="button"
+                                    aria-label={hidden ? "Hiện mật khẩu" : "Ẩn mật khẩu"}
+                                    className="ml-2 hover:cursor-pointer hover:opacity-70"
+                                    onClick={() => {
+                                        sethidden(!hidden);
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={hidden ? faEye : faEyeSlash} />
+                                </button>
                             </div>
                         </div>
                         <div className="flex flex-row-reverse items-start mt-5 w-[95%]">

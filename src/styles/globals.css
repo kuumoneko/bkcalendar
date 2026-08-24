@@ -13,3 +13,25 @@ body {
     margin: 0;
     box-sizing: border-box;
 }
+
+html.light {
+    --color-slate-900: #e2e8f0;
+    --color-slate-800: #e2e8f0;
+    --color-slate-700: #ffffff;
+    --color-slate-600: #f1f5f9;
+    --color-slate-500: #e2e8f0;
+    --color-slate-400: #94a3b8;
+    --color-slate-100: #1e293b;
+    --color-slate-300: #475569;
+    --color-slate-50: #0f172a;
+    --color-white: #0f172a;
+}
+
+html.light body {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.pw-masked {
+    -webkit-text-security: disc;
+}

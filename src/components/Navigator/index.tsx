@@ -1,6 +1,7 @@
 "use client";
 import { useOrientationMode } from "@/hooks/display";
 import Hcmut from "./settings/hcmut";
+import ThemeToggle from "@/components/ThemeToggle";
 import { convertDateFormat, getnow } from "@/utils/day";
 
 export default function Nav() {
@@ -46,6 +47,7 @@ export default function Nav() {
                 <div className="hover:cursor-pointer hover:bg-slate-400 hover:text-slate-800 px-2.5 py-1.25 text-slate-100 rounded-3xl bg-slate-800" onClick={() => {window.location.href = "/export";}}>
                     Export
                 </div>
+                <ThemeToggle />
                 <Hcmut />
             </div>
         </div>

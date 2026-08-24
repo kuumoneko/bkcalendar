@@ -32,15 +32,15 @@ export default function Notification() {
             {notis.map((noti) => (
                 <div
                     key={noti.id}
-                    className={`flex items-start justify-between gap-2 rounded-3xl p-3 text-white shadow-lg border ${
+                    className={`flex items-start justify-between gap-2 rounded-3xl p-3 shadow-lg border ${
                         noti.type === "error"
-                            ? "bg-red-900/95 border-red-700"
-                            : "bg-slate-700/95 border-slate-600"
+                            ? "bg-red-900/95 border-red-700 text-red-50"
+                            : "bg-slate-700/95 border-slate-600 text-slate-100"
                     }`}
                 >
                     <span className="text-sm break-words">{noti.message}</span>
                     <button
-                        className="text-slate-300 hover:text-white shrink-0 cursor-pointer"
+                        className="opacity-80 hover:opacity-100 shrink-0 cursor-pointer"
                         onClick={() =>
                             set_notis((prev) =>
                                 prev.filter((n) => n.id !== noti.id),
