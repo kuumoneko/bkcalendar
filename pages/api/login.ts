@@ -5,6 +5,7 @@ import get_token from "./mybk/app/app";
 import login_user from "./sso/login";
 import create_app from "./mybk/app/login";
 import { revert } from "@/lib/pass";
+import is_allowed from "@/lib/allowlist";
 
 /**
  * Login user
@@ -18,6 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         if (password.length === 0) {
             return "";
+        }
+        if (!(await is_allowed(username))) {
+            return res.status(200).json({ ok: false, data: "NOT_ALLOWED" });
         }
         const { JSESSIONID, ltValue, executionValue } =
             await create_login();

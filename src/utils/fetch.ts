@@ -1,6 +1,7 @@
 import { handle_error } from "./error";
 import Logout from "./logout";
 import { push_noti } from "./notification";
+import { go_public_site, is_going_public } from "./public_redirect";
 
 const TIMEOUT_HINTS = ["timeout", "abort", "eai_again"];
 
@@ -24,15 +25,6 @@ export default async function fetch_data(
             throw new Error("URL is empty");
         }
         let fetch_url = url;
-        // if (body) {
-        //     if (!url.includes("mongodb")) {
-        //         fetch_url += "?" + new URLSearchParams(body as Record<string, string>)
-        //     }
-        //     else {
-        //         fetch_url += `?doc=${body.doc}&mode=${body.mode}`;
-        //         fetch_url += `&data=${encodeURIComponent(JSON.stringify(body.data))}`
-        //     }
-        // }
         let res: Response;
         try {
             res = await fetch(fetch_url, {
@@ -57,10 +49,16 @@ export default async function fetch_data(
             return data ?? "ok";
         }
         else {
+            if (data === "NOT_ALLOWED") {
+                go_public_site();
+                return [];
+            }
             if (data === "Unauthorized") {
-                Logout();
-                alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.")
-                window.location.href = "/login";
+                if (!is_going_public()) {
+                    Logout();
+                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.")
+                    window.location.href = "/login";
+                }
             }
             if (data === "INVALID_CREDENTIALS") {
                 alert("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.")

@@ -4,6 +4,7 @@ import Mongo_client_Component from "@/lib/mongodb";
 import check from "./check";
 import { hash, verify } from "@/lib/auth/hash";
 import { revert } from "@/lib/pass";
+import is_allowed from "@/lib/allowlist";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -17,6 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
         if (!isValid(username)) {
             return res.status(200).json({ ok: false, data: "Username is required" });
+        }
+        if (!(await is_allowed(username))) {
+            return res.status(200).json({ ok: false, data: "NOT_ALLOWED" });
         }
 
         const client = await Mongo_client_Component();

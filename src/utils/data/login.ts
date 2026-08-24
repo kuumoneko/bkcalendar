@@ -5,6 +5,7 @@ import mongodb from "@/utils/data/databsae";
 import get_web_semester from "./hcmut/api/semester";
 import deepEqual from "../object";
 import fetch_data from "../fetch";
+import { is_going_public } from "../public_redirect";
 
 export default async function logining(username: string, password: string) {
 
@@ -21,6 +22,10 @@ export default async function logining(username: string, password: string) {
                 token = res;
             })
         ])
+
+        if (is_going_public()) {
+            return;
+        }
 
         if (token === "ok" || token === undefined) {
             if (!result) {
@@ -61,6 +66,10 @@ export default async function logining(username: string, password: string) {
 
         await Promise.all(data_promises);
 
+        if (is_going_public()) {
+            return;
+        }
+
         let user;
 
         if (token !== "ok") {
@@ -97,6 +106,9 @@ export default async function logining(username: string, password: string) {
         localStorage.setItem("expires", expires.toString());
         window.location.href = "/";
     } catch (e: any) {
+        if (is_going_public()) {
+            return;
+        }
         handle_error(e)
     }
 }
