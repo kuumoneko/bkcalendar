@@ -35,3 +35,11 @@ html.light body {
 .pw-masked {
     -webkit-text-security: disc;
 }
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    scrollbar-width: none;
+}

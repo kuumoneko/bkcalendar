@@ -66,7 +66,7 @@ export default function Logs() {
     }
 
     return (
-        <div className={`flex flex-col items-center mt-10 w-full px-4 ${mode === "row" ? "ml-10" : ""}`}>
+        <div className={`flex flex-col items-center mt-10 w-full px-4 h-full overflow-y-scroll ${mode === "row" ? "ml-10" : ""}`}>
             <h1 className="text-xl font-bold text-slate-300 mb-4">Nhật ký</h1>
 
             <div className="flex flex-wrap gap-2 mb-4 w-full max-w-5xl">

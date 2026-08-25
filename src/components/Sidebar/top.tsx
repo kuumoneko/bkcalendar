@@ -6,6 +6,7 @@ import {
     faFileLines,
 } from "@fortawesome/free-solid-svg-icons";
 import { useOrientationMode } from "@/hooks/display";
+import { useEffect, useState } from "react";
 
 function Side_bar_Button({ text, url }: { text: string; url: string }) {
     const mode = useOrientationMode();
@@ -17,7 +18,7 @@ function Side_bar_Button({ text, url }: { text: string; url: string }) {
     };
     return (
         <li
-            className={`cursor-default select-none h-12.5 w-50 rounded-xl flex flex-row items-center ${
+            className={`cursor-default select-none h-12.5 w-full rounded-xl flex flex-row items-center ${
                 mode === "col" ? "justify-center " : "justify-start "
             } bg-slate-700 pl-3.75 hover:bg-slate-600 hover:cursor-pointer`}
             onClick={() => {
@@ -34,6 +35,16 @@ function Side_bar_Button({ text, url }: { text: string; url: string }) {
 }
 
 export default function Sidebar_Top({ mode }: { mode: "row" | "col" }) {
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const userData = localStorage.getItem("user");
+        if (userData) {
+            const user = JSON.parse(userData);
+            setLoggedIn(!!user.name);
+        }
+    }, []);
+
     return (
         <div
             className={`w-full ${
@@ -51,7 +62,7 @@ export default function Sidebar_Top({ mode }: { mode: "row" | "col" }) {
                     <Side_bar_Button text="Lịch thi" url="/exam" />
                     <Side_bar_Button text="Thời khoá biểu" url="/schedule" />
                     <Side_bar_Button text="Bộ lọc" url="/filter" />
-                    <Side_bar_Button text="Nhật ký" url="/logs" />
+                    {loggedIn && <Side_bar_Button text="Nhật ký" url="/logs" />}
                 </ul>
             </div>
         </div>
