@@ -3,6 +3,7 @@ import {
     faCalendarCheck,
     faCalendarDays,
     faFilter,
+    faFileLines,
 } from "@fortawesome/free-solid-svg-icons";
 import { useOrientationMode } from "@/hooks/display";
 
@@ -12,6 +13,7 @@ function Side_bar_Button({ text, url }: { text: string; url: string }) {
         "Lịch thi": faCalendarCheck,
         "Thời khoá biểu": faCalendarDays,
         "Bộ lọc": faFilter,
+        "Nhật ký": faFileLines,
     };
     return (
         <li
@@ -49,6 +51,7 @@ export default function Sidebar_Top({ mode }: { mode: "row" | "col" }) {
                     <Side_bar_Button text="Lịch thi" url="/exam" />
                     <Side_bar_Button text="Thời khoá biểu" url="/schedule" />
                     <Side_bar_Button text="Bộ lọc" url="/filter" />
+                    <Side_bar_Button text="Nhật ký" url="/logs" />
                 </ul>
             </div>
         </div>
