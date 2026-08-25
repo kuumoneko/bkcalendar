@@ -6,6 +6,7 @@ import login_user from "./sso/login";
 import create_app from "./mybk/app/login";
 import { revert } from "@/lib/pass";
 import is_allowed from "@/lib/allowlist";
+import { logInfo, logWarn, logError } from "@/lib/logger";
 
 /**
  * Login user
@@ -21,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return "";
         }
         if (!(await is_allowed(username))) {
+            logWarn("Login rejected: not in allowlist", "login", username);
             return res.status(200).json({ ok: false, data: "NOT_ALLOWED" });
         }
         const { JSESSIONID, ltValue, executionValue } =
@@ -35,10 +37,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const SESSION = await create_app(result as string);
         let token = await get_token(SESSION as string);
+        logInfo("Login successful", "login", username);
         return res.status(200).json({ data: token, ok: true });
     }
     catch (e: any) {
-        console.error(e)
+        logError("Login failed", "login", undefined, { error: e.message, stack: e.stack });
         return res.status(200).json({ data: e.message, ok: false });
     }
 }

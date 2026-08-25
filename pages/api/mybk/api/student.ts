@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isValid, parse_body } from "../../data";
 import isDown from "../../isDown";
+import { logDebug, logWarn, logError } from "@/lib/logger";
 
 /**
  * Get Student Infomation
@@ -21,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
 
         if (isDown(response.status)) {
+            logWarn("myBK student API is down", "student", undefined, { status: response.status });
             throw new Error("EAI_AGAIN");
         }
 
@@ -50,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     catch (e: any) {
-        console.error(e)
+        logError("Student API error", "student", undefined, { error: e.message });
         res.status(200).json({ data: e.message, ok: false });
     }
 }

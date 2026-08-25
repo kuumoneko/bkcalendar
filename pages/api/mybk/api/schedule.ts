@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isValid, parse_body } from "../../data";
 import isDown from "../../isDown";
+import { logDebug, logWarn, logError } from "@/lib/logger";
 
 /**
  * Get Schedule
@@ -20,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             signal: AbortSignal.timeout(8000),
         });
         if (isDown(response.status)) {
+            logWarn("myBK schedule API is down", "schedule", undefined, { status: response.status });
             throw new Error("EAI_AGAIN");
         }
 
@@ -35,6 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     catch (e: any) {
+        logError("Schedule API error", "schedule", undefined, { error: e.message });
         res.status(200).json({ data: e.message, ok: false });
     }
 }

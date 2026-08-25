@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isValid, parse_body } from "../../data";
 import isDown from "../../isDown";
+import { logWarn, logError } from "@/lib/logger";
 
 /**
  * Get Exam
@@ -21,6 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         if (isDown(response.status)) {
+            logWarn("myBK exam API is down", "exam", undefined, { status: response.status });
             throw new Error("EAI_AGAIN");
         }
 
@@ -36,6 +38,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     catch (e: any) {
+        logError("Exam API error", "exam", undefined, { error: e.message });
         res.status(200).json({ data: e.message, ok: false });
     }
 }

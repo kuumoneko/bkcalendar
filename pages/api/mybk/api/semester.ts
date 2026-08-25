@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import isDown from "../../isDown";
 import { pick_current_and_next } from "@/utils/data/hcmut/api/semester";
+import { logWarn, logError } from "@/lib/logger";
 
 /**
  * Get Semester - returns current and next semester sorted by code descending (newest first)
@@ -13,6 +14,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
         });
 
         if (isDown(response.status)) {
+            logWarn("myBK semester API is down", "semester", undefined, { status: response.status });
             throw new Error("EAI_AGAIN");
         }
 
@@ -34,6 +36,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
         }
     }
     catch (e: any) {
+        logError("Semester API error", "semester", undefined, { error: e.message });
         res.status(200).json({ data: e.message, ok: false });
     }
 }

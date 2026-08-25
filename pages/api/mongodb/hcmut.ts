@@ -5,21 +5,25 @@ import check from "./check";
 import { hash, verify } from "@/lib/auth/hash";
 import { revert } from "@/lib/pass";
 import is_allowed from "@/lib/allowlist";
+import { logDebug, logWarn, logError } from "@/lib/logger";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
         const { doc = "", mode = "", data: received_data }: { doc: string, mode: string, data: any } = parse_body(req.body)
         const { username, ...data } = received_data;
         if (!["post", "get"].includes(mode)) {
+            logWarn("Invalid mode", "mongodb", username, { mode });
             return res.setHeader("Mode", "post,get").status(200).json({ ok: false, data: "Mode is invalid" });
         }
         if (!["password", "user", "filter", "schedule", "exam"].includes(doc)) {
+            logWarn("Invalid doc", "mongodb", username, { doc });
             return res.setHeader("doc", "password,user,filter,schedule,exam").status(200).json({ ok: false, data: "Doc is invalid" });
         }
         if (!isValid(username)) {
             return res.status(200).json({ ok: false, data: "Username is required" });
         }
         if (!(await is_allowed(username))) {
+            logWarn("Access rejected: not in allowlist", "mongodb", username);
             return res.status(200).json({ ok: false, data: "NOT_ALLOWED" });
         }
 
@@ -31,6 +35,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const collection = db.collection('data');
 
         await check(collection, username);
+
+        logDebug(`CRUD: ${mode} ${doc}`, "mongodb", username);
         
         if (doc === "password") {
             if (mode === "get") {
@@ -91,6 +97,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
     catch (e: any) {
+        logError("MongoDB CRUD error", "mongodb", undefined, { error: e.message });
         return res.status(200).json({ ok: false, data: e.message });
     }
 }
