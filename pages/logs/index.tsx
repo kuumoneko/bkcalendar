@@ -133,60 +133,60 @@ export default function Logs() {
                 ) : logs.length === 0 ? (
                     <div className="text-slate-400 text-center mt-10">Không có nhật ký</div>
                 ) : (
-                    <>
-                        <table className="w-full text-sm text-left border-collapse">
-                            <thead>
-                                <tr>
-                                    <th className="bg-slate-600 text-slate-300 border border-slate-500 px-3 py-2">Thời gian</th>
-                                    <th className="bg-slate-700 text-slate-300 border border-slate-500 px-3 py-2">Cấp độ</th>
-                                    <th className="bg-slate-600 text-slate-300 border border-slate-500 px-3 py-2">Ngữ cảnh</th>
-                                    <th className="bg-slate-700 text-slate-300 border border-slate-500 px-3 py-2">Người dùng</th>
-                                    <th className="bg-slate-600 text-slate-300 border border-slate-500 px-3 py-2">Thông điệp</th>
+                    <table className="w-full text-sm text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th className="bg-slate-600 text-slate-300 border border-slate-500 px-3 py-2">Thời gian</th>
+                                <th className="bg-slate-700 text-slate-300 border border-slate-500 px-3 py-2">Cấp độ</th>
+                                <th className="bg-slate-600 text-slate-300 border border-slate-500 px-3 py-2">Ngữ cảnh</th>
+                                <th className="bg-slate-700 text-slate-300 border border-slate-500 px-3 py-2">Người dùng</th>
+                                <th className="bg-slate-600 text-slate-300 border border-slate-500 px-3 py-2">Thông điệp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {logs.map((log: any, i: number) => (
+                                <tr key={log._id ?? i} className="hover:bg-slate-800">
+                                    <td className="border border-slate-600 px-3 py-2 text-slate-400 whitespace-nowrap">
+                                        {formatTime(log.timestamp)}
+                                    </td>
+                                    <td className={`border border-slate-600 px-3 py-2 font-bold ${LEVEL_COLORS[log.level] ?? "text-slate-300"}`}>
+                                        {log.level}
+                                    </td>
+                                    <td className="border border-slate-600 px-3 py-2 text-slate-400">
+                                        {log.context ?? "-"}
+                                    </td>
+                                    <td className="border border-slate-600 px-3 py-2 text-slate-400">
+                                        {log.username ?? "-"}
+                                    </td>
+                                    <td className="border border-slate-600 px-3 py-2 text-slate-300 max-w-xs truncate">
+                                        {log.message}
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {logs.map((log: any, i: number) => (
-                                    <tr key={log._id ?? i} className="hover:bg-slate-800">
-                                        <td className="border border-slate-600 px-3 py-2 text-slate-400 whitespace-nowrap">
-                                            {formatTime(log.timestamp)}
-                                        </td>
-                                        <td className={`border border-slate-600 px-3 py-2 font-bold ${LEVEL_COLORS[log.level] ?? "text-slate-300"}`}>
-                                            {log.level}
-                                        </td>
-                                        <td className="border border-slate-600 px-3 py-2 text-slate-400">
-                                            {log.context ?? "-"}
-                                        </td>
-                                        <td className="border border-slate-600 px-3 py-2 text-slate-400">
-                                            {log.username ?? "-"}
-                                        </td>
-                                        <td className="border border-slate-600 px-3 py-2 text-slate-300 max-w-xs truncate">
-                                            {log.message}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-
-                        <div className="flex items-center justify-center gap-4 mt-4 text-slate-400 text-sm">
-                            <button
-                                onClick={() => fetchLogs(page - 1)}
-                                disabled={page <= 1}
-                                className="px-3 py-1 rounded-xl bg-slate-700 hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                            >
-                                ‹
-                            </button>
-                            <span>Trang {page} / {totalPages} ({total} bản ghi)</span>
-                            <button
-                                onClick={() => fetchLogs(page + 1)}
-                                disabled={page >= totalPages}
-                                className="px-3 py-1 rounded-xl bg-slate-700 hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                            >
-                                ›
-                            </button>
-                        </div>
-                    </>
+                            ))}
+                        </tbody>
+                    </table>
                 )}
             </div>
+
+            {!loading && logs.length > 0 && (
+                <div className="flex items-center justify-center gap-4 mt-4 text-slate-400 text-sm w-full max-w-5xl">
+                    <button
+                        onClick={() => fetchLogs(page - 1)}
+                        disabled={page <= 1}
+                        className="px-3 py-1 rounded-xl bg-slate-700 hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                        ‹
+                    </button>
+                    <span>Trang {page} / {totalPages} ({total} bản ghi)</span>
+                    <button
+                        onClick={() => fetchLogs(page + 1)}
+                        disabled={page >= totalPages}
+                        className="px-3 py-1 rounded-xl bg-slate-700 hover:bg-slate-600 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                        ›
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
