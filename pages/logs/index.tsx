@@ -66,7 +66,7 @@ export default function Logs() {
     }
 
     return (
-        <div className={`flex flex-col items-center mt-10 w-full px-4 h-full overflow-y-scroll ${mode === "row" ? "ml-10" : ""}`}>
+        <div className={`flex flex-col items-center mt-10 w-full px-4 h-full overflow-hidden ${mode === "row" ? "ml-10" : ""}`}>
             <h1 className="text-xl font-bold text-slate-300 mb-4">Nhật ký</h1>
 
             <div className="flex flex-wrap gap-2 mb-4 w-full max-w-5xl">
@@ -127,7 +127,7 @@ export default function Logs() {
                 </button>
             </div>
 
-            <div className="w-full max-w-5xl">
+            <div className="flex-1 w-full max-w-5xl overflow-y-scroll">
                 {loading ? (
                     <Loading mode="Đang tải nhật ký" />
                 ) : logs.length === 0 ? (
