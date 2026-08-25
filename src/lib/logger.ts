@@ -1,4 +1,5 @@
 import Mongo_client_Component from "./mongodb";
+import { waitUntil } from "@vercel/functions";
 
 const LOG_COLLECTION = "logs";
 const TTL_SECONDS = 2592000; // 30 days
@@ -33,16 +34,18 @@ async function ensureTTLIndex() {
 }
 
 function write(entry: LogEntry) {
-    ensureTTLIndex().catch(() => {});
-    Mongo_client_Component()
-        .then((client) => client.connect())
-        .then((client) => {
-            const collection = client.db("hcmut").collection(LOG_COLLECTION);
-            return collection.insertOne(entry);
-        })
-        .catch((e) => {
-            console.error("[logger] Failed to write log to MongoDB:", e.message);
-        });
+    waitUntil(
+        ensureTTLIndex()
+            .then(() => Mongo_client_Component())
+            .then((client) => client.connect())
+            .then((client) => {
+                const collection = client.db("hcmut").collection(LOG_COLLECTION);
+                return collection.insertOne(entry);
+            })
+            .catch((e) => {
+                console.error("[logger] Failed to write log to MongoDB:", e.message);
+            })
+    );
 }
 
 export function logDebug(message: string, context?: string, username?: string, meta?: any) {
