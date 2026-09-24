@@ -34,21 +34,36 @@ function next_day(date: string): string {
     return format_utc(d);
 }
 
-// yyyy-mm-dd + "H:mm" → "YYYYMMDDTHHMMSS" (zero-padded per RFC 5545)
+// Accepts "07g00", "7:00", "0700", "07:00:00" (g/h = giờ) → { h, m } or null
+function parse_time_parts(time: string): { h: number; m: number } | null {
+    if (!time) return null;
+    const cleaned = time.trim().replace(/g/i, ":").replace(/h/i, ":");
+    const parts = cleaned.split(/[:]/).map(p => p.trim());
+    if (parts.length === 1 && /^\d{3,4}$/.test(parts[0])) {
+        const p = parts[0].padStart(4, "0");
+        return { h: parseInt(p.slice(0, 2), 10), m: parseInt(p.slice(2), 10) };
+    }
+    const h = parseInt(parts[0], 10);
+    const m = parts.length > 1 ? parseInt(parts[1], 10) : 0;
+    if (!Number.isFinite(h) || !Number.isFinite(m) || h < 0 || h > 23 || m < 0 || m > 59) return null;
+    return { h, m };
+}
+
+// yyyy-mm-dd + time → "YYYYMMDDTHHMMSS" (zero-padded per RFC 5545)
 function to_ics_datetime(date: string, time: string): string {
     const [y, m, d] = date.split("-");
-    const parts = time.split(":");
-    const h = String(parts[0]).padStart(2, "0");
-    const min = String(parts[1] ?? "0").padStart(2, "0");
+    const t = parse_time_parts(time);
+    if (!t) return `${y}${m}${d}T000000`;
+    const h = String(t.h).padStart(2, "0");
+    const min = String(t.m).padStart(2, "0");
     return `${y}${m}${d}T${h}${min}00`;
 }
 
-// "H:mm" → padded "HHMM00" (for EXDATE time matching)
+// time → padded "HHMM00" (for EXDATE time matching)
 function to_ics_time(time: string): string {
-    const parts = time.split(":");
-    const h = String(parts[0]).padStart(2, "0");
-    const min = String(parts[1] ?? "0").padStart(2, "0");
-    return `${h}${min}00`;
+    const t = parse_time_parts(time);
+    if (!t) return "000000";
+    return `${String(t.h).padStart(2, "0")}${String(t.m).padStart(2, "0")}00`;
 }
 
 function to_ics_date(date: string): string {
@@ -58,25 +73,39 @@ function to_ics_date(date: string): string {
 function parse_duration_minutes(raw: string): number | null {
     if (!raw || raw.length === 0) return null;
     if (/^\d+$/.test(raw)) return parseInt(raw, 10);
-    const hm = raw.match(/^(\d{1,2}):(\d{2})$/);
+    const cleaned = raw.trim().replace(/g/i, ":").replace(/h/i, ":");
+    const hm = cleaned.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);
     if (hm) return parseInt(hm[1], 10) * 60 + parseInt(hm[2], 10);
     return null;
 }
 
-function add_minutes(time: string, minutes: number): string {
-    const [h, m] = time.split(":").map(Number);
-    const total = h * 60 + m + minutes;
-    const eh = Math.floor(total / 60) % 24;
-    const em = total % 60;
-    return `${String(eh).padStart(2, "0")}:${String(em).padStart(2, "0")}`;
+function add_minutes(time: string, minutes: number): { time: string; day_offset: number } {
+    const t = parse_time_parts(time) ?? { h: 0, m: 0 };
+    const total = t.h * 60 + t.m + minutes;
+    const day_offset = Math.floor(total / 1440);
+    const rem = ((total % 1440) + 1440) % 1440;
+    const eh = Math.floor(rem / 60);
+    const em = rem % 60;
+    return {
+        time: `${String(eh).padStart(2, "0")}:${String(em).padStart(2, "0")}`,
+        day_offset,
+    };
 }
 
 function make_uid(subject: string, date: string, extra: string, type: number): string {
-    const slug = subject
-        .replace(/[^a-zA-Z0-9\u00C0-\u024F]/g, "")
+    const slug = (subject || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
+        .replace(/[^a-zA-Z0-9]/g, "")
         .toLowerCase()
         .slice(0, 30);
     const extra_slug = (extra || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
         .replace(/[^a-zA-Z0-9]/g, "")
         .toLowerCase()
         .slice(0, 10);
@@ -108,13 +137,15 @@ function build_schedule_events(schedule: SubjectInfo[], today: string): string[]
     for (const sub of schedule) {
         if (!sub.dates || typeof sub.dates === "string") continue;
 
-        const valid_dates = (sub.dates as string[])
+        const all_dates = (sub.dates as string[])
             .filter(d => typeof d === "string" && !d.includes("--"))
-            .filter(d => d >= today)
             .sort();
+
+        const valid_dates = all_dates.filter(d => d >= today);
 
         if (valid_dates.length === 0) continue;
 
+        const anchor = all_dates[0];
         const first = valid_dates[0];
         const last = valid_dates[valid_dates.length - 1];
         const present = new Set(valid_dates);
@@ -130,12 +161,13 @@ function build_schedule_events(schedule: SubjectInfo[], today: string): string[]
 
         const lines: string[] = [
             "BEGIN:VEVENT",
-            `UID:${make_uid(subject, first, cls, 0)}`,
+            `UID:${make_uid(subject, anchor, cls, 0)}`,
             `DTSTART:${to_ics_datetime(first, sub.startTime)}`,
             `DTEND:${to_ics_datetime(first, sub.endTime)}`,
             `SUMMARY:${escape_ics_text(subject)}`,
             `LOCATION:${escape_ics_text(room_raw + " " + campus)}`,
             `DESCRIPTION:Gi\u00e3ng vi\u00ean: ${escape_ics_text(teacher)}\\nL\u1ed7p: ${escape_ics_text(cls)}`,
+            "SEQUENCE:0",
         ];
 
         if (valid_dates.length === 1) {
@@ -166,10 +198,11 @@ function build_exam_events(exams: ExamInfo[], today: string): string[][] {
         const lines: string[] = ["BEGIN:VEVENT"];
         const duration_min = parse_duration_minutes(exam.duration);
 
-        if (exam.startTime && duration_min !== null && duration_min > 0) {
-            const end_time = add_minutes(exam.startTime, duration_min + 15);
+        if (exam.startTime && parse_time_parts(exam.startTime) && duration_min !== null && duration_min > 0) {
+            const end = add_minutes(exam.startTime, duration_min + 15);
+            const end_date = end.day_offset > 0 ? next_day(exam.date) : exam.date;
             lines.push(`DTSTART:${to_ics_datetime(exam.date, exam.startTime)}`);
-            lines.push(`DTEND:${to_ics_datetime(exam.date, end_time)}`);
+            lines.push(`DTEND:${to_ics_datetime(end_date, end.time)}`);
         } else {
             lines.push(`DTSTART;VALUE=DATE:${to_ics_date(exam.date)}`);
             lines.push(`DTEND;VALUE=DATE:${to_ics_date(next_day(exam.date))}`);
@@ -183,6 +216,7 @@ function build_exam_events(exams: ExamInfo[], today: string): string[][] {
         lines.push(`SUMMARY:${escape_ics_text(("Ki\u1ec3m tra " + subject).trim())}`);
         lines.push(`LOCATION:${escape_ics_text((exam.room ?? "") + " " + campus)}`);
         lines.push(`DESCRIPTION:L\u1ed7p: ${escape_ics_text(cls)}`);
+        lines.push("SEQUENCE:0");
         lines.push("END:VEVENT");
         all_events.push(lines);
     }
@@ -190,10 +224,10 @@ function build_exam_events(exams: ExamInfo[], today: string): string[][] {
     return all_events;
 }
 
-export default function export_ics(schedule: SubjectInfo[], exams: ExamInfo[]): string {
-    const today = today_local();
-    const schedule_events = build_schedule_events(schedule, today);
-    const exam_events = build_exam_events(exams, today);
+export default function export_ics(schedule: SubjectInfo[], exams: ExamInfo[], today?: string): string {
+    const today_str = today ?? today_local();
+    const schedule_events = build_schedule_events(schedule, today_str);
+    const exam_events = build_exam_events(exams, today_str);
 
     const dtstamp = new Date()
         .toISOString()
