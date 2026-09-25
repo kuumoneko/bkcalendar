@@ -49,6 +49,9 @@ export default async function get_web_schedule(authorization: string, studentId:
             authorization: authorization,
             semester_id: semester, student_id: studentId
         })
+        if (!Array.isArray(res)) {
+            return null;
+        }
         return res.map((a: any) => {
             return {
                 subject: a.subject.nameVi,

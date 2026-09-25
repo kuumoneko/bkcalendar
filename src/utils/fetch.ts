@@ -59,26 +59,28 @@ export default async function fetch_data(
                     alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.")
                     window.location.href = "/login";
                 }
+                return [];
             }
             if (data === "INVALID_CREDENTIALS") {
                 alert("Tên đăng nhập hoặc mật khẩu không đúng. Vui lòng thử lại.")
+                return [];
             }
-            else if (res.status === 304) {
+            if (res.status === 304) {
                 return "ok"
             }
-            else if (is_timeout_message(data)) {
+            if (is_timeout_message(data)) {
                 push_noti(
                     "Máy trường không phản hồi hoặc đang quá tải. Vui lòng thử lại sau.",
                     "error",
                 );
                 return [];
             }
-            else {
-                handle_error(data)
-            }
+            handle_error(data)
+            return [];
         }
     }
     catch (e: any) {
         handle_error(e)
+        return [];
     }
 }

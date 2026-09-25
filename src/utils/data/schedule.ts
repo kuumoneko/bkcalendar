@@ -41,14 +41,22 @@ export default async function full_schedule(): Promise<SubjectInfo[]> {
 
         const promises = [];
         if (token.length !== 0 && token !== "undefined" && isOffline === false) {
-            promises.push((get_web_schedule(token, id, semester)).then((res: any) => {
-                if (!Array.isArray(res)) {
-                    return;
-                }
-                raw_mybk = res;
-                mybk_schedule = prune_expired(enrich_expired(res), today);
-            })
-            )
+            if (!id || !semester) {
+                push_noti(
+                    "Thiếu thông tin tài khoản (mã SV / học kỳ). Vui lòng đăng nhập lại để lấy lịch học từ trường.",
+                    "error",
+                );
+            }
+            else {
+                promises.push((get_web_schedule(token, id, semester)).then((res: any) => {
+                    if (!Array.isArray(res)) {
+                        return;
+                    }
+                    raw_mybk = res;
+                    mybk_schedule = prune_expired(enrich_expired(res), today);
+                })
+                )
+            }
         }
         promises.push(
             mongodb("schedule", "get", { username: username }).then((res: any) => {

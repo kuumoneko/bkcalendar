@@ -13,6 +13,9 @@ export default async function get_exam(authorization: string, mssv: string, hock
             hocky: hocky, namhoc: namhoc, mssv: mssv
         })
 
+        if (!res || !Array.isArray(res.data)) {
+            return null;
+        }
         return res.data.map((item: any) => {
             return {
                 subject: item.TENMONHOC,

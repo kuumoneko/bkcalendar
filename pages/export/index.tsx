@@ -51,8 +51,8 @@ export default function Export() {
                 onClick={handleExport}
                 className={`px-4 py-2 mt-4 rounded-3xl transition-colors ${
                     ready
-                        ? "bg-slate-500 hover:bg-slate-400 hover:cursor-pointer text-slate-800"
-                        : "bg-slate-700 text-slate-500 cursor-not-allowed"
+                        ? "bg-slate-700 text-slate-100 hover:bg-slate-400 hover:text-slate-800 hover:cursor-pointer"
+                        : "bg-slate-800 text-slate-500 cursor-not-allowed"
                 }`}
             >
                 Xuất ICS

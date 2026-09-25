@@ -7,5 +7,5 @@ export function handle_error(code: string) {
     if (is_going_public()) {
         return;
     }
-    window.location.href = `/error?${new URLSearchParams(code)}`;
+    window.location.href = `/error?${new URLSearchParams({ code: String(code) })}`;
 }

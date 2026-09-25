@@ -2,7 +2,7 @@ export interface SubjectInfo {
     building: string;
     class: string;
     dates: string | string[]; // yyyy-mm-dd
-    dayofWeek: number;
+    dayOfWeek: number;
     endTime: string;
     lesson: string;
     room: string;

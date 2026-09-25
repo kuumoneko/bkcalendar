@@ -18,11 +18,19 @@ export default async function get_full_exam() {
     if (token.length !== 0 && token !== "undefined" && isOffline === false) {
         let { MSSV, semester: this_semester } = JSON.parse(localStorage.getItem("user") as string);
 
-        const year = String(this_semester).substring(0, 4);
-        const semester_type = String(this_semester).substring(4, 5);
-        promises.push(get_exam(token, MSSV, semester_type, year).then((res: any) => {
-            mybk_exam = res;
-        }))
+        const year = String(this_semester ?? "").substring(0, 4);
+        const semester_type = String(this_semester ?? "").substring(4, 5);
+        if (!MSSV || !year || !semester_type) {
+            mybk_exam = null;
+        }
+        else {
+            promises.push(get_exam(token, MSSV, semester_type, year).then((res: any) => {
+                if (!Array.isArray(res)) {
+                    return;
+                }
+                mybk_exam = res;
+            }))
+        }
     }
     let { username } = JSON.parse(localStorage.getItem("user") as string);
 
